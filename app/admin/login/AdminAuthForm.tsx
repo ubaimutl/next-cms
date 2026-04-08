@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState, useTransition } from "react";
+import { adminKickerClass } from "../components/ui";
 
 type AdminAuthFormProps = {
   adminHasPassword: boolean;
@@ -69,7 +70,7 @@ export default function AdminAuthForm({
   return (
     <div className="admin-panel-muted p-6 md:p-8">
       <div className="border-b border-base-content/8 pb-6">
-        <p className="admin-kicker">
+        <p className={adminKickerClass}>
           {adminHasPassword ? "Authentication" : "Setup"}
         </p>
         <h2 className="mt-3 text-[clamp(2.3rem,5vw,3.6rem)] leading-[0.94] font-semibold tracking-[-0.045em]">
@@ -80,7 +81,7 @@ export default function AdminAuthForm({
       <form onSubmit={handleSubmit} className="mt-6 space-y-5">
         {!adminHasPassword && (
           <label className="block">
-            <span className="admin-kicker">
+            <span className={adminKickerClass}>
               Name
             </span>
             <input
@@ -99,7 +100,7 @@ export default function AdminAuthForm({
         )}
 
         <label className="block">
-          <span className="admin-kicker">
+          <span className={adminKickerClass}>
             Email
           </span>
           <input
@@ -118,7 +119,7 @@ export default function AdminAuthForm({
         </label>
 
         <label className="block">
-          <span className="admin-kicker">
+          <span className={adminKickerClass}>
             Password
           </span>
           <input

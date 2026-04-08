@@ -1,6 +1,6 @@
 "use client";
 
-import { RolePill } from "./ui";
+import { RolePill, adminKickerClass, adminPillClass } from "./ui";
 import type {
   AdminAnalyticsOverview,
   AdminAppSettings,
@@ -64,13 +64,13 @@ function SettingsToggle({
       className="admin-panel-muted flex w-full items-start justify-between gap-5 p-5 text-left transition hover:border-base-content/14 disabled:cursor-not-allowed disabled:opacity-55"
     >
       <div className="min-w-0">
-        <p className="admin-kicker">{label}</p>
+        <p className={adminKickerClass}>{label}</p>
         <p className="mt-3 max-w-xl text-[0.98rem] leading-relaxed text-base-content/62">
           {description}
         </p>
       </div>
 
-      <span className={`shrink-0 ${enabled ? "admin-pill admin-pill-strong" : "admin-pill"}`}>
+      <span className={`shrink-0 ${adminPillClass(enabled ? "strong" : "neutral")}`}>
         {enabled ? "Enabled" : "Disabled"}
       </span>
     </button>
@@ -102,7 +102,7 @@ export default function SettingsSection({
     <div className="space-y-6">
       <section className="admin-panel px-6 py-6 md:px-8">
         <div className="border-b border-base-content/8 pb-5">
-          <p className="admin-kicker">Modules</p>
+          <p className={adminKickerClass}>Modules</p>
           <h2 className="mt-2 text-[1.9rem] leading-none font-semibold tracking-[-0.03em]">
             Public sections
           </h2>
@@ -142,7 +142,7 @@ export default function SettingsSection({
       <section className="admin-panel px-6 py-6 md:px-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="admin-kicker">Analytics</p>
+            <p className={adminKickerClass}>Analytics</p>
             <h2 className="mt-2 text-[1.9rem] leading-none font-semibold tracking-[-0.03em]">
               {analytics.enabled ? "Tracking enabled" : "Tracking disabled"}
             </h2>
@@ -171,12 +171,12 @@ export default function SettingsSection({
         <div className="admin-panel px-6 py-6 md:px-8">
           <div className="flex items-center justify-between gap-4 border-b border-base-content/8 pb-5">
             <div>
-              <p className="admin-kicker">Admin users</p>
+              <p className={adminKickerClass}>Admin users</p>
               <h2 className="mt-2 text-[1.8rem] leading-none font-semibold tracking-[-0.03em]">
                 Roles and access
               </h2>
             </div>
-            <span className="admin-pill">{adminUsers.length} users</span>
+            <span className={adminPillClass("neutral")}>{adminUsers.length} users</span>
           </div>
 
           <div className="mt-5 space-y-4">
@@ -189,11 +189,11 @@ export default function SettingsSection({
                         {user.name?.trim() || user.email}
                       </p>
                       <RolePill role={user.role} />
-                      <span className="admin-pill">
+                      <span className={adminPillClass("neutral")}>
                         {user.active ? "Active" : "Disabled"}
                       </span>
                       {currentAdmin.id === user.id ? (
-                        <span className="admin-pill">Current session</span>
+                        <span className={adminPillClass("neutral")}>Current session</span>
                       ) : null}
                     </div>
 
@@ -250,14 +250,14 @@ export default function SettingsSection({
         </div>
 
         <div className="admin-panel px-6 py-6 md:px-8">
-          <p className="admin-kicker">Add admin user</p>
+          <p className={adminKickerClass}>Add admin user</p>
           <h2 className="mt-2 text-[1.8rem] leading-none font-semibold tracking-[-0.03em]">
             New account
           </h2>
 
           <div className="mt-6 space-y-4">
             <label className="block">
-              <span className="admin-kicker">Name</span>
+              <span className={adminKickerClass}>Name</span>
               <input
                 type="text"
                 value={userForm.name}
@@ -269,7 +269,7 @@ export default function SettingsSection({
             </label>
 
             <label className="block">
-              <span className="admin-kicker">Email</span>
+              <span className={adminKickerClass}>Email</span>
               <input
                 type="email"
                 value={userForm.email}
@@ -281,7 +281,7 @@ export default function SettingsSection({
             </label>
 
             <label className="block">
-              <span className="admin-kicker">Password</span>
+              <span className={adminKickerClass}>Password</span>
               <input
                 type="password"
                 value={userForm.password}
@@ -295,7 +295,7 @@ export default function SettingsSection({
             </label>
 
             <div>
-              <p className="admin-kicker">Role</p>
+              <p className={adminKickerClass}>Role</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {(["OWNER", "ADMIN", "EDITOR"] as const).map((role) => (
                   <button

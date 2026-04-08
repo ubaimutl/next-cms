@@ -47,14 +47,16 @@ export default async function WorkPage() {
   return (
     <>
       <section className="shell">
-        <div className="front-page-header front-rule lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)] lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
           <div className="max-w-sm">
             <p className="front-kicker">Work</p>
-            <h1 className="front-section-title mt-4">Selected projects and case studies.</h1>
+            <h1 className="mt-4 text-[clamp(2rem,4vw,3.8rem)] leading-[0.94] font-medium tracking-[-0.045em]">
+              Selected projects and case studies.
+            </h1>
           </div>
 
           <div className="mt-6 max-w-3xl lg:mt-0">
-            <p className="front-copy">
+            <p className="max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               A showcase-led layout with larger media, shorter copy blocks, and
               more emphasis on finished work than on archive structure.
             </p>
@@ -87,12 +89,17 @@ export default async function WorkPage() {
               <h2 className="mt-4 text-[clamp(2rem,3vw,3.1rem)] leading-[0.96] font-medium tracking-[-0.05em]">
                 {featuredProject.title}
               </h2>
-              <p className="front-meta mt-4">{featuredProject.description}</p>
+              <p className="mt-4 text-[0.9rem] leading-[1.6] text-base-content/62">
+                {featuredProject.description}
+              </p>
 
               {featuredProject.tags.length > 0 ? (
                 <div className="mt-6 flex flex-wrap gap-2">
                   {featuredProject.tags.slice(0, 4).map((tag) => (
-                    <span key={tag} className="front-chip">
+                    <span
+                      key={tag}
+                      className="inline-flex items-center rounded-full border border-[var(--line-soft)] px-3 py-[0.3rem] text-[0.84rem] text-base-content/72"
+                    >
                       {tag}
                     </span>
                   ))}
@@ -114,7 +121,7 @@ export default async function WorkPage() {
         ) : (
           <div className="front-card p-6 md:p-8">
             <p className="front-kicker">No projects published</p>
-            <p className="front-copy mt-4">
+            <p className="mt-4 max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               Add projects in admin and they will appear here automatically.
             </p>
           </div>
@@ -146,7 +153,9 @@ export default async function WorkPage() {
                   <h3 className="text-[1.45rem] leading-tight font-medium tracking-[-0.04em]">
                     {project.title}
                   </h3>
-                  <p className="front-meta mt-3">{project.description}</p>
+                  <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
+                    {project.description}
+                  </p>
                   {project.link ? (
                     <a
                       href={project.link}

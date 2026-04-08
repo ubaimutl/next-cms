@@ -5,13 +5,14 @@ import Image from "next/image";
 import type { ChangeEvent, FormEventHandler } from "react";
 
 import { shouldBypassImageOptimization } from "@/lib/image";
+import { adminKickerClass } from "./ui";
 import type { PostFormState } from "./types";
 
 const PostContentEditor = dynamic(() => import("../PostContentEditor"), {
   ssr: false,
   loading: () => (
     <div className="admin-panel-muted mt-4 min-h-[18rem] px-5 py-5">
-      <p className="admin-kicker">Loading editor</p>
+      <p className={adminKickerClass}>Loading editor</p>
     </div>
   ),
 });

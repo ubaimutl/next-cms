@@ -2,7 +2,7 @@
 
 import { formatPrice } from "@/lib/shop-helpers";
 
-import { formatDateTime } from "./ui";
+import { adminKickerClass, adminPillClass, formatDateTime } from "./ui";
 import type {
   AdminAnalyticsOverview,
   AdminMessage,
@@ -89,7 +89,7 @@ function MetricCard({
 }) {
   return (
     <div className="admin-panel-muted p-5">
-      <p className="admin-kicker">{label}</p>
+      <p className={adminKickerClass}>{label}</p>
       <p className="mt-4 text-[2rem] leading-none font-semibold tracking-[-0.04em]">
         {value}
       </p>
@@ -171,19 +171,19 @@ export default function DashboardSection({
         <section className="admin-panel px-6 py-6 md:px-8">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 pb-5">
             <div>
-              <p className="admin-kicker">30 days</p>
+              <p className={adminKickerClass}>30 days</p>
               <h2 className="mt-2 text-[2rem] leading-none font-semibold tracking-[-0.04em]">
                 Site performance
               </h2>
             </div>
-            <span className="admin-pill">Traffic overview</span>
+            <span className={adminPillClass("neutral")}>Traffic overview</span>
           </div>
 
           <div className="grid gap-6 pt-6 lg:grid-cols-[minmax(0,1fr)_15rem]">
             <div>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
-                  <p className="admin-kicker">Views</p>
+                  <p className={adminKickerClass}>Views</p>
                   <p className="mt-2 text-[2.8rem] leading-none font-semibold tracking-[-0.05em]">
                     {analytics.totalPageViews}
                   </p>
@@ -199,19 +199,19 @@ export default function DashboardSection({
 
             <div className="space-y-3">
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Top pages</p>
+                <p className={adminKickerClass}>Top pages</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {analytics.topPages.length}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Products</p>
+                <p className={adminKickerClass}>Products</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {products.length}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Projects</p>
+                <p className={adminKickerClass}>Projects</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {projects.length}
                 </p>
@@ -221,7 +221,7 @@ export default function DashboardSection({
         </section>
 
         <aside className="admin-panel px-6 py-6">
-          <p className="admin-kicker">Recent activity</p>
+          <p className={adminKickerClass}>Recent activity</p>
           <div className="mt-5 space-y-4">
             {recentActivity.length === 0 ? (
               <p className="text-sm text-white/46">No recent activity yet.</p>
@@ -256,7 +256,7 @@ export default function DashboardSection({
         <div className="admin-panel px-6 py-6 md:px-8">
           <div className="flex items-center justify-between gap-3 border-b border-white/6 pb-5">
             <div>
-              <p className="admin-kicker">Start creating content</p>
+              <p className={adminKickerClass}>Start creating content</p>
               <h2 className="mt-2 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                 Quick actions
               </h2>
@@ -353,7 +353,7 @@ export default function DashboardSection({
                       </p>
                       <p className="mt-1 text-xs text-white/34">/posts/{post.slug}</p>
                     </div>
-                    <span className="admin-pill">{post.views} views</span>
+                    <span className={adminPillClass("neutral")}>{post.views} views</span>
                   </div>
                 ))
               )}
@@ -373,7 +373,7 @@ export default function DashboardSection({
             <div className="mt-4 grid gap-3">
               <div className="admin-panel-muted flex items-center justify-between p-4">
                 <div>
-                  <p className="admin-kicker">Projects</p>
+                  <p className={adminKickerClass}>Projects</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">
                     {projects.length}
                   </p>
@@ -382,7 +382,7 @@ export default function DashboardSection({
               </div>
               <div className="admin-panel-muted flex items-center justify-between p-4">
                 <div>
-                  <p className="admin-kicker">Products</p>
+                  <p className={adminKickerClass}>Products</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">
                     {products.length}
                   </p>
@@ -391,7 +391,7 @@ export default function DashboardSection({
               </div>
               <div className="admin-panel-muted flex items-center justify-between p-4">
                 <div>
-                  <p className="admin-kicker">Drafts</p>
+                  <p className={adminKickerClass}>Drafts</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">
                     {posts.filter((post) => !post.published).length}
                   </p>

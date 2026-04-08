@@ -6,6 +6,7 @@ import {
   getAuthenticatedAdmin,
   hasConfiguredAdminPassword,
 } from "@/lib/auth";
+import { adminKickerClass, adminPillClass } from "../components/ui";
 
 import AdminAuthForm from "./AdminAuthForm";
 
@@ -28,14 +29,14 @@ export default async function AdminLoginPage() {
   }
 
   return (
-    <section className="ghost-admin admin-shell">
+    <section className="next-cms-admin admin-shell">
       <div className="shell max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <div className="admin-panel overflow-hidden px-6 py-8 md:px-10 md:py-10">
           <div className="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_24rem]">
             <div>
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/6 pb-8">
                 <div>
-                  <p className="admin-kicker">Workspace access</p>
+                  <p className={adminKickerClass}>Workspace access</p>
                   <h1 className="mt-3 text-[clamp(3rem,10vw,5.8rem)] leading-[0.9] font-semibold tracking-[-0.055em] text-white">
                     Admin login
                   </h1>
@@ -57,21 +58,21 @@ export default async function AdminLoginPage() {
 
             <aside className="space-y-4">
               <div className="admin-panel-muted p-6">
-                <p className="admin-kicker">Status</p>
+                <p className={adminKickerClass}>Status</p>
                 <p className="mt-3 text-[1.7rem] leading-[1.05] font-semibold tracking-[-0.03em] text-white">
                   {adminHasPassword ? "Ready to sign in" : "Owner setup required"}
                 </p>
               </div>
 
               <div className="admin-panel-muted p-6">
-                <p className="admin-kicker">What you can do</p>
+                <p className={adminKickerClass}>What you can do</p>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <span className="admin-pill">Posts</span>
-                  <span className="admin-pill">Projects</span>
-                  <span className="admin-pill">Shop</span>
-                  <span className="admin-pill">Orders</span>
-                  <span className="admin-pill">Messages</span>
-                  <span className="admin-pill">Settings</span>
+                  <span className={adminPillClass("neutral")}>Posts</span>
+                  <span className={adminPillClass("neutral")}>Projects</span>
+                  <span className={adminPillClass("neutral")}>Shop</span>
+                  <span className={adminPillClass("neutral")}>Orders</span>
+                  <span className={adminPillClass("neutral")}>Messages</span>
+                  <span className={adminPillClass("neutral")}>Settings</span>
                 </div>
               </div>
             </aside>

@@ -155,16 +155,22 @@ export default async function ShopProductPage({ params }: ProductPageProps) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
         />
 
-        <div className="front-page-header front-rule lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)] lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10">
           <div className="max-w-4xl">
             <p className="front-kicker">{getProductKindLabel(product.kind)}</p>
             <h1 className="mt-4 max-w-3xl text-[clamp(2.5rem,5vw,4.2rem)] leading-[0.95] font-medium tracking-[-0.055em]">
               {product.title}
             </h1>
-            <p className="front-copy mt-5 max-w-2xl">{product.summary}</p>
+            <p className="mt-5 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
+              {product.summary}
+            </p>
             <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className="front-pill">{availabilityLabel}</span>
-              <span className="front-meta">{readingTime} min read</span>
+              <span className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66">
+                {availabilityLabel}
+              </span>
+              <span className="text-[0.9rem] leading-[1.6] text-base-content/62">
+                {readingTime} min read
+              </span>
             </div>
           </div>
 
@@ -238,9 +244,12 @@ export default async function ShopProductPage({ params }: ProductPageProps) {
             {product.highlights.length > 0 ? (
               <div className="front-card p-5">
                 <p className="front-kicker">Included</p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {product.highlights.map((highlight) => (
-                    <span key={highlight} className="front-chip">
+              <div className="mt-4 flex flex-wrap gap-2">
+                {product.highlights.map((highlight) => (
+                    <span
+                      key={highlight}
+                      className="inline-flex items-center rounded-full border border-[var(--line-soft)] px-3 py-[0.3rem] text-[0.84rem] text-base-content/72"
+                    >
                       {highlight}
                     </span>
                   ))}
@@ -250,7 +259,7 @@ export default async function ShopProductPage({ params }: ProductPageProps) {
 
             <div className="front-card p-5">
               <p className="front-kicker">Need a tailored version?</p>
-              <p className="front-meta mt-4">
+              <p className="mt-4 text-[0.9rem] leading-[1.6] text-base-content/62">
                 If the standard offer is close but not exact, send the brief
                 through contact and I can scope a custom version.
               </p>

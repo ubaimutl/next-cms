@@ -170,13 +170,13 @@ export default async function Home() {
       />
 
       <section className="shell">
-        <div className="front-hero-centered front-rule">
-          <div className="front-center-copy">
+        <div className="front-rule py-[clamp(3rem,7vw,6rem)]">
+          <div className="mx-auto max-w-[40rem] text-center">
             <p className="front-kicker">{siteConfig.shortName}</p>
             <h1 className="mt-4 text-[clamp(2.7rem,6vw,4.75rem)] leading-[0.94] font-medium tracking-[-0.055em]">
               Publishing, portfolio, and commerce in one quieter frontend.
             </h1>
-            <p className="front-copy mt-5">
+            <p className="mt-5 max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               A calmer public surface for writing, projects, and lightweight
               offers. Less dashboard energy, more focus on content.
             </p>
@@ -208,8 +208,12 @@ export default async function Home() {
                   <h2 className="text-[1.45rem] leading-[1.02] font-medium tracking-[-0.045em]">
                     {card.title}
                   </h2>
-                  <p className="front-meta mt-3">{card.meta}</p>
-                  <p className="front-meta mt-4">{card.excerpt}</p>
+                  <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
+                    {card.meta}
+                  </p>
+                  <p className="mt-4 text-[0.9rem] leading-[1.6] text-base-content/62">
+                    {card.excerpt}
+                  </p>
                   <span className="front-button-subtle mt-5 min-h-9 px-4 text-sm">
                     {card.cta}
                   </span>
@@ -222,11 +226,14 @@ export default async function Home() {
 
       {topicTags.length > 0 ? (
         <section className="shell mt-12">
-          <div className="front-center-copy">
+          <div className="mx-auto max-w-[40rem] text-center">
             <p className="front-kicker">Tags</p>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
               {topicTags.map((tag) => (
-                <span key={tag} className="front-pill">
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66"
+                >
                   {tag}
                 </span>
               ))}
@@ -255,12 +262,12 @@ export default async function Home() {
                   <h2 className="text-[1.7rem] leading-[1.02] font-medium tracking-[-0.045em]">
                     {post.title}
                   </h2>
-                  <p className="front-meta mt-3">
+                  <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
                     {getExcerptFromHtml(post.content, 140) ||
                       "Published from the built-in editor with a cleaner reading layout."}
                   </p>
                   <div className="mt-5 flex items-center justify-between gap-4">
-                    <span className="front-meta">
+                    <span className="text-[0.9rem] leading-[1.6] text-base-content/62">
                       {getReadingTimeMinutes(post.content)} min read
                     </span>
                     <span className="front-button-subtle min-h-9 px-4 text-sm">
@@ -272,7 +279,7 @@ export default async function Home() {
             </div>
           ) : (
             <div className="front-card mt-5 p-6">
-              <p className="front-meta">
+              <p className="text-[0.9rem] leading-[1.6] text-base-content/62">
                 Publish the first post in admin and the homepage feed will
                 populate here automatically.
               </p>

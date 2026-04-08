@@ -1510,7 +1510,7 @@ export default function AdminWorkspace({
 
   if (isPostEditorMode) {
     return (
-      <section className="ghost-admin admin-shell" data-admin-theme={theme}>
+      <section className="next-cms-admin admin-shell" data-admin-theme={theme}>
         {feedback ? (
           <div className="pointer-events-none fixed top-4 left-1/2 z-[140] -translate-x-1/2 px-4">
             <div
@@ -1568,7 +1568,7 @@ export default function AdminWorkspace({
   }
 
   return (
-    <section className="ghost-admin admin-shell" data-admin-theme={theme}>
+    <section className="next-cms-admin admin-shell" data-admin-theme={theme}>
       <div className="grid min-h-screen xl:grid-cols-[15.5rem_minmax(0,1fr)]">
           <AdminSidebar
             admin={admin}

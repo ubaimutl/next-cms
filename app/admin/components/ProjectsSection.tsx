@@ -1,6 +1,7 @@
 "use client";
 
 import type { AdminProject } from "./types";
+import { adminPillClass, adminTableHeadClass } from "./ui";
 
 type ProjectsSectionProps = {
   projects: AdminProject[];
@@ -20,11 +21,11 @@ export default function ProjectsSection({
       <div className="overflow-x-auto">
         <div className="min-w-[60rem]">
           <div className="grid grid-cols-[minmax(0,1.9fr)_12rem_7rem_11rem_8rem] gap-4 border-b border-white/6 px-6 py-4 md:px-8">
-            <span className="admin-table-head">Project</span>
-            <span className="admin-table-head">Tags</span>
-            <span className="admin-table-head text-center">Assets</span>
-            <span className="admin-table-head">Link</span>
-            <span className="admin-table-head text-right">Actions</span>
+            <span className={adminTableHeadClass}>Project</span>
+            <span className={adminTableHeadClass}>Tags</span>
+            <span className={`${adminTableHeadClass} text-center`}>Assets</span>
+            <span className={adminTableHeadClass}>Link</span>
+            <span className={`${adminTableHeadClass} text-right`}>Actions</span>
           </div>
 
         {projects.length === 0 ? (
@@ -49,7 +50,7 @@ export default function ProjectsSection({
                 <div className="flex flex-wrap content-start gap-2">
                   {project.tags.length > 0 ? (
                     project.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="admin-pill">
+                      <span key={tag} className={adminPillClass("neutral")}>
                         {tag}
                       </span>
                     ))

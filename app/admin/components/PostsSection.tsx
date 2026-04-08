@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { getExcerptFromHtml } from "@/lib/post-content";
 
-import { StatusPill } from "./ui";
+import { StatusPill, adminTableHeadClass } from "./ui";
 import type { AdminPost } from "./types";
 
 type PostsSectionProps = {
@@ -27,11 +27,11 @@ export default function PostsSection({
       <div className="overflow-x-auto">
         <div className="min-w-[56rem]">
           <div className="grid grid-cols-[minmax(0,1.8fr)_7rem_9rem_7rem_8rem] gap-4 border-b border-white/6 px-6 py-4 md:px-8">
-        <span className="admin-table-head">Title</span>
-        <span className="admin-table-head text-right">Views</span>
-        <span className="admin-table-head">Path</span>
-        <span className="admin-table-head text-center">Status</span>
-        <span className="admin-table-head text-right">Actions</span>
+        <span className={adminTableHeadClass}>Title</span>
+        <span className={`${adminTableHeadClass} text-right`}>Views</span>
+        <span className={adminTableHeadClass}>Path</span>
+        <span className={`${adminTableHeadClass} text-center`}>Status</span>
+        <span className={`${adminTableHeadClass} text-right`}>Actions</span>
           </div>
 
           {posts.length === 0 ? (

@@ -38,12 +38,12 @@ export default async function ThoughtsPage() {
   return (
     <>
       <section className="shell-narrow">
-        <div className="front-page-header front-rule">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)]">
           <p className="front-kicker">Writings</p>
           <h1 className="mt-4 max-w-3xl text-[clamp(2.4rem,5vw,4rem)] leading-[0.96] font-medium tracking-[-0.05em]">
             Writing archive.
           </h1>
-          <p className="front-copy mt-5 max-w-2xl">
+          <p className="mt-5 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
             Shorter summaries, tighter spacing, and a narrower reading column
             so the archive feels editorial rather than app-like.
           </p>
@@ -52,24 +52,24 @@ export default async function ThoughtsPage() {
 
       <section className="shell-narrow">
         {posts.length > 0 ? (
-          <div className="front-list">
+          <div className="border-t border-[var(--line-soft)]">
             {posts.map((post: PostListItem) => (
               <Link
                 key={post.id}
                 href={`/posts/${post.slug}`}
-                className="front-list-item block transition hover:opacity-80"
+                className="block border-b border-[var(--line-soft)] py-[1.35rem] transition hover:opacity-80"
               >
                 <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_7rem] md:items-start">
                   <div className="max-w-2xl">
                     <h2 className="text-[clamp(1.55rem,3vw,2.2rem)] leading-[1] font-medium tracking-[-0.045em]">
                       {post.title}
                     </h2>
-                    <p className="front-meta mt-3">
+                    <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
                       {getExcerptFromHtml(post.content, 190) ||
                         "Published with semantic structure and a cleaner reading layout."}
                     </p>
                   </div>
-                  <div className="front-meta md:pt-1 md:text-right">
+                  <div className="text-[0.9rem] leading-[1.6] text-base-content/62 md:pt-1 md:text-right">
                     {getReadingTimeMinutes(post.content)} min read
                   </div>
                 </div>
@@ -79,7 +79,7 @@ export default async function ThoughtsPage() {
         ) : (
           <div className="front-card p-6 md:p-8">
             <p className="front-kicker">No posts published</p>
-            <p className="front-copy mt-4">
+            <p className="mt-4 max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               Publish the first post in admin and it will appear here.
             </p>
           </div>

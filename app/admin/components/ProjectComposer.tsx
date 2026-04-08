@@ -3,6 +3,7 @@
 import type { ChangeEventHandler, FormEventHandler } from "react";
 
 import type { ProjectFormState } from "./types";
+import { adminKickerClass } from "./ui";
 
 type ProjectComposerProps = {
   isEditingProject: boolean;
@@ -82,7 +83,7 @@ export default function ProjectComposer({
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_24rem]">
           <div className="space-y-6">
             <label className="block">
-              <span className="admin-kicker">Description</span>
+              <span className={adminKickerClass}>Description</span>
               <textarea
                 value={projectForm.description}
                 onChange={(event) => onDescriptionChange(event.target.value)}
@@ -93,7 +94,7 @@ export default function ProjectComposer({
             </label>
 
             <label className="block">
-              <span className="admin-kicker">External link</span>
+              <span className={adminKickerClass}>External link</span>
               <input
                 type="text"
                 value={projectForm.link}
@@ -104,7 +105,7 @@ export default function ProjectComposer({
             </label>
 
             <label className="block">
-              <span className="admin-kicker">Tags</span>
+              <span className={adminKickerClass}>Tags</span>
               <input
                 type="text"
                 value={projectForm.tags}
@@ -118,7 +119,7 @@ export default function ProjectComposer({
 
           <div className="space-y-5">
             <div className="admin-panel-muted p-5">
-              <p className="admin-kicker">Primary image</p>
+              <p className={adminKickerClass}>Primary image</p>
               <input
                 key={`primary-${projectInputKey}`}
                 type="file"
@@ -136,7 +137,7 @@ export default function ProjectComposer({
             </div>
 
             <div className="admin-panel-muted p-5">
-              <p className="admin-kicker">Secondary image</p>
+              <p className={adminKickerClass}>Secondary image</p>
               <input
                 key={`secondary-${projectInputKey}`}
                 type="file"

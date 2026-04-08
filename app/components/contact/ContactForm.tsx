@@ -294,12 +294,12 @@ export default function ContactForm() {
                 <h2 className="mt-3 text-[clamp(2.2rem,4vw,3.4rem)] leading-[0.94] tracking-[-0.04em]">
                   Share your message in three steps.
                 </h2>
-                <p className="front-copy mt-3 max-w-2xl">
+                <p className="mt-3 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
                   Keep it simple. Choose the main topic, add your details, then
                   write what you need in plain language.
                 </p>
               </div>
-              <div className="front-pill">
+              <div className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66">
                 Step {currentStep} / 3
               </div>
             </div>
@@ -345,12 +345,12 @@ export default function ContactForm() {
                 <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
                   <div>
                     <p className="front-kicker">Choose a topic</p>
-                    <p className="front-copy mt-2 max-w-2xl">
+                    <p className="mt-2 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
                       Select the type of message this is so the reply can start
                       in the right place.
                     </p>
                   </div>
-                  <span className="front-pill">
+                  <span className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66">
                     {selectedServices.length} selected
                   </span>
                 </div>
@@ -404,7 +404,7 @@ export default function ContactForm() {
               <div>
                 <div>
                   <p className="front-kicker">Share contact details</p>
-                  <p className="front-copy mt-2 max-w-2xl">
+                  <p className="mt-2 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
                     Enough context to reply clearly and follow up without extra back-and-forth.
                   </p>
                 </div>
@@ -477,7 +477,7 @@ export default function ContactForm() {
               <div>
                 <div>
                   <p className="front-kicker">Add optional context</p>
-                  <p className="front-copy mt-2 max-w-2xl">
+                  <p className="mt-2 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
                     Budget and timing are optional. The main thing is a clear
                     message with enough context to answer well.
                   </p>
@@ -579,11 +579,14 @@ export default function ContactForm() {
                   </div>
                 ) : null}
 
-                <div className="front-card-soft p-5">
+                <div className="rounded-[1.25rem] border border-[var(--line-soft)] bg-[var(--surface-soft)] p-5">
                   <p className="front-kicker">Topics selected</p>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {selectedServices.map((service) => (
-                      <span key={service} className="front-pill">
+                      <span
+                        key={service}
+                        className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66"
+                      >
                         {service}
                       </span>
                     ))}
@@ -594,7 +597,7 @@ export default function ContactForm() {
 
             {step < 4 ? (
               <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line-soft)] pt-6">
-                <div className="front-meta text-sm">
+                <div className="text-[0.9rem] leading-[1.6] text-base-content/62 text-sm">
                   {step === 1
                     ? "Choose the main topic."
                     : step === 2
@@ -645,12 +648,15 @@ export default function ContactForm() {
               <div className="mt-3 flex flex-wrap gap-2">
                 {selectedServices.length > 0 ? (
                   selectedServices.map((service) => (
-                    <span key={service} className="front-pill">
+                    <span
+                      key={service}
+                      className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66"
+                    >
                       {service}
                     </span>
                   ))
                 ) : (
-                  <span className="front-meta text-sm">
+                  <span className="text-[0.9rem] leading-[1.6] text-base-content/62 text-sm">
                     Nothing selected yet.
                   </span>
                 )}
@@ -659,7 +665,7 @@ export default function ContactForm() {
 
             <div>
               <p className="front-kicker">Reply target</p>
-              <p className="front-meta mt-3 text-sm">
+              <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62 text-sm">
                 {formData.email.trim() || "Your email goes here once you add it."}
               </p>
             </div>
@@ -676,7 +682,7 @@ export default function ContactForm() {
 
             <div>
               <p className="front-kicker">Expectation</p>
-              <p className="front-meta mt-3 text-sm">
+              <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62 text-sm">
                 A clear message gets a better reply. Include the context,
                 desired outcome, and anything that would help shape the answer.
               </p>

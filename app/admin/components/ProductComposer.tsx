@@ -4,12 +4,13 @@ import dynamic from "next/dynamic";
 import type { ChangeEventHandler, FormEventHandler } from "react";
 
 import type { AdminProductAvailability, ProductFormState } from "./types";
+import { adminKickerClass } from "./ui";
 
 const PostContentEditor = dynamic(() => import("../PostContentEditor"), {
   ssr: false,
   loading: () => (
     <div className="admin-panel-muted mt-4 min-h-[18rem] px-5 py-5">
-      <p className="admin-kicker">Loading editor</p>
+      <p className={adminKickerClass}>Loading editor</p>
     </div>
   ),
 });
@@ -127,7 +128,7 @@ export default function ProductComposer({
         <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1.15fr)_24rem]">
           <div className="space-y-6">
             <label className="block">
-              <span className="admin-kicker">Summary</span>
+              <span className={adminKickerClass}>Summary</span>
               <textarea
                 value={productForm.summary}
                 onChange={(event) => onSummaryChange(event.target.value)}
@@ -139,7 +140,7 @@ export default function ProductComposer({
 
             <div className="grid gap-6 md:grid-cols-2">
               <label className="block">
-                <span className="admin-kicker">Price</span>
+                <span className={adminKickerClass}>Price</span>
                 <input
                   type="text"
                   value={productForm.price}
@@ -152,7 +153,7 @@ export default function ProductComposer({
               </label>
 
               <label className="block">
-                <span className="admin-kicker">Delivery</span>
+                <span className={adminKickerClass}>Delivery</span>
                 <input
                   type="text"
                   value={productForm.deliveryText}
@@ -164,7 +165,7 @@ export default function ProductComposer({
             </div>
 
             <label className="block">
-              <span className="admin-kicker">Highlights</span>
+              <span className={adminKickerClass}>Highlights</span>
               <input
                 type="text"
                 value={productForm.highlights}
@@ -176,7 +177,7 @@ export default function ProductComposer({
             </label>
 
             <div>
-              <span className="admin-kicker">Availability</span>
+              <span className={adminKickerClass}>Availability</span>
               <div className="mt-3 flex flex-wrap gap-2">
                 {(
                   [
@@ -213,7 +214,7 @@ export default function ProductComposer({
             <div className="admin-panel-muted p-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <p className="admin-kicker">Buyer brief</p>
+                  <p className={adminKickerClass}>Buyer brief</p>
                   <p className="mt-2 text-sm text-white/42">
                     Ask buyers to describe what they need before payment.
                   </p>
@@ -229,7 +230,7 @@ export default function ProductComposer({
 
               {productForm.requiresBrief ? (
                 <label className="mt-5 block">
-                  <span className="admin-kicker">Optional prompt</span>
+                  <span className={adminKickerClass}>Optional prompt</span>
                   <textarea
                     value={productForm.briefPrompt}
                     onChange={(event) => onBriefPromptChange(event.target.value)}
@@ -246,7 +247,7 @@ export default function ProductComposer({
 
           <div className="space-y-5">
             <div className="admin-panel-muted p-5">
-              <p className="admin-kicker">Primary image</p>
+              <p className={adminKickerClass}>Primary image</p>
               <input
                 key={`product-primary-${productInputKey}`}
                 type="file"
@@ -264,7 +265,7 @@ export default function ProductComposer({
             </div>
 
             <div className="admin-panel-muted p-5">
-              <p className="admin-kicker">Secondary image</p>
+              <p className={adminKickerClass}>Secondary image</p>
               <input
                 key={`product-secondary-${productInputKey}`}
                 type="file"

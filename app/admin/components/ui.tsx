@@ -5,26 +5,55 @@ import type {
   AdminUserRole,
 } from "./types";
 
+export const adminKickerClass =
+  "text-[0.68rem] font-semibold uppercase tracking-[0.14em] text-[var(--admin-faint)]";
+
+export const adminNavMetaClass =
+  "ml-auto text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-white/35";
+
+export const adminTableHeadClass =
+  "text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-white/38";
+
+const adminPillBaseClass =
+  "inline-flex items-center rounded-full border border-white/8 bg-white/[0.04] px-[0.7rem] py-[0.3rem] text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-[var(--admin-muted)]";
+
+export function adminPillClass(
+  tone: "neutral" | "strong" | "success" | "warning" | "danger",
+) {
+  const toneClass =
+    tone === "strong"
+      ? "border-[rgba(255,26,117,0.26)] bg-[rgba(255,26,117,0.18)] text-[#ff6aa7]"
+      : tone === "success"
+        ? "border-[rgba(48,207,67,0.26)] bg-[rgba(48,207,67,0.16)] text-[#76e284]"
+        : tone === "warning"
+          ? "border-[rgba(255,202,95,0.22)] bg-[rgba(255,202,95,0.16)] text-[#ffd87f]"
+          : tone === "danger"
+            ? "border-[rgba(255,106,106,0.24)] bg-[rgba(255,106,106,0.16)] text-[#ff8f8f]"
+            : "";
+
+  return `${adminPillBaseClass} ${toneClass}`.trim();
+}
+
 function pillToneClass(
   tone: "neutral" | "strong" | "success" | "warning" | "danger",
 ) {
   if (tone === "strong") {
-    return "admin-pill admin-pill-strong";
+    return adminPillClass("strong");
   }
 
   if (tone === "success") {
-    return "admin-pill admin-pill-success";
+    return adminPillClass("success");
   }
 
   if (tone === "warning") {
-    return "admin-pill admin-pill-warning";
+    return adminPillClass("warning");
   }
 
   if (tone === "danger") {
-    return "admin-pill admin-pill-danger";
+    return adminPillClass("danger");
   }
 
-  return "admin-pill";
+  return adminPillClass("neutral");
 }
 
 export function StatusPill({
@@ -63,7 +92,7 @@ export function SidebarSectionButton({
       }`}
     >
       <span className="font-medium">{label}</span>
-      <span className="admin-nav-meta">{count}</span>
+      <span className={adminNavMetaClass}>{count}</span>
     </button>
   );
 }

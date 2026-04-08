@@ -1,5 +1,6 @@
 "use client";
 
+import { adminKickerClass, adminPillClass } from "./ui";
 import type { AdminAnalyticsOverview } from "./types";
 
 type AnalyticsSectionProps = {
@@ -17,7 +18,7 @@ export default function AnalyticsSection({
     <div className="space-y-6">
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <div className="admin-panel-muted p-5">
-          <p className="admin-kicker">
+          <p className={adminKickerClass}>
             Total page views
           </p>
           <p className="mt-4 text-[2.4rem] leading-none font-semibold">
@@ -26,7 +27,7 @@ export default function AnalyticsSection({
         </div>
 
         <div className="admin-panel-muted p-5">
-          <p className="admin-kicker">
+          <p className={adminKickerClass}>
             Visits
           </p>
           <p className="mt-4 text-[2.4rem] leading-none font-semibold">
@@ -35,7 +36,7 @@ export default function AnalyticsSection({
         </div>
 
         <div className="admin-panel-muted p-5">
-          <p className="admin-kicker">
+          <p className={adminKickerClass}>
             Post views
           </p>
           <p className="mt-4 text-[2.4rem] leading-none font-semibold">
@@ -44,7 +45,7 @@ export default function AnalyticsSection({
         </div>
 
         <div className="admin-panel-muted p-5">
-          <p className="admin-kicker">
+          <p className={adminKickerClass}>
             Last 7 days
           </p>
           <p className="mt-4 text-[2.4rem] leading-none font-semibold">
@@ -59,7 +60,7 @@ export default function AnalyticsSection({
       <section className="admin-panel px-6 py-6">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="admin-kicker">
+            <p className={adminKickerClass}>
               Tracking
             </p>
             <h2 className="mt-3 text-[2rem] leading-none font-semibold">
@@ -91,7 +92,7 @@ export default function AnalyticsSection({
         <section className="admin-panel px-6 py-6">
           <div className="flex items-center justify-between gap-3 border-b border-base-content/8 pb-4">
             <h2 className="text-[1.5rem] leading-none font-semibold">Top pages</h2>
-            <span className="admin-pill">
+            <span className={adminPillClass("neutral")}>
               Views
             </span>
           </div>
@@ -122,7 +123,7 @@ export default function AnalyticsSection({
         <section className="admin-panel px-6 py-6">
           <div className="flex items-center justify-between gap-3 border-b border-base-content/8 pb-4">
             <h2 className="text-[1.5rem] leading-none font-semibold">Top posts</h2>
-            <span className="admin-pill">
+            <span className={adminPillClass("neutral")}>
               Views
             </span>
           </div>

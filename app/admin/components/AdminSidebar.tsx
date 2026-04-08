@@ -14,6 +14,7 @@ import type {
   PostFilter,
   ThemeMode,
 } from "./types";
+import { adminNavMetaClass } from "./ui";
 
 type AdminSidebarProps = {
   admin: AdminAccount;
@@ -94,7 +95,7 @@ function NavItem({
       <span className="text-white/58">{icon}</span>
       <span>{label}</span>
       {meta !== undefined && meta !== null ? (
-        <span className="admin-nav-meta">{meta}</span>
+        <span className={adminNavMetaClass}>{meta}</span>
       ) : null}
     </button>
   );
@@ -115,12 +116,11 @@ function SubItem({
     <button
       type="button"
       onClick={onClick}
-      className={`admin-nav-link ml-8 py-2 text-[0.84rem] ${
-        active ? "admin-nav-link-active" : ""
-      }`}
+      className={`admin-nav-link ml-8 py-2 text-[0.84rem] ${active ? "admin-nav-link-active" : ""
+        }`}
     >
       <span>{label}</span>
-      <span className="admin-nav-meta">{meta}</span>
+      <span className={adminNavMetaClass}>{meta}</span>
     </button>
   );
 }
@@ -138,7 +138,7 @@ function GroupHeader({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center justify-between px-3 py-2 text-left text-[0.72rem] font-semibold tracking-[0.12em] text-white/36 uppercase"
+      className="flex w-full items-center justify-between px-3 py-2 text-left text-[0.72rem] font-semibold tracking-[0.12em] text-[var(--admin-faint)] uppercase"
     >
       <span>{label}</span>
       <span className={`transition-transform ${open ? "rotate-90" : "rotate-0"}`}>

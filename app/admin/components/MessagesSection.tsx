@@ -1,6 +1,11 @@
 "use client";
 
-import { MessageStatusPill, formatDateTime } from "./ui";
+import {
+  MessageStatusPill,
+  adminKickerClass,
+  adminPillClass,
+  formatDateTime,
+} from "./ui";
 import type { AdminMessage, AdminMessageStatus } from "./types";
 
 type MessagesSectionProps = {
@@ -30,7 +35,7 @@ export default function MessagesSection({
       <section className="admin-panel overflow-hidden">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/6 px-6 py-5 md:px-8">
           <div>
-            <p className="admin-kicker">Messages</p>
+            <p className={adminKickerClass}>Messages</p>
             <h2 className="mt-2 text-[1.8rem] leading-none font-semibold tracking-[-0.03em]">
               Contact inbox
             </h2>
@@ -64,7 +69,7 @@ export default function MessagesSection({
                         {message.name}
                       </h3>
                       {message.services[0] ? (
-                        <span className="admin-pill">{message.services[0]}</span>
+                        <span className={adminPillClass("neutral")}>{message.services[0]}</span>
                       ) : null}
                     </div>
                     <p className="mt-2 truncate text-[0.92rem] text-white/42">
@@ -100,14 +105,14 @@ export default function MessagesSection({
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 pb-5">
               <div>
-                <p className="admin-kicker">Selected message</p>
+                <p className={adminKickerClass}>Selected message</p>
                 <h2 className="mt-2 text-[1.9rem] leading-[1] font-semibold tracking-[-0.03em]">
                   {selectedMessage.name}
                 </h2>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <MessageStatusPill status={selectedMessage.status} />
-                <span className="admin-pill">
+                <span className={adminPillClass("neutral")}>
                   {formatDateTime(selectedMessage.createdAt)}
                 </span>
               </div>
@@ -124,13 +129,13 @@ export default function MessagesSection({
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Company</p>
+                <p className={adminKickerClass}>Company</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.company || "Not provided"}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Website</p>
+                <p className={adminKickerClass}>Website</p>
                 {selectedMessage.website ? (
                   <a
                     href={selectedMessage.website}
@@ -145,13 +150,13 @@ export default function MessagesSection({
                 )}
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Budget</p>
+                <p className={adminKickerClass}>Budget</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.budget || "Not specified"}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Timeline</p>
+                <p className={adminKickerClass}>Timeline</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.timeline || "Not specified"}
                 </p>
@@ -159,10 +164,10 @@ export default function MessagesSection({
             </div>
 
             <div>
-              <p className="admin-kicker">Services</p>
+              <p className={adminKickerClass}>Services</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 {selectedMessage.services.map((service) => (
-                  <span key={service} className="admin-pill">
+                  <span key={service} className={adminPillClass("neutral")}>
                     {service}
                   </span>
                 ))}
@@ -170,14 +175,14 @@ export default function MessagesSection({
             </div>
 
             <div>
-              <p className="admin-kicker">Message</p>
+              <p className={adminKickerClass}>Message</p>
               <p className="mt-3 whitespace-pre-wrap text-[1rem] leading-relaxed text-white/72">
                 {selectedMessage.message}
               </p>
             </div>
 
             <div className="space-y-2 border-t border-white/6 pt-5">
-              <p className="admin-kicker">Delivery</p>
+              <p className={adminKickerClass}>Delivery</p>
               <p className="text-[0.98rem] text-white/68">
                 {selectedMessage.emailSentAt
                   ? `Mail sent ${formatDateTime(selectedMessage.emailSentAt)}`

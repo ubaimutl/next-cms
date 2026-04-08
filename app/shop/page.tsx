@@ -48,14 +48,16 @@ export default async function ShopPage() {
   return (
     <>
       <section className="shell">
-        <div className="front-page-header front-rule lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)] lg:grid lg:grid-cols-[18rem_minmax(0,1fr)] lg:gap-12">
           <div className="max-w-sm">
             <p className="front-kicker">Shop</p>
-            <h1 className="front-section-title mt-4">Products and offers.</h1>
+            <h1 className="mt-4 text-[clamp(2rem,4vw,3.8rem)] leading-[0.94] font-medium tracking-[-0.045em]">
+              Products and offers.
+            </h1>
           </div>
 
           <div className="mt-6 max-w-3xl lg:mt-0">
-            <p className="front-copy">
+            <p className="max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               A clearer commerce surface: structured cards, visible pricing, and
               direct calls to action instead of archive-style browsing.
             </p>
@@ -73,7 +75,7 @@ export default async function ShopPage() {
                 className="front-card block p-6 transition hover:opacity-90"
               >
                 <div className="flex items-start justify-between gap-4">
-                  <span className="front-pill">
+                  <span className="inline-flex items-center rounded-full border border-[var(--line-soft)] bg-transparent px-[0.8rem] py-[0.35rem] text-[0.74rem] font-semibold uppercase tracking-[0.12em] text-base-content/66">
                     {getProductKindLabel(product.kind)}
                   </span>
                   <span className="text-[1.05rem] font-medium tracking-[-0.03em]">
@@ -84,7 +86,9 @@ export default async function ShopPage() {
                 <h2 className="mt-6 text-[1.55rem] leading-[1] font-medium tracking-[-0.045em]">
                   {product.title}
                 </h2>
-                <p className="front-meta mt-3">{product.summary}</p>
+                <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
+                  {product.summary}
+                </p>
 
                 <div className="mt-6">
                   <span className="front-button-subtle min-h-9 px-4 text-sm">
@@ -97,7 +101,7 @@ export default async function ShopPage() {
         ) : (
           <div className="front-card p-6 md:p-8">
             <p className="front-kicker">No live offers</p>
-            <p className="front-copy mt-4">
+            <p className="mt-4 max-w-[42rem] text-[1.03rem] leading-[1.72] text-base-content/72">
               Publish products in admin and they will appear here automatically.
             </p>
           </div>

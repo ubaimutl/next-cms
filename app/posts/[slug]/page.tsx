@@ -141,17 +141,25 @@ const PostSingle = async ({ params }: PostProps) => {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
         />
 
-        <div className="front-page-header front-rule">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)]">
           <p className="front-kicker">Writing</p>
           <h1 className="mt-4 max-w-3xl text-[clamp(2.4rem,5vw,4rem)] leading-[0.96] font-medium tracking-[-0.05em]">
             {post.title}
           </h1>
           <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-            <span className="front-meta">Article</span>
-            <span className="front-meta">{readingTime} min read</span>
-            <span className="front-meta">{wordCount} words</span>
+            <span className="text-[0.9rem] leading-[1.6] text-base-content/62">
+              Article
+            </span>
+            <span className="text-[0.9rem] leading-[1.6] text-base-content/62">
+              {readingTime} min read
+            </span>
+            <span className="text-[0.9rem] leading-[1.6] text-base-content/62">
+              {wordCount} words
+            </span>
           </div>
-          <p className="front-copy mt-6 max-w-2xl">{description}</p>
+          <p className="mt-6 max-w-2xl text-[1.03rem] leading-[1.72] text-base-content/72">
+            {description}
+          </p>
         </div>
       </section>
 

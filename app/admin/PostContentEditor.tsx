@@ -20,6 +20,7 @@ import {
   renderItems,
 } from "novel";
 import type { EditorInstance, JSONContent } from "novel";
+import { adminKickerClass } from "./components/ui";
 
 type PostContentEditorProps = {
   editorKey: number;
@@ -283,7 +284,7 @@ export default function PostContentEditor({
       >
         {!isGhostVariant ? (
           <div className="mb-4 flex items-center justify-between gap-4">
-            <p className="admin-kicker">
+            <p className={adminKickerClass}>
               {isFocusMode ? "Focus mode" : "Editor"}
             </p>
 

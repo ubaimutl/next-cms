@@ -32,7 +32,7 @@ function PostListItemSkeleton({
   excerptWidth: string;
 }) {
   return (
-    <div className="front-list-item">
+    <div className="border-b border-[var(--line-soft)] py-[1.35rem]">
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_7rem] md:items-start">
         <div className="max-w-2xl">
           <SkeletonCardLine
@@ -44,7 +44,7 @@ function PostListItemSkeleton({
           </div>
         </div>
 
-        <div className="front-meta md:pt-1 md:text-right">
+        <div className="text-[0.9rem] leading-[1.6] text-base-content/62 md:pt-1 md:text-right">
           <SkeletonBar className="h-4 w-20 md:ml-auto" />
         </div>
       </div>
@@ -70,7 +70,7 @@ export function PostListSkeleton() {
   return (
     <>
       <section className="shell-narrow">
-        <div className="front-page-header front-rule">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)]">
           <SkeletonBar className="h-3 w-20" />
 
           <div className="mt-4 space-y-3">
@@ -86,7 +86,7 @@ export function PostListSkeleton() {
       </section>
 
       <section className="shell-narrow">
-        <div className="front-list">
+        <div className="border-t border-[var(--line-soft)]">
           <PostListItemSkeleton titleWidth="w-full max-w-[20rem]" excerptWidth="w-[88%]" />
           <PostListItemSkeleton titleWidth="w-[88%] max-w-[24rem]" excerptWidth="w-[84%]" />
           <PostListItemSkeleton titleWidth="w-[76%] max-w-[18rem]" excerptWidth="w-[78%]" />
@@ -111,7 +111,7 @@ export function PostDetailSkeleton() {
   return (
     <>
       <section className="shell-narrow">
-        <div className="front-page-header front-rule">
+        <div className="front-rule py-[clamp(3rem,6vw,5.5rem)]">
           <SkeletonBar className="h-3 w-16" />
 
           <div className="mt-4 space-y-3">

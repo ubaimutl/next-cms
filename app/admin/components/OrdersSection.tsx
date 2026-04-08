@@ -4,7 +4,12 @@ import Link from "next/link";
 
 import { formatPrice } from "@/lib/shop-helpers";
 
-import { OrderStatusPill, formatDateTime } from "./ui";
+import {
+  OrderStatusPill,
+  adminKickerClass,
+  adminPillClass,
+  formatDateTime,
+} from "./ui";
 import type { AdminOrder } from "./types";
 
 type OrdersSectionProps = {
@@ -23,7 +28,7 @@ export default function OrdersSection({
       <section className="admin-panel overflow-hidden">
         <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/6 px-6 py-5 md:px-8">
           <div>
-            <p className="admin-kicker">Orders</p>
+            <p className={adminKickerClass}>Orders</p>
             <h2 className="mt-2 text-[1.8rem] leading-none font-semibold tracking-[-0.03em]">
               Payment activity
             </h2>
@@ -82,14 +87,14 @@ export default function OrdersSection({
           <div className="space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/6 pb-5">
               <div>
-                <p className="admin-kicker">Selected order</p>
+                <p className={adminKickerClass}>Selected order</p>
                 <h2 className="mt-2 text-[1.9rem] leading-[1] font-semibold tracking-[-0.03em]">
                   {selectedOrder.productTitle}
                 </h2>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <OrderStatusPill status={selectedOrder.status} />
-                <span className="admin-pill">
+                <span className={adminPillClass("neutral")}>
                   {formatDateTime(selectedOrder.createdAt)}
                 </span>
               </div>
@@ -113,25 +118,25 @@ export default function OrdersSection({
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Buyer</p>
+                <p className={adminKickerClass}>Buyer</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedOrder.buyerName || "Not provided"}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Buyer email</p>
+                <p className={adminKickerClass}>Buyer email</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.buyerEmail || "Not provided"}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">PayPal order</p>
+                <p className={adminKickerClass}>PayPal order</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.paypalOrderId}
                 </p>
               </div>
               <div className="admin-panel-muted p-4">
-                <p className="admin-kicker">Capture</p>
+                <p className={adminKickerClass}>Capture</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.paypalCaptureId || "Pending"}
                 </p>
@@ -140,7 +145,7 @@ export default function OrdersSection({
 
             {selectedOrder.buyerBrief ? (
               <div className="border-t border-white/6 pt-5">
-                <p className="admin-kicker">Buyer brief</p>
+                <p className={adminKickerClass}>Buyer brief</p>
                 <p className="mt-3 whitespace-pre-wrap text-[0.98rem] leading-relaxed text-white/72">
                   {selectedOrder.buyerBrief}
                 </p>
@@ -148,7 +153,7 @@ export default function OrdersSection({
             ) : null}
 
             <div className="border-t border-white/6 pt-5">
-              <p className="admin-kicker">Updated</p>
+              <p className={adminKickerClass}>Updated</p>
               <p className="mt-2 text-[0.98rem] text-white/68">
                 {formatDateTime(selectedOrder.updatedAt)}
               </p>
