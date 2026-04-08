@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { deleteStoredImage } from "@/lib/media-storage";
 import { getPlainTextFromHtml } from "@/lib/post-content";
 import { createUniquePostSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
@@ -87,7 +88,7 @@ export async function PATCH(
 
     const existingPost = await prisma.post.findUnique({
       where: { id: postId },
-      select: { id: true },
+      select: { id: true, featuredImage: true },
     });
 
     if (!existingPost) {
@@ -110,6 +111,20 @@ export async function PATCH(
         published,
       },
     });
+
+    if (
+      existingPost.featuredImage &&
+      existingPost.featuredImage !== post.featuredImage
+    ) {
+      try {
+        await deleteStoredImage(existingPost.featuredImage);
+      } catch (cleanupError) {
+        console.error(
+          "Error deleting previous post image:",
+          cleanupError,
+        );
+      }
+    }
 
     return NextResponse.json(post, { status: 200 });
   } catch (error) {
@@ -141,7 +156,7 @@ export async function DELETE(
 
     const existingPost = await prisma.post.findUnique({
       where: { id: postId },
-      select: { id: true },
+      select: { id: true, featuredImage: true },
     });
 
     if (!existingPost) {
@@ -151,6 +166,14 @@ export async function DELETE(
     await prisma.post.delete({
       where: { id: postId },
     });
+
+    if (existingPost.featuredImage) {
+      try {
+        await deleteStoredImage(existingPost.featuredImage);
+      } catch (cleanupError) {
+        console.error("Error deleting post image:", cleanupError);
+      }
+    }
 
     return NextResponse.json({ id: postId }, { status: 200 });
   } catch (error) {
