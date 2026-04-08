@@ -2,6 +2,8 @@
 
 A reusable Next.js CMS starter extracted from the portfolio/admin system and cleaned up for future client and studio projects.
 
+![next-cms preview](docs/preview.png)
+
 ## Included modules
 
 - posts / blog
