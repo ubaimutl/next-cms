@@ -1,5 +1,6 @@
 import "server-only";
 
+import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
@@ -34,6 +35,8 @@ const globalForPrisma = globalThis as typeof globalThis & {
   prisma?: PrismaClient;
 };
 
+const isVercelRuntime = Boolean(process.env.VERCEL);
+
 function isPrismaErrorWithCode(error: unknown, code: string) {
   return (
     typeof error === "object" &&
@@ -57,9 +60,15 @@ function createPrismaClient() {
     }).$extends(withAccelerate()) as unknown as PrismaClient;
   }
 
-  const adapter = new PrismaPg({
+  const pool = new Pool({
     connectionString: databaseUrl,
+    // In serverless, every function instance owns its own pool.
+    // Keep the pool tiny so concurrent instances do not exhaust the DB.
+    max: isVercelRuntime ? 1 : 10,
+    connectionTimeoutMillis: 5_000,
+    idleTimeoutMillis: 10_000,
   });
+  const adapter = new PrismaPg(pool);
 
   return new PrismaClient({ adapter });
 }
