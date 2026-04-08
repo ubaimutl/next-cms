@@ -34,6 +34,16 @@ const globalForPrisma = globalThis as typeof globalThis & {
   prisma?: PrismaClient;
 };
 
+function isPrismaErrorWithCode(error: unknown, code: string) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof error.code === "string" &&
+    error.code === code
+  );
+}
+
 function createPrismaClient() {
   const databaseUrl = process.env.DATABASE_URL;
 
@@ -73,16 +83,34 @@ function sortCountEntriesDescending(entries: Map<string, number>) {
 }
 
 export async function getAnalyticsSettings() {
-  return prisma.analyticsSettings.upsert({
+  const existingSettings = await prisma.analyticsSettings.findUnique({
     where: {
       id: 1,
     },
-    create: {
-      id: 1,
-      enabled: false,
-    },
-    update: {},
   });
+
+  if (existingSettings) {
+    return existingSettings;
+  }
+
+  try {
+    return await prisma.analyticsSettings.create({
+      data: {
+        id: 1,
+        enabled: false,
+      },
+    });
+  } catch (error) {
+    if (!isPrismaErrorWithCode(error, "P2002")) {
+      throw error;
+    }
+
+    return prisma.analyticsSettings.findUniqueOrThrow({
+      where: {
+        id: 1,
+      },
+    });
+  }
 }
 
 export async function setAnalyticsEnabled(enabled: boolean) {

@@ -6,27 +6,57 @@ export type PublicModuleSettings = {
   shopEnabled: boolean;
 };
 
-export async function getAppSettings() {
+function isPrismaErrorWithCode(error: unknown, code: string) {
+  return (
+    typeof error === "object" &&
+    error !== null &&
+    "code" in error &&
+    typeof error.code === "string" &&
+    error.code === code
+  );
+}
+
+async function createDefaultAppSettings() {
   try {
-    return await prisma.appSettings.upsert({
-      where: {
-        id: 1,
-      },
-      update: {},
-      create: {
+    return await prisma.appSettings.create({
+      data: {
         id: 1,
       },
     });
   } catch (error) {
-    const prismaCode =
-      typeof error === "object" &&
-      error !== null &&
-      "code" in error &&
-      typeof error.code === "string"
-        ? error.code
-        : null;
+    if (!isPrismaErrorWithCode(error, "P2002")) {
+      throw error;
+    }
 
-    if (prismaCode === "P2021") {
+    const existingSettings = await prisma.appSettings.findUnique({
+      where: {
+        id: 1,
+      },
+    });
+
+    if (existingSettings) {
+      return existingSettings;
+    }
+
+    throw error;
+  }
+}
+
+export async function getAppSettings() {
+  try {
+    const existingSettings = await prisma.appSettings.findUnique({
+      where: {
+        id: 1,
+      },
+    });
+
+    if (existingSettings) {
+      return existingSettings;
+    }
+
+    return await createDefaultAppSettings();
+  } catch (error) {
+    if (isPrismaErrorWithCode(error, "P2021")) {
       const now = new Date();
 
       return {
