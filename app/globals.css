@@ -455,7 +455,7 @@ textarea {
   .next-cms-admin .admin-shell {
     min-height: 100svh;
     color: var(--admin-text);
-    background: #15171a;
+ 
   }
 
   .next-cms-admin[data-admin-theme="light"].admin-shell,
@@ -466,7 +466,7 @@ textarea {
 
   .next-cms-admin .admin-panel {
     border: 1px solid var(--admin-border);
-    background: var(--admin-surface);
+
     border-radius: 0.5rem;
     box-shadow: none;
   }

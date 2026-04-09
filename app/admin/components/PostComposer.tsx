@@ -88,7 +88,7 @@ export default function PostComposer({
     : 0;
 
   return (
-    <form onSubmit={onSubmit} className="min-h-screen bg-[#15171a]">
+    <form onSubmit={onSubmit} className="min-h-screen">
       <div className="flex min-h-14 items-center justify-between gap-4 border-b border-white/6 px-4 md:px-8">
         <button
           type="button"

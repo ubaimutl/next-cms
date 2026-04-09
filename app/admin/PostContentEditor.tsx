@@ -136,6 +136,28 @@ const suggestionItems = createSuggestionItems([
   },
 ]);
 
+function getCurrentBlockElement(editor: EditorInstance) {
+  const { $from } = editor.state.selection;
+
+  if ($from.depth > 0) {
+    const blockDom = editor.view.nodeDOM($from.before($from.depth));
+
+    if (blockDom instanceof HTMLElement) {
+      return blockDom;
+    }
+  }
+
+  const domAtSelection = editor.view.domAtPos(editor.state.selection.from).node;
+  const element =
+    domAtSelection instanceof HTMLElement
+      ? domAtSelection
+      : domAtSelection.parentElement;
+
+  return element?.closest(
+    "p, h1, h2, h3, h4, h5, h6, li, blockquote, pre",
+  ) as HTMLElement | null;
+}
+
 function BubbleAction({
   label,
   onClick,
@@ -166,6 +188,7 @@ export default function PostContentEditor({
   const [editorInstance, setEditorInstance] = useState<EditorInstance | null>(null);
   const [showInsertMenu, setShowInsertMenu] = useState(false);
   const [insertButtonTop, setInsertButtonTop] = useState(88);
+  const [showInsertButton, setShowInsertButton] = useState(true);
   const isGhostVariant = variant === "ghost";
   const insertMenuRef = useRef<HTMLDivElement | null>(null);
   const editorViewportRef = useRef<HTMLDivElement | null>(null);
@@ -182,12 +205,47 @@ export default function PostContentEditor({
         }
 
         const container = editorViewportRef.current;
-        const { from } = editor.state.selection;
-        const coords = editor.view.coordsAtPos(from);
-        const rect = container.getBoundingClientRect();
-        const nextTop = coords.top - rect.top + container.scrollTop + 12;
+        const { selection } = editor.state;
+        const { $from } = selection;
+        const currentBlock = $from.parent;
+        const isEmptyTextBlock =
+          selection.empty &&
+          currentBlock.isTextblock &&
+          currentBlock.textContent.trim().length === 0;
 
-        setInsertButtonTop(Math.max(44, nextTop));
+        if (!isEmptyTextBlock) {
+          setShowInsertMenu(false);
+          setShowInsertButton(false);
+          return;
+        }
+
+        const rect = container.getBoundingClientRect();
+        const currentBlockElement = getCurrentBlockElement(editor);
+
+        if (currentBlockElement) {
+          const blockRect = currentBlockElement.getBoundingClientRect();
+          const computedLineHeight = Number.parseFloat(
+            window.getComputedStyle(currentBlockElement).lineHeight,
+          );
+          const effectiveLineHeight = Number.isFinite(computedLineHeight)
+            ? Math.min(blockRect.height, Math.max(20, computedLineHeight))
+            : blockRect.height;
+          const nextTop =
+            blockRect.top - rect.top + container.scrollTop + effectiveLineHeight / 2;
+
+          setShowInsertButton(true);
+          setInsertButtonTop(Math.max(14, nextTop));
+          return;
+        }
+
+        const blockStart = $from.start();
+        const coords = editor.view.coordsAtPos(blockStart);
+        const lineHeight = Math.max(20, coords.bottom - coords.top);
+        const nextTop =
+          coords.top - rect.top + container.scrollTop + lineHeight / 2;
+
+        setShowInsertButton(true);
+        setInsertButtonTop(Math.max(14, nextTop));
       });
     },
     [isGhostVariant],
@@ -301,10 +359,10 @@ export default function PostContentEditor({
           </div>
         ) : null}
 
-        {isGhostVariant && !isFocusMode ? (
+        {isGhostVariant && !isFocusMode && showInsertButton ? (
           <div
             ref={insertMenuRef}
-            className="absolute left-0 z-40 -translate-y-1/2"
+            className="absolute left-[-3.5rem] z-40 -translate-y-1/2"
             style={{ top: `${insertButtonTop}px` }}
           >
             <button
@@ -324,7 +382,7 @@ export default function PostContentEditor({
             </button>
 
             {showInsertMenu ? (
-              <div className="absolute top-1/2 left-12 z-40 w-72 -translate-y-1/2 overflow-hidden rounded-[0.95rem] border border-white/8 bg-[#111315] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
+              <div className="absolute top-1/2 left-14 z-40 w-72 -translate-y-1/2 overflow-hidden rounded-[0.95rem] border border-white/8 bg-[#111315] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
                 {suggestionItems.map((item) => (
                   <button
                     key={`insert-${item.title}`}
@@ -406,7 +464,7 @@ export default function PostContentEditor({
                 attributes: {
                   class:
                     isGhostVariant
-                      ? "novel-editor min-h-[52vh] pl-12 text-[1.06rem] leading-relaxed outline-none md:text-[1.12rem]"
+                      ? "novel-editor min-h-[52vh] text-[1.06rem] leading-relaxed outline-none md:text-[1.12rem]"
                       : "novel-editor min-h-[24rem] text-[1rem] leading-relaxed outline-none md:text-[1.02rem]",
                 },
                 handleDOMEvents: {

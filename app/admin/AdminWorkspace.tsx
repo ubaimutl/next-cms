@@ -985,8 +985,8 @@ export default function AdminWorkspace({
           editingProductId === null
             ? [savedProduct, ...current]
             : current.map((product) =>
-                product.id === savedProduct.id ? savedProduct : product,
-              ),
+              product.id === savedProduct.id ? savedProduct : product,
+            ),
         );
         setFeedback({
           tone: "success",
@@ -1620,11 +1620,10 @@ export default function AdminWorkspace({
         {feedback ? (
           <div className="pointer-events-none fixed top-4 left-1/2 z-[140] -translate-x-1/2 px-4">
             <div
-              className={`rounded-md border px-4 py-3 text-sm leading-relaxed shadow-[0_16px_40px_rgba(0,0,0,0.24)] ${
-                feedback.tone === "success"
+              className={`rounded-md border px-4 py-3 text-sm leading-relaxed shadow-[0_16px_40px_rgba(0,0,0,0.24)] ${feedback.tone === "success"
                   ? "border-emerald-500/20 bg-emerald-500/12 text-emerald-200"
                   : "border-red-500/20 bg-red-500/12 text-red-200"
-              }`}
+                }`}
             >
               {feedback.text}
             </div>
@@ -1693,404 +1692,403 @@ export default function AdminWorkspace({
 
   return (
     <section className="next-cms-admin admin-shell" data-admin-theme={theme}>
-      <div className="grid min-h-screen xl:grid-cols-[15.5rem_minmax(0,1fr)]">
-          <AdminSidebar
-            admin={admin}
-            theme={theme}
-            isLoggingOut={isLoggingOut}
+      <div className="grid min-h-screen xl:grid-cols-[20.5rem_minmax(0,1fr)]">
+        <AdminSidebar
+          admin={admin}
+          theme={theme}
+          isLoggingOut={isLoggingOut}
+          activeSection={activeSection}
+          postCount={posts.length}
+          projectCount={projects.length}
+          productCount={products.length}
+          mediaCount={mediaAssets.length}
+          orderCount={orders.length}
+          messageCount={messages.length}
+          userCount={adminUsers.length}
+          filter={filter}
+          draftCount={draftCount}
+          publishedCount={publishedCount}
+          orderFilter={orderFilter}
+          pendingOrderCount={pendingOrderCount}
+          completedOrderCount={completedOrderCount}
+          failedOrderCount={failedOrderCount}
+          canceledOrderCount={canceledOrderCount}
+          messageFilter={messageFilter}
+          newMessageCount={newMessageCount}
+          readMessageCount={readMessageCount}
+          archivedMessageCount={archivedMessageCount}
+          canManageSettings={canManageWorkspaceSettings}
+          onLogout={() => {
+            void handleLogout();
+          }}
+          onToggleTheme={() =>
+            setTheme((current) => (current === "light" ? "dark" : "light"))
+          }
+          onSwitchSection={switchSection}
+          onSetFilter={setFilter}
+          onSetOrderFilter={setOrderFilter}
+          onSetMessageFilter={setMessageFilter}
+        />
+
+        <div className="space-y-6 px-4 py-4 sm:px-6 lg:px-10 lg:py-8">
+          <AdminHeader
             activeSection={activeSection}
-            postCount={posts.length}
+            pageTitle={pageTitle}
+            filter={filter}
+            messageFilter={messageFilter}
+            orderFilter={orderFilter}
+            analyticsEnabled={analytics.enabled}
+            canManageSettings={canManageWorkspaceSettings}
             projectCount={projects.length}
             productCount={products.length}
             mediaCount={mediaAssets.length}
             orderCount={orders.length}
-            messageCount={messages.length}
-            userCount={adminUsers.length}
-            filter={filter}
-            draftCount={draftCount}
-            publishedCount={publishedCount}
-            orderFilter={orderFilter}
             pendingOrderCount={pendingOrderCount}
             completedOrderCount={completedOrderCount}
             failedOrderCount={failedOrderCount}
             canceledOrderCount={canceledOrderCount}
-            messageFilter={messageFilter}
-            newMessageCount={newMessageCount}
-            readMessageCount={readMessageCount}
-            archivedMessageCount={archivedMessageCount}
-            canManageSettings={canManageWorkspaceSettings}
-            onLogout={() => {
-              void handleLogout();
-            }}
-            onToggleTheme={() =>
-              setTheme((current) => (current === "light" ? "dark" : "light"))
-            }
-            onSwitchSection={switchSection}
+            showComposer={showComposer}
+            isEditingPost={isEditingPost}
+            isEditingProject={isEditingProject}
+            isEditingProduct={isEditingProduct}
             onSetFilter={setFilter}
-            onSetOrderFilter={setOrderFilter}
             onSetMessageFilter={setMessageFilter}
+            onSetOrderFilter={setOrderFilter}
+            onComposerButtonClick={handleComposerButtonClick}
           />
 
-          <div className="space-y-6 px-4 py-4 sm:px-6 lg:px-10 lg:py-8">
-            <AdminHeader
-              activeSection={activeSection}
-              pageTitle={pageTitle}
-              filter={filter}
-              messageFilter={messageFilter}
-              orderFilter={orderFilter}
-              analyticsEnabled={analytics.enabled}
-              canManageSettings={canManageWorkspaceSettings}
-              projectCount={projects.length}
-              productCount={products.length}
-              mediaCount={mediaAssets.length}
-              orderCount={orders.length}
-              pendingOrderCount={pendingOrderCount}
-              completedOrderCount={completedOrderCount}
-              failedOrderCount={failedOrderCount}
-              canceledOrderCount={canceledOrderCount}
-              showComposer={showComposer}
-              isEditingPost={isEditingPost}
-              isEditingProject={isEditingProject}
-              isEditingProduct={isEditingProduct}
-              onSetFilter={setFilter}
-              onSetMessageFilter={setMessageFilter}
-              onSetOrderFilter={setOrderFilter}
-              onComposerButtonClick={handleComposerButtonClick}
-            />
-
-            {feedback ? (
-              <div
-                className={`admin-panel px-6 py-4 text-sm leading-relaxed md:px-8 ${
-                  feedback.tone === "success"
-                    ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-200"
-                    : "border-red-500/20 bg-red-500/10 text-red-200"
+          {feedback ? (
+            <div
+              className={`admin-panel px-6 py-4 text-sm leading-relaxed md:px-8 ${feedback.tone === "success"
+                  ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-200"
+                  : "border-red-500/20 bg-red-500/10 text-red-200"
                 }`}
-              >
-                {feedback.text}
-              </div>
-            ) : null}
-
-            {showComposer &&
-              (activeSection === "posts" ? (
-                <PostComposer
-                  isEditingPost={isEditingPost}
-                  postForm={postForm}
-                  editorKey={editorKey}
-                  postInputKey={postInputKey}
-                  featuredImageUrl={postExistingImage}
-                  isSubmittingPost={isSubmittingPost}
-                  onSubmit={handlePostSubmit}
-                  onCancel={closeComposer}
-                  onTitleChange={(title) =>
-                    setPostForm((current) => ({
-                      ...current,
-                      title,
-                    }))
-                  }
-                  onSeoTitleChange={(seoTitle) =>
-                    setPostForm((current) => ({
-                      ...current,
-                      seoTitle,
-                    }))
-                  }
-                  onSeoDescriptionChange={(seoDescription) =>
-                    setPostForm((current) => ({
-                      ...current,
-                      seoDescription,
-                    }))
-                  }
-                  onSeoImageChange={(seoImage) =>
-                    setPostForm((current) => ({
-                      ...current,
-                      seoImage,
-                    }))
-                  }
-                  onPublishedToggle={() =>
-                    setPostForm((current) => ({
-                      ...current,
-                      published: !current.published,
-                    }))
-                  }
-                  onFeaturedImageChange={handlePostFileChange}
-                  onRemoveFeaturedImage={() => {
-                    setPostExistingImage(null);
-                    setPostForm((current) => ({
-                      ...current,
-                      featuredImageFile: null,
-                    }));
-                    setPostInputKey((current) => current + 1);
-                  }}
-                  onContentChange={({ html, text }) =>
-                    setPostForm((current) => ({
-                      ...current,
-                      contentHtml: html,
-                      contentText: text,
-                    }))
-                  }
-                />
-              ) : activeSection === "projects" ? (
-                <ProjectComposer
-                  isEditingProject={isEditingProject}
-                  projectForm={projectForm}
-                  projectExistingImages={projectExistingImages}
-                  projectInputKey={projectInputKey}
-                  isSubmittingProject={isSubmittingProject}
-                  onSubmit={handleProjectSubmit}
-                  onCancel={closeComposer}
-                  onTitleChange={(title) =>
-                    setProjectForm((current) => ({
-                      ...current,
-                      title,
-                    }))
-                  }
-                  onLinkChange={(link) =>
-                    setProjectForm((current) => ({
-                      ...current,
-                      link,
-                    }))
-                  }
-                  onDescriptionChange={(description) =>
-                    setProjectForm((current) => ({
-                      ...current,
-                      description,
-                    }))
-                  }
-                  onTagsChange={(tags) =>
-                    setProjectForm((current) => ({
-                      ...current,
-                      tags,
-                    }))
-                  }
-                  onPrimaryImageChange={(event) =>
-                    handleProjectFileChange("primaryImageFile", event)
-                  }
-                  onSecondaryImageChange={(event) =>
-                    handleProjectFileChange("secondaryImageFile", event)
-                  }
-                />
-              ) : activeSection === "shop" ? (
-                <ProductComposer
-                  isEditingProduct={isEditingProduct}
-                  productForm={productForm}
-                  productExistingImages={productExistingImages}
-                  productInputKey={productInputKey}
-                  editorKey={editorKey}
-                  isSubmittingProduct={isSubmittingProduct}
-                  onSubmit={handleProductSubmit}
-                  onCancel={closeComposer}
-                  onTitleChange={(title) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      title,
-                    }))
-                  }
-                  onSummaryChange={(summary) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      summary,
-                    }))
-                  }
-                  onSeoTitleChange={(seoTitle) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      seoTitle,
-                    }))
-                  }
-                  onSeoDescriptionChange={(seoDescription) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      seoDescription,
-                    }))
-                  }
-                  onSeoImageChange={(seoImage) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      seoImage,
-                    }))
-                  }
-                  onPriceChange={(price) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      price,
-                    }))
-                  }
-                  onKindChange={(kind) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      kind,
-                    }))
-                  }
-                  onActiveToggle={() =>
-                    setProductForm((current) => ({
-                      ...current,
-                      active: !current.active,
-                    }))
-                  }
-                  onAvailabilityChange={(availability) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      availability,
-                    }))
-                  }
-                  onRequiresBriefToggle={() =>
-                    setProductForm((current) => ({
-                      ...current,
-                      requiresBrief: !current.requiresBrief,
-                      briefPrompt: current.requiresBrief ? "" : current.briefPrompt,
-                    }))
-                  }
-                  onBriefPromptChange={(briefPrompt) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      briefPrompt,
-                    }))
-                  }
-                  onDeliveryTextChange={(deliveryText) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      deliveryText,
-                    }))
-                  }
-                  onHighlightsChange={(highlights) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      highlights,
-                    }))
-                  }
-                  onPrimaryImageChange={(event) =>
-                    handleProductFileChange("primaryImageFile", event)
-                  }
-                  onSecondaryImageChange={(event) =>
-                    handleProductFileChange("secondaryImageFile", event)
-                  }
-                  onContentChange={({ html, text }) =>
-                    setProductForm((current) => ({
-                      ...current,
-                      contentHtml: html,
-                      contentText: text,
-                    }))
-                  }
-                />
-              ) : null)}
-
-            <div>
-              {activeSection === "dashboard" ? (
-                <DashboardSection
-                  analytics={analytics}
-                  posts={posts}
-                  projects={projects}
-                  products={products}
-                  orders={orders}
-                  messages={messages}
-                  onOpenPosts={() => switchSection("posts")}
-                  onNewPost={startPostCreate}
-                  onOpenMessages={() => switchSection("messages")}
-                  onOpenOrders={() => switchSection("orders")}
-                  onOpenShop={() => switchSection("shop")}
-                  onOpenProjects={() => switchSection("projects")}
-                />
-              ) : activeSection === "posts" ? (
-                <PostsSection
-                  posts={visiblePosts}
-                  postViewCounts={analytics.postViewCounts}
-                  isDeletingPostId={isDeletingPostId}
-                  onEdit={startPostEdit}
-                  onDelete={(post) => {
-                    void handleDeletePost(post);
-                  }}
-                />
-              ) : activeSection === "projects" ? (
-                <ProjectsSection
-                  projects={projects}
-                  isDeletingProjectId={isDeletingProjectId}
-                  onEdit={startProjectEdit}
-                  onDelete={(project) => {
-                    void handleDeleteProject(project);
-                  }}
-                />
-              ) : activeSection === "shop" ? (
-                <ShopSection
-                  products={products}
-                  isDeletingProductId={isDeletingProductId}
-                  onEdit={startProductEdit}
-                  onDelete={(product) => {
-                    void handleDeleteProduct(product);
-                  }}
-                />
-              ) : activeSection === "media" ? (
-                <MediaSection
-                  assets={mediaAssets}
-                  isDeletingMediaId={isDeletingMediaId}
-                  onDelete={(asset) => {
-                    void handleDeleteMediaAsset(asset);
-                  }}
-                />
-              ) : activeSection === "orders" ? (
-                <OrdersSection
-                  orders={visibleOrders}
-                  selectedOrder={selectedOrder}
-                  onOpenOrder={(order: AdminOrder) => {
-                    setSelectedOrderId(order.id);
-                  }}
-                />
-              ) : activeSection === "messages" ? (
-                <MessagesSection
-                  messages={visibleMessages}
-                  selectedMessage={selectedMessage}
-                  isUpdatingMessage={isUpdatingMessage}
-                  isDeletingMessageId={isDeletingMessageId}
-                  onOpenMessage={(message) => {
-                    void openMessage(message);
-                  }}
-                  onUpdateMessageStatus={(messageId, status) => {
-                    void updateMessageStatus(messageId, status);
-                  }}
-                  onDeleteMessage={(message) => {
-                    void handleDeleteMessage(message);
-                  }}
-                />
-              ) : (
-                <SettingsSection
-                  settings={settings}
-                  analytics={analytics}
-                  adminUsers={adminUsers}
-                  currentAdmin={{ id: admin.id, role: admin.role }}
-                  canManageSettings={canManageWorkspaceSettings}
-                  canManageUsers={canManageWorkspaceUsers}
-                  isSavingSettings={isSavingSettings}
-                  isUpdatingAnalytics={isUpdatingAnalytics}
-                  isSubmittingUser={isSubmittingUser}
-                  isUpdatingUserId={isUpdatingUserId}
-                  isDeletingUserId={isDeletingUserId}
-                  userForm={userForm}
-                  onToggleModule={(module, nextValue) => {
-                    void handleSettingsUpdate({ [module]: nextValue });
-                  }}
-                  onToggleAnalytics={(nextEnabled) => {
-                    void handleAnalyticsToggle(nextEnabled);
-                  }}
-                  onUserFormChange={(field, value) =>
-                    setUserForm((current) => ({
-                      ...current,
-                      [field]: value,
-                    }))
-                  }
-                  onCreateUser={() => {
-                    void handleCreateAdminUser();
-                  }}
-                  onUpdateUserRole={(user, role) => {
-                    void handleUpdateAdminUser(user.id, { role });
-                  }}
-                  onToggleUserActive={(user, nextActive) => {
-                    void handleUpdateAdminUser(user.id, { active: nextActive });
-                  }}
-                  onDeleteUser={(user) => {
-                    void handleDeleteAdminUser(user);
-                  }}
-                />
-              )}
+            >
+              {feedback.text}
             </div>
+          ) : null}
+
+          {showComposer &&
+            (activeSection === "posts" ? (
+              <PostComposer
+                isEditingPost={isEditingPost}
+                postForm={postForm}
+                editorKey={editorKey}
+                postInputKey={postInputKey}
+                featuredImageUrl={postExistingImage}
+                isSubmittingPost={isSubmittingPost}
+                onSubmit={handlePostSubmit}
+                onCancel={closeComposer}
+                onTitleChange={(title) =>
+                  setPostForm((current) => ({
+                    ...current,
+                    title,
+                  }))
+                }
+                onSeoTitleChange={(seoTitle) =>
+                  setPostForm((current) => ({
+                    ...current,
+                    seoTitle,
+                  }))
+                }
+                onSeoDescriptionChange={(seoDescription) =>
+                  setPostForm((current) => ({
+                    ...current,
+                    seoDescription,
+                  }))
+                }
+                onSeoImageChange={(seoImage) =>
+                  setPostForm((current) => ({
+                    ...current,
+                    seoImage,
+                  }))
+                }
+                onPublishedToggle={() =>
+                  setPostForm((current) => ({
+                    ...current,
+                    published: !current.published,
+                  }))
+                }
+                onFeaturedImageChange={handlePostFileChange}
+                onRemoveFeaturedImage={() => {
+                  setPostExistingImage(null);
+                  setPostForm((current) => ({
+                    ...current,
+                    featuredImageFile: null,
+                  }));
+                  setPostInputKey((current) => current + 1);
+                }}
+                onContentChange={({ html, text }) =>
+                  setPostForm((current) => ({
+                    ...current,
+                    contentHtml: html,
+                    contentText: text,
+                  }))
+                }
+              />
+            ) : activeSection === "projects" ? (
+              <ProjectComposer
+                isEditingProject={isEditingProject}
+                projectForm={projectForm}
+                projectExistingImages={projectExistingImages}
+                projectInputKey={projectInputKey}
+                isSubmittingProject={isSubmittingProject}
+                onSubmit={handleProjectSubmit}
+                onCancel={closeComposer}
+                onTitleChange={(title) =>
+                  setProjectForm((current) => ({
+                    ...current,
+                    title,
+                  }))
+                }
+                onLinkChange={(link) =>
+                  setProjectForm((current) => ({
+                    ...current,
+                    link,
+                  }))
+                }
+                onDescriptionChange={(description) =>
+                  setProjectForm((current) => ({
+                    ...current,
+                    description,
+                  }))
+                }
+                onTagsChange={(tags) =>
+                  setProjectForm((current) => ({
+                    ...current,
+                    tags,
+                  }))
+                }
+                onPrimaryImageChange={(event) =>
+                  handleProjectFileChange("primaryImageFile", event)
+                }
+                onSecondaryImageChange={(event) =>
+                  handleProjectFileChange("secondaryImageFile", event)
+                }
+              />
+            ) : activeSection === "shop" ? (
+              <ProductComposer
+                isEditingProduct={isEditingProduct}
+                productForm={productForm}
+                productExistingImages={productExistingImages}
+                productInputKey={productInputKey}
+                editorKey={editorKey}
+                isSubmittingProduct={isSubmittingProduct}
+                onSubmit={handleProductSubmit}
+                onCancel={closeComposer}
+                onTitleChange={(title) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    title,
+                  }))
+                }
+                onSummaryChange={(summary) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    summary,
+                  }))
+                }
+                onSeoTitleChange={(seoTitle) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    seoTitle,
+                  }))
+                }
+                onSeoDescriptionChange={(seoDescription) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    seoDescription,
+                  }))
+                }
+                onSeoImageChange={(seoImage) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    seoImage,
+                  }))
+                }
+                onPriceChange={(price) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    price,
+                  }))
+                }
+                onKindChange={(kind) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    kind,
+                  }))
+                }
+                onActiveToggle={() =>
+                  setProductForm((current) => ({
+                    ...current,
+                    active: !current.active,
+                  }))
+                }
+                onAvailabilityChange={(availability) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    availability,
+                  }))
+                }
+                onRequiresBriefToggle={() =>
+                  setProductForm((current) => ({
+                    ...current,
+                    requiresBrief: !current.requiresBrief,
+                    briefPrompt: current.requiresBrief ? "" : current.briefPrompt,
+                  }))
+                }
+                onBriefPromptChange={(briefPrompt) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    briefPrompt,
+                  }))
+                }
+                onDeliveryTextChange={(deliveryText) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    deliveryText,
+                  }))
+                }
+                onHighlightsChange={(highlights) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    highlights,
+                  }))
+                }
+                onPrimaryImageChange={(event) =>
+                  handleProductFileChange("primaryImageFile", event)
+                }
+                onSecondaryImageChange={(event) =>
+                  handleProductFileChange("secondaryImageFile", event)
+                }
+                onContentChange={({ html, text }) =>
+                  setProductForm((current) => ({
+                    ...current,
+                    contentHtml: html,
+                    contentText: text,
+                  }))
+                }
+              />
+            ) : null)}
+
+          <div>
+            {activeSection === "dashboard" ? (
+              <DashboardSection
+                analytics={analytics}
+                posts={posts}
+                projects={projects}
+                products={products}
+                orders={orders}
+                messages={messages}
+                onOpenPosts={() => switchSection("posts")}
+                onNewPost={startPostCreate}
+                onOpenMessages={() => switchSection("messages")}
+                onOpenOrders={() => switchSection("orders")}
+                onOpenShop={() => switchSection("shop")}
+                onOpenProjects={() => switchSection("projects")}
+              />
+            ) : activeSection === "posts" ? (
+              <PostsSection
+                posts={visiblePosts}
+                postViewCounts={analytics.postViewCounts}
+                isDeletingPostId={isDeletingPostId}
+                onEdit={startPostEdit}
+                onDelete={(post) => {
+                  void handleDeletePost(post);
+                }}
+              />
+            ) : activeSection === "projects" ? (
+              <ProjectsSection
+                projects={projects}
+                isDeletingProjectId={isDeletingProjectId}
+                onEdit={startProjectEdit}
+                onDelete={(project) => {
+                  void handleDeleteProject(project);
+                }}
+              />
+            ) : activeSection === "shop" ? (
+              <ShopSection
+                products={products}
+                isDeletingProductId={isDeletingProductId}
+                onEdit={startProductEdit}
+                onDelete={(product) => {
+                  void handleDeleteProduct(product);
+                }}
+              />
+            ) : activeSection === "media" ? (
+              <MediaSection
+                assets={mediaAssets}
+                isDeletingMediaId={isDeletingMediaId}
+                onDelete={(asset) => {
+                  void handleDeleteMediaAsset(asset);
+                }}
+              />
+            ) : activeSection === "orders" ? (
+              <OrdersSection
+                orders={visibleOrders}
+                selectedOrder={selectedOrder}
+                onOpenOrder={(order: AdminOrder) => {
+                  setSelectedOrderId(order.id);
+                }}
+              />
+            ) : activeSection === "messages" ? (
+              <MessagesSection
+                messages={visibleMessages}
+                selectedMessage={selectedMessage}
+                isUpdatingMessage={isUpdatingMessage}
+                isDeletingMessageId={isDeletingMessageId}
+                onOpenMessage={(message) => {
+                  void openMessage(message);
+                }}
+                onUpdateMessageStatus={(messageId, status) => {
+                  void updateMessageStatus(messageId, status);
+                }}
+                onDeleteMessage={(message) => {
+                  void handleDeleteMessage(message);
+                }}
+              />
+            ) : (
+              <SettingsSection
+                settings={settings}
+                analytics={analytics}
+                adminUsers={adminUsers}
+                currentAdmin={{ id: admin.id, role: admin.role }}
+                canManageSettings={canManageWorkspaceSettings}
+                canManageUsers={canManageWorkspaceUsers}
+                isSavingSettings={isSavingSettings}
+                isUpdatingAnalytics={isUpdatingAnalytics}
+                isSubmittingUser={isSubmittingUser}
+                isUpdatingUserId={isUpdatingUserId}
+                isDeletingUserId={isDeletingUserId}
+                userForm={userForm}
+                onToggleModule={(module, nextValue) => {
+                  void handleSettingsUpdate({ [module]: nextValue });
+                }}
+                onToggleAnalytics={(nextEnabled) => {
+                  void handleAnalyticsToggle(nextEnabled);
+                }}
+                onUserFormChange={(field, value) =>
+                  setUserForm((current) => ({
+                    ...current,
+                    [field]: value,
+                  }))
+                }
+                onCreateUser={() => {
+                  void handleCreateAdminUser();
+                }}
+                onUpdateUserRole={(user, role) => {
+                  void handleUpdateAdminUser(user.id, { role });
+                }}
+                onToggleUserActive={(user, nextActive) => {
+                  void handleUpdateAdminUser(user.id, { active: nextActive });
+                }}
+                onDeleteUser={(user) => {
+                  void handleDeleteAdminUser(user);
+                }}
+              />
+            )}
           </div>
+        </div>
       </div>
     </section>
   );
