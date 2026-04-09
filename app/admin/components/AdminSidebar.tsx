@@ -91,10 +91,10 @@ function NavItem({
     <button
       type="button"
       onClick={onClick}
-      className={`admin-nav-link ${active ? "admin-nav-link-active" : ""}`}
+      className={`admin-nav-link min-w-0 ${active ? "admin-nav-link-active" : ""}`}
     >
       <span className="text-white/58">{icon}</span>
-      <span>{label}</span>
+      <span className="min-w-0 truncate">{label}</span>
       {meta !== undefined && meta !== null ? (
         <span className={adminNavMetaClass}>{meta}</span>
       ) : null}
@@ -117,10 +117,10 @@ function SubItem({
     <button
       type="button"
       onClick={onClick}
-      className={`admin-nav-link ml-8 py-2 text-[0.84rem] ${active ? "admin-nav-link-active" : ""
+      className={`admin-nav-link min-w-0 py-2 pr-3 pl-11 text-[0.84rem] ${active ? "admin-nav-link-active" : ""
         }`}
     >
-      <span>{label}</span>
+      <span className="min-w-0 truncate">{label}</span>
       <span className={adminNavMetaClass}>{meta}</span>
     </button>
   );
@@ -195,8 +195,8 @@ export default function AdminSidebar({
   }
 
   return (
-    <aside className="xl:sticky xl:top-0 xl:h-screen xl:self-start">
-      <div className="flex h-full flex-col border-b border-white/6 bg-[#111315] px-4 py-5 xl:border-r xl:border-b-0">
+    <aside className="overflow-hidden xl:sticky xl:top-0 xl:h-screen xl:self-start">
+      <div className="flex h-full min-w-0 flex-col overflow-hidden border-b border-white/6 bg-[#111315] px-4 py-5 xl:border-r xl:border-b-0">
         <div className="flex items-center justify-between gap-3 px-2">
           <Link href="/" className="flex min-w-0 items-center gap-3">
             <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/14 bg-white/[0.02] text-white/88">
@@ -238,7 +238,7 @@ export default function AdminSidebar({
           </Link>
         </div>
 
-        <nav className="mt-8 flex-1 space-y-5 overflow-y-auto pr-1">
+        <nav className="mt-8 flex-1 space-y-5 overflow-y-auto overflow-x-hidden pr-1">
           <div className="space-y-1">
             <GroupHeader
               label="Content"

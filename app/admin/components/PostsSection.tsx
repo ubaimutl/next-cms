@@ -4,7 +4,12 @@ import Link from "next/link";
 
 import { getExcerptFromHtml } from "@/lib/post-content";
 
-import { StatusPill, adminTableHeadClass } from "./ui";
+import {
+  StatusPill,
+  adminTableActionClass,
+  adminTableActionDangerClass,
+  adminTableHeadClass,
+} from "./ui";
 import type { AdminPost } from "./types";
 
 type PostsSectionProps = {
@@ -25,8 +30,8 @@ export default function PostsSection({
   return (
     <section className="admin-panel overflow-hidden">
       <div className="overflow-x-auto">
-        <div className="min-w-[56rem]">
-          <div className="grid grid-cols-[minmax(0,1.8fr)_7rem_9rem_7rem_8rem] gap-4 border-b border-white/6 px-6 py-4 md:px-8">
+        <div className="min-w-[60rem]">
+          <div className="grid grid-cols-[minmax(0,1.8fr)_7rem_9rem_8rem_10rem] gap-4 border-b border-white/6 px-6 py-4 md:px-8">
         <span className={adminTableHeadClass}>Title</span>
         <span className={`${adminTableHeadClass} text-right`}>Views</span>
         <span className={adminTableHeadClass}>Path</span>
@@ -43,7 +48,7 @@ export default function PostsSection({
               return (
                 <div
                   key={post.id}
-                  className="grid grid-cols-[minmax(0,1.8fr)_7rem_9rem_7rem_8rem] gap-4 border-b border-white/6 px-6 py-5 last:border-b-0 md:px-8"
+                  className="grid grid-cols-[minmax(0,1.8fr)_7rem_9rem_8rem_10rem] gap-4 border-b border-white/6 px-6 py-5 last:border-b-0 md:px-8"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-[1rem] font-semibold text-white/94">
@@ -70,7 +75,7 @@ export default function PostsSection({
                         href={`/posts/${post.slug}`}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-sm text-white/58 transition hover:text-white"
+                        className={adminTableActionClass}
                       >
                         Preview
                       </Link>
@@ -78,7 +83,7 @@ export default function PostsSection({
                     <button
                       type="button"
                       onClick={() => onEdit(post)}
-                      className="text-sm text-white/68 transition hover:text-white"
+                      className={adminTableActionClass}
                     >
                       Edit
                     </button>
@@ -86,7 +91,7 @@ export default function PostsSection({
                       type="button"
                       onClick={() => onDelete(post)}
                       disabled={isDeletingPostId === post.id}
-                      className="text-sm text-[#ff8f8f] transition hover:text-[#ffb1b1] disabled:opacity-45"
+                      className={adminTableActionDangerClass}
                     >
                       {isDeletingPostId === post.id ? "Deleting" : "Delete"}
                     </button>

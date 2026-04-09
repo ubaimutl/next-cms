@@ -35,6 +35,12 @@ export const adminNavMetaClass =
 export const adminTableHeadClass =
   "text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-white/38";
 
+export const adminTableActionClass =
+  "inline-flex min-h-[2rem] items-center justify-center rounded-[0.55rem] border border-[var(--admin-border)] bg-[var(--admin-surface-3)] px-3 text-[0.8rem] font-medium text-[var(--admin-text)] transition hover:bg-[var(--admin-surface)]";
+
+export const adminTableActionDangerClass =
+  "inline-flex min-h-[2rem] items-center justify-center rounded-[0.55rem] border border-[rgba(255,106,106,0.16)] bg-[rgba(255,106,106,0.04)] px-3 text-[0.8rem] font-medium text-[#ff9b9b] transition hover:border-[rgba(255,106,106,0.26)] hover:bg-[rgba(255,106,106,0.08)] disabled:opacity-45";
+
 const adminPillBaseClass =
   "inline-flex items-center rounded-full border border-white/8 bg-white/[0.04] px-[0.7rem] py-[0.3rem] text-[0.64rem] font-semibold uppercase tracking-[0.12em] text-[var(--admin-muted)]";
 

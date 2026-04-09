@@ -130,11 +130,11 @@ export default async function WorkPage() {
 
       {secondaryProjects.length > 0 ? (
         <section className="shell mt-6">
-          <div className="grid gap-5 md:grid-cols-2">
-            {secondaryProjects.map((project, index) => (
+          <div className="grid gap-6 md:grid-cols-2 md:gap-6">
+            {secondaryProjects.map((project) => (
               <article
                 key={project.id}
-                className={`front-card overflow-hidden ${index % 3 === 0 ? "md:translate-y-6" : ""}`}
+                className="front-card flex h-full flex-col overflow-hidden"
               >
                 {project.images[0] ? (
                   <div className="media-frame aspect-[4/3] rounded-none">
@@ -149,11 +149,11 @@ export default async function WorkPage() {
                   </div>
                 ) : null}
 
-                <div className="p-6">
+                <div className="flex flex-1 flex-col p-6">
                   <h3 className="text-[1.45rem] leading-tight font-medium tracking-[-0.04em]">
                     {project.title}
                   </h3>
-                  <p className="mt-3 text-[0.9rem] leading-[1.6] text-base-content/62">
+                  <p className="mt-3 line-clamp-3 text-[0.9rem] leading-[1.6] text-base-content/62">
                     {project.description}
                   </p>
                   {project.link ? (
@@ -161,7 +161,7 @@ export default async function WorkPage() {
                       href={project.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="front-link mt-5"
+                      className="front-link mt-auto pt-5"
                     >
                       Open project
                     </a>
