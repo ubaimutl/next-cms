@@ -24,6 +24,7 @@ type AdminSidebarProps = {
   postCount: number;
   projectCount: number;
   productCount: number;
+  mediaCount: number;
   orderCount: number;
   messageCount: number;
   userCount: number;
@@ -156,6 +157,7 @@ export default function AdminSidebar({
   postCount,
   projectCount,
   productCount,
+  mediaCount,
   orderCount,
   messageCount,
   userCount,
@@ -289,6 +291,14 @@ export default function AdminSidebar({
                   active={activeSection === "shop"}
                   meta={productCount}
                   onClick={() => onSwitchSection("shop")}
+                />
+
+                <NavItem
+                  label="Media"
+                  icon={<Icon path="M4.5 6.5h15v11h-15zM8 11l2.2-2.2a1 1 0 0 1 1.4 0l1.8 1.8 1.1-1.1a1 1 0 0 1 1.4 0L19 13M9 10.25a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5Z" />}
+                  active={activeSection === "media"}
+                  meta={mediaCount}
+                  onClick={() => onSwitchSection("media")}
                 />
               </div>
             ) : null}

@@ -16,6 +16,7 @@ import { getPlainTextFromHtml } from "@/lib/post-content";
 import DashboardSection from "./components/DashboardSection";
 import AdminHeader from "./components/AdminHeader";
 import AdminSidebar from "./components/AdminSidebar";
+import MediaSection from "./components/MediaSection";
 import MessagesSection from "./components/MessagesSection";
 import OrdersSection from "./components/OrdersSection";
 import PostComposer from "./components/PostComposer";
@@ -27,6 +28,7 @@ import SettingsSection from "./components/SettingsSection";
 import ShopSection from "./components/ShopSection";
 import {
   type AdminAppSettings,
+  type AdminMediaAsset,
   type AdminMessage,
   type AdminMessageStatus,
   type AdminOrder,
@@ -81,6 +83,7 @@ export default function AdminWorkspace({
   initialProducts,
   initialOrders,
   initialMessages,
+  initialMediaAssets,
   initialAnalytics,
   initialSettings,
   initialUsers,
@@ -92,6 +95,7 @@ export default function AdminWorkspace({
   const [products, setProducts] = useState(initialProducts);
   const [orders] = useState(initialOrders);
   const [messages, setMessages] = useState(initialMessages);
+  const [mediaAssets, setMediaAssets] = useState(initialMediaAssets);
   const [analytics, setAnalytics] = useState(initialAnalytics);
   const [settings, setSettings] = useState<AdminAppSettings>(initialSettings);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>(initialUsers);
@@ -112,6 +116,7 @@ export default function AdminWorkspace({
   const [isDeletingMessageId, setIsDeletingMessageId] = useState<number | null>(
     null,
   );
+  const [isDeletingMediaId, setIsDeletingMediaId] = useState<number | null>(null);
   const [isUpdatingAnalytics, setIsUpdatingAnalytics] = useState(false);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [isSubmittingUser, setIsSubmittingUser] = useState(false);
@@ -337,6 +342,10 @@ export default function AdminWorkspace({
     if (section === "orders" && !selectedOrderId && orders[0]) {
       setSelectedOrderId(orders[0].id);
     }
+
+    if (section === "media") {
+      void refreshMediaAssets();
+    }
   }
 
   function startPostCreate() {
@@ -546,6 +555,35 @@ export default function AdminWorkspace({
     return payload.url;
   }
 
+  async function refreshMediaAssets() {
+    try {
+      const response = await fetch("/api/media", {
+        cache: "no-store",
+      });
+      const payload = (await response.json()) as
+        | AdminMediaAsset[]
+        | { error?: string };
+
+      if (!response.ok || !Array.isArray(payload)) {
+        throw new Error(
+          !Array.isArray(payload) && payload.error
+            ? payload.error
+            : "Failed to refresh media assets.",
+        );
+      }
+
+      setMediaAssets(payload);
+    } catch (error) {
+      setFeedback({
+        tone: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Failed to refresh media assets.",
+      });
+    }
+  }
+
   function handleProjectFileChange(
     field: "primaryImageFile" | "secondaryImageFile",
     event: ChangeEvent<HTMLInputElement>,
@@ -659,6 +697,7 @@ export default function AdminWorkspace({
         resetPostComposer();
         setShowComposer(false);
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -788,6 +827,7 @@ export default function AdminWorkspace({
         resetProjectComposer();
         setShowComposer(false);
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -944,6 +984,7 @@ export default function AdminWorkspace({
         resetProductComposer();
         setShowComposer(false);
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -1277,6 +1318,7 @@ export default function AdminWorkspace({
           text: "Post deleted.",
         });
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -1330,6 +1372,7 @@ export default function AdminWorkspace({
           text: "Project deleted.",
         });
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -1385,6 +1428,7 @@ export default function AdminWorkspace({
           text: "Product deleted.",
         });
       });
+      void refreshMediaAssets();
     } catch (error) {
       setFeedback({
         tone: "error",
@@ -1454,6 +1498,55 @@ export default function AdminWorkspace({
     }
   }
 
+  async function handleDeleteMediaAsset(asset: AdminMediaAsset) {
+    if (
+      !window.confirm(
+        `Delete "${asset.pathname}" from the media library? This action cannot be undone.`,
+      )
+    ) {
+      return;
+    }
+
+    setIsDeletingMediaId(asset.id);
+    setFeedback(null);
+
+    try {
+      const response = await fetch(`/api/media/${asset.id}`, {
+        method: "DELETE",
+      });
+
+      const payload = (await response.json()) as
+        | { id: number }
+        | { error?: string; usageCount?: number };
+
+      if (!response.ok || !("id" in payload)) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Failed to delete the media asset.",
+        );
+      }
+
+      setMediaAssets((current) =>
+        current.filter((entry) => entry.id !== asset.id),
+      );
+      setFeedback({
+        tone: "success",
+        text: "Media asset deleted.",
+      });
+    } catch (error) {
+      setFeedback({
+        tone: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Failed to delete the media asset.",
+      });
+    } finally {
+      setIsDeletingMediaId(null);
+    }
+  }
+
   function handleComposerButtonClick() {
     if (activeSection === "posts") {
       if (showComposer && !isEditingPost) {
@@ -1476,6 +1569,10 @@ export default function AdminWorkspace({
       return;
     }
 
+    if (activeSection === "media") {
+      return;
+    }
+
     if (activeSection === "shop") {
       if (showComposer && !isEditingProduct) {
         closeComposer();
@@ -1492,20 +1589,17 @@ export default function AdminWorkspace({
     }
   }
 
-  const pageTitle =
-    activeSection === "dashboard"
-      ? "Dashboard"
-      : activeSection === "posts"
-      ? "Posts"
-      : activeSection === "projects"
-        ? "Projects"
-        : activeSection === "shop"
-        ? "Shop"
-        : activeSection === "orders"
-          ? "Orders"
-        : activeSection === "messages"
-          ? "Messages"
-          : "Settings";
+  const pageTitleBySection: Record<AdminSection, string> = {
+    dashboard: "Dashboard",
+    posts: "Posts",
+    projects: "Projects",
+    shop: "Shop",
+    media: "Media",
+    orders: "Orders",
+    messages: "Messages",
+    settings: "Settings",
+  };
+  const pageTitle = pageTitleBySection[activeSection];
   const isPostEditorMode = activeSection === "posts" && showComposer;
 
   if (isPostEditorMode) {
@@ -1578,6 +1672,7 @@ export default function AdminWorkspace({
             postCount={posts.length}
             projectCount={projects.length}
             productCount={products.length}
+            mediaCount={mediaAssets.length}
             orderCount={orders.length}
             messageCount={messages.length}
             userCount={adminUsers.length}
@@ -1617,6 +1712,7 @@ export default function AdminWorkspace({
               canManageSettings={canManageWorkspaceSettings}
               projectCount={projects.length}
               productCount={products.length}
+              mediaCount={mediaAssets.length}
               orderCount={orders.length}
               pendingOrderCount={pendingOrderCount}
               completedOrderCount={completedOrderCount}
@@ -1853,6 +1949,14 @@ export default function AdminWorkspace({
                   onEdit={startProductEdit}
                   onDelete={(product) => {
                     void handleDeleteProduct(product);
+                  }}
+                />
+              ) : activeSection === "media" ? (
+                <MediaSection
+                  assets={mediaAssets}
+                  isDeletingMediaId={isDeletingMediaId}
+                  onDelete={(asset) => {
+                    void handleDeleteMediaAsset(asset);
                   }}
                 />
               ) : activeSection === "orders" ? (

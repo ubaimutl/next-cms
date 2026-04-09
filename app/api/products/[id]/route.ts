@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import { normalizeShopProductRecord, writeStringList } from "@/lib/db-json";
+import {
+  normalizeShopProductRecord,
+  readStringList,
+  writeStringList,
+} from "@/lib/db-json";
+import { cleanupManagedMediaUrls } from "@/lib/media-library";
 import { getPlainTextFromHtml } from "@/lib/post-content";
 import { createUniqueShopProductSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
@@ -123,6 +128,7 @@ export async function PATCH(
       },
       select: {
         id: true,
+        images: true,
       },
     });
 
@@ -147,6 +153,7 @@ export async function PATCH(
       highlights,
       images,
     } = validation.data;
+    const previousImages = readStringList(existingProduct.images);
     const slug = await createUniqueShopProductSlug(title, {
       excludeId: productId,
       prisma,
@@ -172,6 +179,18 @@ export async function PATCH(
         images: writeStringList(images),
       },
     });
+
+    const removedImages = previousImages.filter(
+      (image) => !images.includes(image),
+    );
+
+    if (removedImages.length > 0) {
+      try {
+        await cleanupManagedMediaUrls(removedImages);
+      } catch (cleanupError) {
+        console.error("Error deleting removed product images:", cleanupError);
+      }
+    }
 
     return NextResponse.json(normalizeShopProductRecord(product), {
       status: 200,
@@ -212,6 +231,7 @@ export async function DELETE(
       },
       select: {
         id: true,
+        images: true,
       },
     });
 
@@ -227,6 +247,16 @@ export async function DELETE(
         id: productId,
       },
     });
+
+    const existingImages = readStringList(existingProduct.images);
+
+    if (existingImages.length > 0) {
+      try {
+        await cleanupManagedMediaUrls(existingImages);
+      } catch (cleanupError) {
+        console.error("Error deleting product images:", cleanupError);
+      }
+    }
 
     return NextResponse.json({ id: productId }, { status: 200 });
   } catch (error) {

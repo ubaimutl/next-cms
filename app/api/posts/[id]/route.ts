@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import { deleteStoredImage } from "@/lib/media-storage";
+import { cleanupManagedMediaUrl } from "@/lib/media-library";
 import { getPlainTextFromHtml } from "@/lib/post-content";
 import { createUniquePostSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
@@ -117,7 +117,7 @@ export async function PATCH(
       existingPost.featuredImage !== post.featuredImage
     ) {
       try {
-        await deleteStoredImage(existingPost.featuredImage);
+        await cleanupManagedMediaUrl(existingPost.featuredImage);
       } catch (cleanupError) {
         console.error(
           "Error deleting previous post image:",
@@ -169,7 +169,7 @@ export async function DELETE(
 
     if (existingPost.featuredImage) {
       try {
-        await deleteStoredImage(existingPost.featuredImage);
+        await cleanupManagedMediaUrl(existingPost.featuredImage);
       } catch (cleanupError) {
         console.error("Error deleting post image:", cleanupError);
       }

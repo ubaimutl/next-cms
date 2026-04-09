@@ -18,6 +18,7 @@ type AdminHeaderProps = {
   canManageSettings: boolean;
   projectCount: number;
   productCount: number;
+  mediaCount: number;
   orderCount: number;
   pendingOrderCount: number;
   completedOrderCount: number;
@@ -43,6 +44,7 @@ export default function AdminHeader({
   canManageSettings,
   projectCount,
   productCount,
+  mediaCount,
   orderCount,
   pendingOrderCount,
   completedOrderCount,
@@ -82,7 +84,7 @@ export default function AdminHeader({
           </h1>
           <p className="mt-3 max-w-3xl text-[0.96rem] leading-relaxed text-white/46">
             {activeSection === "dashboard"
-              ? "A Ghost-inspired publishing workspace for content, sales, and site operations."
+              ? "A publishing workspace for content, sales, and site operations."
               : activeSection === "settings"
                 ? canManageSettings
                   ? analyticsEnabled
@@ -93,6 +95,8 @@ export default function AdminHeader({
                   ? `${projectCount} projects currently stored in the workspace.`
                   : activeSection === "shop"
                     ? `${productCount} products currently stored in the workspace.`
+                    : activeSection === "media"
+                      ? `${mediaCount} uploaded assets currently tracked in the library.`
                     : activeSection === "orders"
                       ? `Filter ${orderCount} stored orders by payment state.`
                       : activeSection === "messages"

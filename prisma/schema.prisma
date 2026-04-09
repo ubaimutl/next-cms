@@ -22,6 +22,7 @@ model User {
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
   posts        Post[]
+  mediaAssets  MediaAsset[]
   sessions     Session[]
 }
 
@@ -161,6 +162,23 @@ model AppSettings {
   updatedAt       DateTime @updatedAt
 }
 
+model MediaAsset {
+  id           Int           @id @default(autoincrement())
+  url          String        @unique
+  pathname     String        @unique
+  provider     MediaProvider
+  kind         MediaKind
+  mimeType     String
+  size         Int
+  uploadedById Int?
+  uploadedBy   User?         @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([kind, createdAt])
+  @@index([uploadedById])
+}
+
 enum ContactMessageStatus {
   NEW
   READ
@@ -189,4 +207,15 @@ enum UserRole {
   OWNER
   ADMIN
   EDITOR
+}
+
+enum MediaProvider {
+  BLOB
+  LOCAL
+}
+
+enum MediaKind {
+  POST_IMAGE
+  PROJECT_IMAGE
+  PRODUCT_IMAGE
 }

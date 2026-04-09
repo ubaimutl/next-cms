@@ -22,6 +22,8 @@ export type AdminProject = {
 
 export type AdminProductKind = "SERVICE" | "DIGITAL";
 export type AdminProductAvailability = "AVAILABLE" | "COMING_SOON" | "SOLD_OUT";
+export type AdminMediaProvider = "BLOB" | "LOCAL";
+export type AdminMediaKind = "POST_IMAGE" | "PROJECT_IMAGE" | "PRODUCT_IMAGE";
 
 export type AdminProduct = {
   id: number;
@@ -39,6 +41,20 @@ export type AdminProduct = {
   deliveryText: string | null;
   highlights: string[];
   images: string[];
+};
+
+export type AdminMediaAsset = {
+  id: number;
+  url: string;
+  pathname: string;
+  provider: AdminMediaProvider;
+  kind: AdminMediaKind;
+  mimeType: string;
+  size: number;
+  usageCount: number;
+  uploadedByName: string | null;
+  uploadedByEmail: string | null;
+  createdAt: string;
 };
 
 export type AdminOrderStatus = "PENDING" | "COMPLETED" | "FAILED" | "CANCELED";
@@ -135,6 +151,7 @@ export type AdminWorkspaceProps = {
   initialProducts: AdminProduct[];
   initialOrders: AdminOrder[];
   initialMessages: AdminMessage[];
+  initialMediaAssets: AdminMediaAsset[];
   initialAnalytics: AdminAnalyticsOverview;
   initialSettings: AdminAppSettings;
   initialUsers: AdminUser[];
@@ -154,6 +171,7 @@ export type AdminSection =
   | "posts"
   | "projects"
   | "shop"
+  | "media"
   | "orders"
   | "messages"
   | "settings";

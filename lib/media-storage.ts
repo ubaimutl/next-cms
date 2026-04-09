@@ -8,6 +8,13 @@ import { getUploadDirectory } from "./uploads";
 import { resolveUploadedFile } from "./uploads";
 
 export type UploadKind = "posts" | "products" | "projects";
+export type StoredImage = {
+  url: string;
+  pathname: string;
+  provider: "BLOB" | "LOCAL";
+  mimeType: string;
+  size: number;
+};
 
 const LOCAL_MAX_FILE_SIZE = 8 * 1024 * 1024;
 const BLOB_MAX_FILE_SIZE = Math.floor(4.5 * 1024 * 1024);
@@ -101,7 +108,13 @@ async function uploadToBlob(file: File, kind: UploadKind, extension: string) {
     contentType: file.type,
   });
 
-  return blob.url;
+  return {
+    url: blob.url,
+    pathname,
+    provider: "BLOB" as const,
+    mimeType: file.type,
+    size: file.size,
+  };
 }
 
 async function uploadToLocal(file: File, kind: UploadKind, extension: string) {
@@ -111,10 +124,17 @@ async function uploadToLocal(file: File, kind: UploadKind, extension: string) {
   const fileName = `${Date.now()}-${randomUUID()}-${sanitizeFileName(file.name, kind)}${extension}`;
   const filePath = path.join(uploadDirectory, fileName);
   const buffer = Buffer.from(await file.arrayBuffer());
+  const pathname = `${kind}/${fileName}`;
 
   await writeFile(filePath, buffer);
 
-  return `/uploads/${kind}/${fileName}`;
+  return {
+    url: `/uploads/${kind}/${fileName}`,
+    pathname,
+    provider: "LOCAL" as const,
+    mimeType: file.type,
+    size: file.size,
+  };
 }
 
 export async function storeUploadedImage(

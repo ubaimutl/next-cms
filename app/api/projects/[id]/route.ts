@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
-import { normalizeProjectRecord, writeStringList } from "@/lib/db-json";
+import {
+  normalizeProjectRecord,
+  readStringList,
+  writeStringList,
+} from "@/lib/db-json";
+import { cleanupManagedMediaUrls } from "@/lib/media-library";
 import prisma from "@/lib/prisma";
 import { getPublicModuleSettings } from "@/lib/settings";
 import { normalizeExternalUrl } from "@/lib/url";
@@ -91,7 +96,7 @@ export async function PATCH(
 
     const existingProject = await prisma.project.findUnique({
       where: { id: projectId },
-      select: { id: true },
+      select: { id: true, images: true },
     });
 
     if (!existingProject) {
@@ -99,6 +104,7 @@ export async function PATCH(
     }
 
     const { title, description, tags, images, link } = validation.data;
+    const previousImages = readStringList(existingProject.images);
 
     const project = await prisma.project.update({
       where: { id: projectId },
@@ -110,6 +116,18 @@ export async function PATCH(
         link,
       },
     });
+
+    const removedImages = previousImages.filter(
+      (image) => !images.includes(image),
+    );
+
+    if (removedImages.length > 0) {
+      try {
+        await cleanupManagedMediaUrls(removedImages);
+      } catch (cleanupError) {
+        console.error("Error deleting removed project images:", cleanupError);
+      }
+    }
 
     return NextResponse.json(normalizeProjectRecord(project), { status: 200 });
   } catch (error) {
@@ -144,7 +162,7 @@ export async function DELETE(
 
     const existingProject = await prisma.project.findUnique({
       where: { id: projectId },
-      select: { id: true },
+      select: { id: true, images: true },
     });
 
     if (!existingProject) {
@@ -154,6 +172,16 @@ export async function DELETE(
     await prisma.project.delete({
       where: { id: projectId },
     });
+
+    const existingImages = readStringList(existingProject.images);
+
+    if (existingImages.length > 0) {
+      try {
+        await cleanupManagedMediaUrls(existingImages);
+      } catch (cleanupError) {
+        console.error("Error deleting project images:", cleanupError);
+      }
+    }
 
     return NextResponse.json({ id: projectId }, { status: 200 });
   } catch (error) {

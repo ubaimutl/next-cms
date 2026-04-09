@@ -6,10 +6,16 @@ import {
   normalizeProjectRecord,
   normalizeShopProductRecord,
 } from "@/lib/db-json";
+import { listAdminMediaAssets } from "@/lib/media-library";
 import prisma, { type AnalyticsOverview, getAnalyticsOverview } from "@/lib/prisma";
 import { getAppSettings } from "@/lib/settings";
 
-import type { AdminMessage, AdminOrder, AdminUser } from "./components/types";
+import type {
+  AdminMediaAsset,
+  AdminMessage,
+  AdminOrder,
+  AdminUser,
+} from "./components/types";
 
 import AdminWorkspace from "./AdminWorkspace";
 
@@ -33,7 +39,7 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const admin = await requireAuthenticatedAdmin();
-  const [posts, projects, products, orders, messages, analytics, settings, users] =
+  const [posts, projects, products, orders, messages, mediaAssets, analytics, settings, users] =
     await Promise.all([
     prisma.post.findMany({
       orderBy: {
@@ -60,6 +66,7 @@ export default async function AdminPage() {
         createdAt: "desc",
       },
     }),
+    listAdminMediaAssets(),
     getAnalyticsOverview(),
     getAppSettings(),
     prisma.user.findMany({
@@ -131,6 +138,11 @@ export default async function AdminPage() {
           emailSentAt: normalizedMessage.emailSentAt?.toISOString() ?? null,
         };
       })}
+      initialMediaAssets={mediaAssets.map(
+        (asset): AdminMediaAsset => ({
+          ...asset,
+        }),
+      )}
       initialAnalytics={analytics as AdminAnalyticsOverview}
       initialSettings={{
         id: settings.id,

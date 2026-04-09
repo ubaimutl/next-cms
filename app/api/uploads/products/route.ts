@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
+import { registerMediaAsset } from "@/lib/media-library";
 import { storeUploadedImage, validateUploadEntry } from "@/lib/media-storage";
 
 export const runtime = "nodejs";
@@ -23,13 +24,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const url = await storeUploadedImage(
+    const storedImage = await storeUploadedImage(
       validation.file,
       "products",
       validation.extension,
     );
 
-    return NextResponse.json({ url }, { status: 201 });
+    await registerMediaAsset({
+      storedImage,
+      kind: "products",
+      uploadedById: admin.id,
+    });
+
+    return NextResponse.json({ url: storedImage.url }, { status: 201 });
   } catch (error) {
     console.error("Error uploading product image:", error);
     return NextResponse.json(
