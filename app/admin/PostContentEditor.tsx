@@ -326,22 +326,20 @@ export default function PostContentEditor({
 
   return (
     <div
-      className={`${
-        isFocusMode
+      className={`${isFocusMode
           ? "fixed inset-0 z-[120] flex items-center justify-center bg-[color-mix(in_srgb,var(--bg-color)_88%,transparent)] p-4 backdrop-blur-sm md:p-8"
           : isGhostVariant
             ? "relative mt-6 px-0 py-0"
             : "relative mt-4 px-0 py-0"
-      }`}
+        }`}
     >
       <div
-        className={`${
-          isFocusMode
+        className={`${isFocusMode
             ? "admin-panel relative flex h-[min(88vh,58rem)] w-full max-w-5xl flex-col overflow-hidden px-5 py-5 md:px-8 md:py-7"
             : isGhostVariant
               ? "relative pl-0 md:pl-0"
               : "relative border-t border-white/6 pt-6"
-        }`}
+          }`}
       >
         {!isGhostVariant ? (
           <div className="mb-4 flex items-center justify-between gap-4">
@@ -382,7 +380,7 @@ export default function PostContentEditor({
             </button>
 
             {showInsertMenu ? (
-              <div className="absolute top-1/2 left-14 z-40 w-72 -translate-y-1/2 overflow-hidden rounded-[0.95rem] border border-white/8 bg-[#111315] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
+              <div className="absolute top-1/2 left-14 z-40 w-72 -translate-y-1/2 overflow-hidden rounded-[0.95rem] border border-white/8 bg-[#151719] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
                 {suggestionItems.map((item) => (
                   <button
                     key={`insert-${item.title}`}
@@ -500,7 +498,7 @@ export default function PostContentEditor({
                 tippyOptions={{
                   placement: "top",
                 }}
-                className="flex items-center gap-1 rounded-full border border-white/8 bg-[#111315] px-2 py-1 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
+                className="flex items-center gap-1 rounded-full border border-white/8 bg-[#151719] px-2 py-1 shadow-[0_10px_24px_rgba(0,0,0,0.18)]"
               >
                 <BubbleAction
                   label="B"
@@ -534,7 +532,7 @@ export default function PostContentEditor({
                 />
               </EditorBubble>
 
-              <EditorCommand className="z-50 max-h-80 w-72 overflow-y-auto rounded-[1rem] border border-white/8 bg-[#111315] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
+              <EditorCommand className="z-50 max-h-80 w-72 overflow-y-auto rounded-[1rem] border border-white/8 bg-[#151719] p-2 shadow-[0_20px_40px_rgba(0,0,0,0.24)]">
                 <EditorCommandEmpty className="px-3 py-2 text-[0.82rem] text-white/48">
                   No results
                 </EditorCommandEmpty>

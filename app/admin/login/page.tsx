@@ -33,7 +33,7 @@ export default async function AdminLoginPage() {
   }
 
   return (
-    <section className="next-cms-admin admin-shell">
+    <section className="next-cms-admin admin-shell [font-family:-apple-system,BlinkMacSystemFont,Segoe_UI,Roboto,Oxygen,Ubuntu,Droid_Sans,Helvetica_Neue,sans-serif]">
       <div className="shell max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-10">
         <div className="admin-panel overflow-hidden px-6 py-8 md:px-10 md:py-10">
           <div className="grid gap-8 xl:grid-cols-[minmax(0,1.1fr)_24rem]">

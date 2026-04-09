@@ -30,7 +30,7 @@ export const adminFileInputClass =
   "block w-full text-[0.82rem] text-[var(--admin-muted)] file:mr-3 file:rounded-[0.45rem] file:border file:border-[var(--admin-border)] file:bg-[var(--admin-surface-3)] file:px-[0.85rem] file:py-[0.6rem] file:text-[0.8rem] file:font-medium file:text-[var(--admin-text)] file:transition hover:file:bg-[var(--admin-surface)]";
 
 export const adminNavMetaClass =
-  "ml-auto text-[0.72rem] font-semibold uppercase tracking-[0.08em] text-white/35";
+  "ml-auto inline-flex min-w-[1.3rem] items-center justify-center rounded-full bg-[var(--admin-surface-3)] px-[0.42rem] py-[0.08rem] text-[0.64rem] font-medium tracking-[0.01em] text-[var(--admin-faint)]";
 
 export const adminTableHeadClass =
   "text-[0.64rem] font-semibold uppercase tracking-[0.14em] text-white/38";

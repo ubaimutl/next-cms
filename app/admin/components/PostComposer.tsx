@@ -126,7 +126,7 @@ export default function PostComposer({
           <button
             type="submit"
             disabled={isSubmittingPost}
-            className="inline-flex min-h-9 items-center justify-center rounded-md bg-white px-3.5 text-[0.82rem] font-semibold text-[#111315] transition hover:opacity-90 disabled:opacity-45"
+            className="inline-flex min-h-9 items-center justify-center rounded-md bg-white px-3.5 text-[0.82rem] font-semibold text-[#151719] transition hover:opacity-90 disabled:opacity-45"
           >
             {isSubmittingPost
               ? "Saving"

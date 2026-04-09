@@ -91,9 +91,14 @@ function NavItem({
     <button
       type="button"
       onClick={onClick}
-      className={`admin-nav-link min-w-0 ${active ? "admin-nav-link-active" : ""}`}
+      className={`admin-nav-link min-w-0 rounded-[0.78rem] px-3 py-[0.66rem] text-[0.92rem] ${active
+          ? "admin-nav-link-active bg-[var(--admin-surface-2)] font-medium text-[var(--admin-text)]"
+          : "text-[var(--admin-muted)] hover:bg-[var(--admin-surface-2)] hover:text-[var(--admin-text)]"
+        }`}
     >
-      <span className="text-white/58">{icon}</span>
+      <span className={active ? "text-[var(--admin-text)]" : "text-[var(--admin-faint)]"}>
+        {icon}
+      </span>
       <span className="min-w-0 truncate">{label}</span>
       {meta !== undefined && meta !== null ? (
         <span className={adminNavMetaClass}>{meta}</span>
@@ -117,7 +122,9 @@ function SubItem({
     <button
       type="button"
       onClick={onClick}
-      className={`admin-nav-link min-w-0 py-2 pr-3 pl-11 text-[0.84rem] ${active ? "admin-nav-link-active" : ""
+      className={`admin-nav-link min-w-0 rounded-[0.72rem] py-[0.38rem] pr-3 pl-12 text-[0.81rem] ${active
+          ? "bg-transparent font-medium text-[var(--admin-text)]"
+          : "bg-transparent text-[var(--admin-muted)] hover:bg-transparent hover:text-[var(--admin-text)]"
         }`}
     >
       <span className="min-w-0 truncate">{label}</span>
@@ -139,7 +146,7 @@ function GroupHeader({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center justify-between px-3 py-2 text-left text-[0.72rem] font-semibold tracking-[0.12em] text-[var(--admin-faint)] uppercase"
+      className="flex w-full items-center justify-between px-3 py-2 text-left text-[0.72rem] font-semibold tracking-[0.18em] text-[var(--admin-faint)] uppercase"
     >
       <span>{label}</span>
       <span className={`transition-transform ${open ? "rotate-90" : "rotate-0"}`}>
@@ -196,13 +203,13 @@ export default function AdminSidebar({
 
   return (
     <aside className="overflow-hidden xl:sticky xl:top-0 xl:h-screen xl:self-start">
-      <div className="flex h-full min-w-0 flex-col overflow-hidden border-b border-white/6 bg-[#111315] px-4 py-5 xl:border-r xl:border-b-0">
-        <div className="flex items-center justify-between gap-3 px-2">
+      <div className="flex h-full min-w-0 flex-col overflow-hidden border-b border-[var(--admin-border)] bg-[#151719] px-5 py-6 xl:border-r xl:border-b-0">
+        <div className="flex items-center justify-between gap-3 px-1">
           <Link href="/" className="flex min-w-0 items-center gap-3">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/14 bg-white/[0.02] text-white/88">
-              <Logo className="h-4.5 w-4.5" />
+            <span className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--admin-border)] bg-[var(--admin-surface)] text-[var(--admin-text)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+              <Logo className="h-5 w-5" />
             </span>
-            <span className="truncate text-sm font-semibold text-white/92">
+            <span className="truncate text-[0.95rem] font-semibold tracking-[-0.015em] text-[var(--admin-text)]">
               {siteConfig.shortName}
             </span>
           </Link>
@@ -210,7 +217,7 @@ export default function AdminSidebar({
           <button
             type="button"
             onClick={onToggleTheme}
-            className="admin-icon-button"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-[var(--admin-border)] bg-[var(--admin-surface)] text-[var(--admin-faint)] transition hover:border-[color:var(--admin-faint)] hover:text-[var(--admin-text)]"
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
             title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
           >
@@ -222,7 +229,7 @@ export default function AdminSidebar({
           </button>
         </div>
 
-        <div className="mt-8 space-y-1">
+        <div className="mt-9 space-y-1">
           <NavItem
             label="Dashboard"
             icon={<Icon path="M4 12.5 12 5l8 7.5M6.5 10.5V20h11v-9.5" />}
@@ -230,9 +237,12 @@ export default function AdminSidebar({
             onClick={() => onSwitchSection("dashboard")}
           />
 
-          <Link href="/" className="admin-nav-link">
-            <span className="text-white/58">
-              <Icon path="M12 3v18M3 12h18" />
+          <Link
+            href="/"
+            className="admin-nav-link rounded-[0.78rem] px-3 py-[0.66rem] text-[0.92rem] text-[var(--admin-muted)] hover:bg-[var(--admin-surface-2)] hover:text-[var(--admin-text)]"
+          >
+            <span className="text-[var(--admin-faint)]">
+              <Icon path="M4 5h16v14H4zM8 19V5" />
             </span>
             <span>View site</span>
           </Link>
@@ -255,7 +265,7 @@ export default function AdminSidebar({
                   onClick={() => onSwitchSection("posts")}
                 />
                 {activeSection === "posts" ? (
-                  <div className="space-y-1">
+                  <div className="mt-0.5 space-y-0">
                     <SubItem
                       label="All posts"
                       meta={postCount}
@@ -320,7 +330,7 @@ export default function AdminSidebar({
                   onClick={() => onSwitchSection("messages")}
                 />
                 {activeSection === "messages" ? (
-                  <div className="space-y-1">
+                  <div className="mt-0.5 space-y-0">
                     <SubItem
                       label="All"
                       meta={messageCount}
@@ -356,7 +366,7 @@ export default function AdminSidebar({
                   onClick={() => onSwitchSection("orders")}
                 />
                 {activeSection === "orders" ? (
-                  <div className="space-y-1">
+                  <div className="mt-0.5 space-y-0">
                     <SubItem
                       label="All"
                       meta={orderCount}
@@ -413,19 +423,26 @@ export default function AdminSidebar({
           </div>
         </nav>
 
-        <div className="mt-6 border-t border-white/6 px-2 pt-4">
-          <div className="flex items-center justify-between gap-3">
-            <div className="min-w-0">
-              <p className="truncate text-sm font-medium text-white/92">
-                {admin.email}
-              </p>
-              <p className="mt-1 text-xs text-white/38">{admin.role}</p>
+        <div className="mt-6 border-t border-[var(--admin-border)] px-1 pt-5">
+          <div className="flex items-center justify-between gap-3 rounded-[1rem]">
+            <div className="flex min-w-0 items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[var(--admin-border)] bg-[var(--admin-surface)] text-sm font-medium text-[var(--admin-text)]">
+                {admin.email.charAt(0).toUpperCase()}
+              </span>
+              <div className="min-w-0">
+                <p className="truncate text-[0.9rem] font-medium text-[var(--admin-text)]">
+                  {admin.email}
+                </p>
+                <p className="mt-0.5 text-[0.68rem] uppercase tracking-[0.14em] text-[var(--admin-faint)]">
+                  {admin.role}
+                </p>
+              </div>
             </div>
             <button
               type="button"
               onClick={onLogout}
               disabled={isLoggingOut}
-              className="admin-icon-button"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--admin-border)] bg-[var(--admin-surface)] text-[var(--admin-faint)] transition hover:border-[color:var(--admin-faint)] hover:text-[var(--admin-text)]"
               aria-label="Log out"
             >
               <Icon path="M15 17l5-5-5-5M20 12H9M9 20H5V4h4" />

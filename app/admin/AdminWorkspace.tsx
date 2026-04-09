@@ -1691,8 +1691,11 @@ export default function AdminWorkspace({
   }
 
   return (
-    <section className="next-cms-admin admin-shell" data-admin-theme={theme}>
-      <div className="grid min-h-screen xl:grid-cols-[20.5rem_minmax(0,1fr)]">
+    <section
+      className="next-cms-admin admin-shell [font-family:-apple-system,BlinkMacSystemFont,Segoe_UI,Roboto,Oxygen,Ubuntu,Droid_Sans,Helvetica_Neue,sans-serif]"
+      data-admin-theme={theme}
+    >
+      <div className="grid min-h-screen xl:grid-cols-[18.5rem_minmax(0,1fr)]">
         <AdminSidebar
           admin={admin}
           theme={theme}

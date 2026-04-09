@@ -114,10 +114,7 @@ a {
   text-decoration: none;
 }
 
-button,
-input,
-select,
-textarea {
+:where(.public-shell, .public-shell *) :is(button, input, select, textarea) {
   font: inherit;
 }
 
@@ -399,20 +396,20 @@ textarea {
     --invert-color: #f4f7fb;
     --color-base-100: #17191d;
     --color-base-200: #1d2024;
-    --color-base-300: #111315;
+    --color-base-300: #151719;
     --color-base-content: #f5f7fa;
     --color-primary: #f5f6f7;
-    --color-primary-content: #111315;
+    --color-primary-content: #151719;
     --color-success: #30cf43;
     --color-success-content: #f5f7fa;
     --color-warning: #ffca5f;
-    --color-warning-content: #111315;
+    --color-warning-content: #151719;
     --color-error: #ff6a6a;
     --color-error-content: #f5f7fa;
     --admin-border: rgba(255, 255, 255, 0.07);
     --admin-surface: #17191d;
     --admin-surface-2: #1d2024;
-    --admin-surface-3: #111315;
+    --admin-surface-3: #151719;
     --admin-text: #f5f7fa;
     --admin-muted: rgba(245, 247, 250, 0.66);
     --admin-faint: rgba(245, 247, 250, 0.42);
@@ -427,7 +424,7 @@ textarea {
     --admin-red: #ff6a6a;
     --admin-red-soft: rgba(255, 106, 106, 0.16);
     color: var(--admin-text);
-    background: #111315;
+    background: #151719;
   }
 
   .next-cms-admin[data-admin-theme="light"] {
@@ -447,7 +444,7 @@ textarea {
     --admin-text: #15171a;
     --admin-muted: rgba(21, 23, 26, 0.66);
     --admin-faint: rgba(21, 23, 26, 0.42);
-    background: #f6f7fa;
+    background: rgb(21 23 25);
     color: #15171a;
   }
 
@@ -599,7 +596,7 @@ textarea {
   }
 
   .next-cms-admin[data-admin-theme="light"] [class*="bg-[#15171a]"],
-  .next-cms-admin[data-admin-theme="light"] [class*="bg-[#111315]"],
+  .next-cms-admin[data-admin-theme="light"] [class*="bg-[#151719]"],
   .next-cms-admin[data-admin-theme="light"] [class*="bg-black/20"],
   .next-cms-admin[data-admin-theme="light"] [class*="bg-black/10"] {
     background: #eef1f4 !important;
@@ -625,7 +622,7 @@ textarea {
     border-color: #15171a !important;
   }
 
-  .next-cms-admin[data-admin-theme="light"] [class*="text-[#111315]"] {
+  .next-cms-admin[data-admin-theme="light"] [class*="text-[#151719]"] {
     color: #f6f7fa !important;
   }
 
