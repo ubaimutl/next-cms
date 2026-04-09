@@ -104,7 +104,7 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
-  background: var(--page-wash);
+
   color: var(--color-base-content);
   font-family: var(--font-sans);
 }
@@ -124,7 +124,7 @@ textarea {
 @layer components {
   .public-shell {
     @apply relative min-h-svh overflow-x-clip;
-    background: var(--page-wash);
+    
   }
 
   .public-main {
@@ -469,176 +469,6 @@ textarea {
     background: var(--admin-surface);
     border-radius: 0.5rem;
     box-shadow: none;
-  }
-
-  .next-cms-admin .admin-panel-muted {
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    background: var(--admin-surface-2);
-    border-radius: 0.5rem;
-  }
-
-  .next-cms-admin[data-admin-theme="light"] .admin-panel-muted {
-    border-color: rgba(21, 23, 26, 0.05);
-  }
-
-  .next-cms-admin .admin-button-primary {
-    display: inline-flex;
-    min-height: 2.6rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    background: #f5f6f7;
-    padding: 0 1rem;
-    color: #111315;
-    font-size: 0.86rem;
-    font-weight: 600;
-    transition:
-      transform 160ms ease,
-      opacity 160ms ease;
-  }
-
-  .next-cms-admin .admin-button-primary:hover {
-    transform: translateY(-1px);
-  }
-
-  .next-cms-admin[data-admin-theme="light"] .admin-button-primary {
-    border-color: rgba(21, 23, 26, 0.9);
-    background: #15171a;
-    color: #f6f7fa;
-  }
-
-  .next-cms-admin .admin-button-primary:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
-
-  .next-cms-admin .admin-button-secondary {
-    display: inline-flex;
-    min-height: 2.6rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.45rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.04);
-    padding: 0 1rem;
-    color: var(--admin-text);
-    font-size: 0.86rem;
-    font-weight: 500;
-    transition:
-      background 160ms ease,
-      border-color 160ms ease;
-  }
-
-  .next-cms-admin .admin-button-secondary:hover {
-    border-color: rgba(255, 255, 255, 0.14);
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  .next-cms-admin[data-admin-theme="light"] .admin-button-secondary {
-    border-color: rgba(21, 23, 26, 0.1);
-    background: rgba(21, 23, 26, 0.04);
-    color: #15171a;
-  }
-
-  .next-cms-admin[data-admin-theme="light"] .admin-button-secondary:hover {
-    border-color: rgba(21, 23, 26, 0.16);
-    background: rgba(21, 23, 26, 0.06);
-  }
-
-  .next-cms-admin .admin-button-secondary:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
-
-  .next-cms-admin .admin-button-danger {
-    display: inline-flex;
-    min-height: 2.6rem;
-    align-items: center;
-    justify-content: center;
-    border-radius: 0.45rem;
-    border: 1px solid rgba(255, 106, 106, 0.22);
-    background: rgba(255, 106, 106, 0.06);
-    padding: 0 1rem;
-    color: #ff9b9b;
-    font-size: 0.86rem;
-    font-weight: 500;
-    transition:
-      background 160ms ease,
-      border-color 160ms ease;
-  }
-
-  .next-cms-admin .admin-button-danger:hover {
-    border-color: rgba(255, 106, 106, 0.34);
-    background: rgba(255, 106, 106, 0.1);
-  }
-
-  .next-cms-admin .admin-button-danger:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-  }
-
-  .next-cms-admin .admin-field,
-  .next-cms-admin .admin-select,
-  .next-cms-admin .admin-textarea {
-    width: 100%;
-    border-radius: 0.7rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: var(--admin-surface-3);
-    color: var(--admin-text);
-    box-shadow: none;
-    transition:
-      border-color 160ms ease,
-      background 160ms ease;
-  }
-
-  .next-cms-admin .admin-field,
-  .next-cms-admin .admin-select {
-    min-height: 3rem;
-    padding-inline: 0.95rem;
-  }
-
-  .next-cms-admin .admin-textarea {
-    min-height: 7rem;
-    padding: 0.95rem;
-    line-height: 1.65;
-  }
-
-  .next-cms-admin .admin-field::placeholder,
-  .next-cms-admin .admin-textarea::placeholder {
-    color: rgba(245, 247, 250, 0.34);
-  }
-
-  .next-cms-admin .admin-field:focus,
-  .next-cms-admin .admin-select:focus,
-  .next-cms-admin .admin-textarea:focus {
-    outline: none;
-    border-color: rgba(83, 197, 255, 0.32);
-    background: #121418;
-  }
-
-  .next-cms-admin .admin-file {
-    display: block;
-    width: 100%;
-    color: var(--admin-muted);
-    font-size: 0.82rem;
-  }
-
-  .next-cms-admin .admin-file::file-selector-button {
-    margin-right: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 0.45rem;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 0.6rem 0.85rem;
-    color: var(--admin-text);
-    font-size: 0.8rem;
-    font-weight: 500;
-  }
-
-  .next-cms-admin[data-admin-theme="light"] .admin-file::file-selector-button {
-    border-color: rgba(21, 23, 26, 0.08);
-    background: rgba(21, 23, 26, 0.04);
-    color: #15171a;
   }
 
   .next-cms-admin .admin-link {

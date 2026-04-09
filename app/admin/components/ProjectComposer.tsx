@@ -3,7 +3,15 @@
 import type { ChangeEventHandler, FormEventHandler } from "react";
 
 import type { ProjectFormState } from "./types";
-import { adminKickerClass } from "./ui";
+import {
+  adminFileInputClass,
+  adminInputClass,
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+  adminTextareaClass,
+} from "./ui";
 
 type ProjectComposerProps = {
   isEditingProject: boolean;
@@ -49,7 +57,7 @@ export default function ProjectComposer({
           <button
             type="button"
             onClick={onCancel}
-            className="admin-button-secondary"
+            className={adminSecondaryButtonClass}
           >
             Cancel
           </button>
@@ -57,7 +65,7 @@ export default function ProjectComposer({
           <button
             type="submit"
             disabled={isSubmittingProject}
-            className="admin-button-primary"
+            className={adminPrimaryButtonClass}
           >
             {isSubmittingProject
               ? "Saving"
@@ -87,7 +95,7 @@ export default function ProjectComposer({
               <textarea
                 value={projectForm.description}
                 onChange={(event) => onDescriptionChange(event.target.value)}
-                className="admin-textarea mt-3 min-h-40"
+                className={`${adminTextareaClass} mt-3 min-h-40`}
                 placeholder="Write a concise summary of the project, what shipped, and why it mattered."
                 required
               />
@@ -99,7 +107,7 @@ export default function ProjectComposer({
                 type="text"
                 value={projectForm.link}
                 onChange={(event) => onLinkChange(event.target.value)}
-                className="admin-field mt-3"
+                className={`${adminInputClass} mt-3`}
                 placeholder="https://example.com"
               />
             </label>
@@ -110,7 +118,7 @@ export default function ProjectComposer({
                 type="text"
                 value={projectForm.tags}
                 onChange={(event) => onTagsChange(event.target.value)}
-                className="admin-field mt-3"
+                className={`${adminInputClass} mt-3`}
                 placeholder="Design, Development, CMS"
                 required
               />
@@ -118,14 +126,14 @@ export default function ProjectComposer({
           </div>
 
           <div className="space-y-5">
-            <div className="admin-panel-muted p-5">
+            <div className={`${adminPanelMutedClass} p-5`}>
               <p className={adminKickerClass}>Primary image</p>
               <input
                 key={`primary-${projectInputKey}`}
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/avif"
                 onChange={onPrimaryImageChange}
-                className="admin-file mt-4"
+                className={`${adminFileInputClass} mt-4`}
                 required={!isEditingProject}
               />
               <p className="mt-3 text-sm text-white/42">
@@ -136,14 +144,14 @@ export default function ProjectComposer({
               </p>
             </div>
 
-            <div className="admin-panel-muted p-5">
+            <div className={`${adminPanelMutedClass} p-5`}>
               <p className={adminKickerClass}>Secondary image</p>
               <input
                 key={`secondary-${projectInputKey}`}
                 type="file"
                 accept="image/jpeg,image/png,image/webp,image/avif"
                 onChange={onSecondaryImageChange}
-                className="admin-file mt-4"
+                className={`${adminFileInputClass} mt-4`}
               />
               <p className="mt-3 text-sm text-white/42">
                 {projectForm.secondaryImageFile?.name ||

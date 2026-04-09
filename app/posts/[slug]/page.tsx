@@ -14,6 +14,7 @@ import {
   getExcerptFromHtml,
   getReadingTimeMinutes,
   getWordCountFromHtml,
+  sanitizeRichHtml,
 } from "@/lib/post-content";
 import { getPostBySlug } from "@/lib/posts";
 import { getPublicModuleSettings } from "@/lib/settings";
@@ -61,35 +62,38 @@ export async function generateMetadata({
     };
   }
 
-  const description =
+  const excerpt =
     getExcerptFromHtml(post.content, 160) || siteConfig.description;
+  const metadataTitle = post.seoTitle || post.title;
+  const metadataDescription = post.seoDescription || excerpt;
   const canonicalPath = `/posts/${post.slug}`;
   const shareImage =
-    toAbsoluteImageUrl(post.featuredImage, siteConfig.url) || siteConfig.ogImage;
+    toAbsoluteImageUrl(post.seoImage || post.featuredImage, siteConfig.url) ||
+    siteConfig.ogImage;
 
   return {
-    title: post.title,
-    description,
+    title: metadataTitle,
+    description: metadataDescription,
     alternates: { canonical: canonicalPath },
     openGraph: {
       type: "article",
       url: canonicalPath,
-      title: post.title,
-      description,
+      title: metadataTitle,
+      description: metadataDescription,
       siteName: siteConfig.shortName,
       images: [
         {
           url: shareImage,
           width: 1200,
           height: 630,
-          alt: `${post.title} article preview`,
+          alt: `${metadataTitle} article preview`,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title,
-      description,
+      title: metadataTitle,
+      description: metadataDescription,
       images: [shareImage],
     },
   };
@@ -111,8 +115,13 @@ const PostSingle = async ({ params }: PostProps) => {
 
   const description =
     getExcerptFromHtml(post.content, 160) || siteConfig.description;
-  const headings = extractHeadingsFromHtml(post.content);
-  const contentWithHeadingIds = addHeadingIdsToHtml(post.content);
+  const metadataDescription = post.seoDescription || description;
+  const metadataImage =
+    toAbsoluteImageUrl(post.seoImage || post.featuredImage, siteConfig.url) ||
+    siteConfig.ogImage;
+  const sanitizedContent = sanitizeRichHtml(post.content);
+  const headings = extractHeadingsFromHtml(sanitizedContent);
+  const contentWithHeadingIds = addHeadingIdsToHtml(sanitizedContent);
   const readingTime = getReadingTimeMinutes(post.content);
   const wordCount = getWordCountFromHtml(post.content);
   const postUrl = `${siteConfig.url}/posts/${post.slug}`;
@@ -125,12 +134,12 @@ const PostSingle = async ({ params }: PostProps) => {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description,
+    description: metadataDescription,
     url: postUrl,
     mainEntityOfPage: postUrl,
     author: { "@type": "Person", name: siteConfig.name },
     publisher: { "@type": "Person", name: siteConfig.name },
-    image: [toAbsoluteImageUrl(post.featuredImage, siteConfig.url) || siteConfig.ogImage],
+    image: [metadataImage],
   };
 
   return (

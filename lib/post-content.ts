@@ -1,4 +1,58 @@
+import sanitizeHtml from "sanitize-html";
+
 import { slugifyPostTitle } from "@/lib/post-slug";
+
+const SANITIZE_ALLOWED_TAGS = [
+  "a",
+  "blockquote",
+  "br",
+  "code",
+  "em",
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
+  "hr",
+  "img",
+  "li",
+  "ol",
+  "p",
+  "pre",
+  "strong",
+  "ul",
+];
+
+const SANITIZE_ALLOWED_ATTRIBUTES: sanitizeHtml.IOptions["allowedAttributes"] = {
+  a: ["href", "name", "target", "rel"],
+  code: ["class"],
+  h1: ["id"],
+  h2: ["id"],
+  h3: ["id"],
+  h4: ["id"],
+  h5: ["id"],
+  h6: ["id"],
+  img: ["src", "alt", "title", "width", "height", "loading"],
+  pre: ["class"],
+};
+
+export function sanitizeRichHtml(content: string | null | undefined) {
+  if (!content) {
+    return "";
+  }
+
+  return sanitizeHtml(content, {
+    allowedAttributes: SANITIZE_ALLOWED_ATTRIBUTES,
+    allowedSchemes: ["http", "https", "mailto"],
+    allowedTags: SANITIZE_ALLOWED_TAGS,
+    disallowedTagsMode: "discard",
+    parseStyleAttributes: false,
+    transformTags: {
+      a: sanitizeHtml.simpleTransform("a", { rel: "noopener noreferrer" }, true),
+    },
+  }).trim();
+}
 
 export function getPlainTextFromHtml(content: string | null | undefined) {
   if (!content) {

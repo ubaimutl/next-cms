@@ -1,6 +1,11 @@
 "use client";
 
-import { adminKickerClass, adminPillClass } from "./ui";
+import {
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPillClass,
+  adminPrimaryButtonClass,
+} from "./ui";
 import type { AdminAnalyticsOverview } from "./types";
 
 type AnalyticsSectionProps = {
@@ -17,7 +22,7 @@ export default function AnalyticsSection({
   return (
     <div className="space-y-6">
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div className="admin-panel-muted p-5">
+        <div className={`${adminPanelMutedClass} p-5`}>
           <p className={adminKickerClass}>
             Total page views
           </p>
@@ -26,7 +31,7 @@ export default function AnalyticsSection({
           </p>
         </div>
 
-        <div className="admin-panel-muted p-5">
+        <div className={`${adminPanelMutedClass} p-5`}>
           <p className={adminKickerClass}>
             Visits
           </p>
@@ -35,7 +40,7 @@ export default function AnalyticsSection({
           </p>
         </div>
 
-        <div className="admin-panel-muted p-5">
+        <div className={`${adminPanelMutedClass} p-5`}>
           <p className={adminKickerClass}>
             Post views
           </p>
@@ -44,7 +49,7 @@ export default function AnalyticsSection({
           </p>
         </div>
 
-        <div className="admin-panel-muted p-5">
+        <div className={`${adminPanelMutedClass} p-5`}>
           <p className={adminKickerClass}>
             Last 7 days
           </p>
@@ -77,7 +82,7 @@ export default function AnalyticsSection({
             type="button"
             onClick={() => onToggleAnalytics(!analytics.enabled)}
             disabled={isUpdatingAnalytics}
-            className="admin-button-primary"
+            className={adminPrimaryButtonClass}
           >
             {isUpdatingAnalytics
               ? "Saving"

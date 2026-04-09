@@ -8,7 +8,7 @@ import {
   writeStringList,
 } from "@/lib/db-json";
 import { cleanupManagedMediaUrls } from "@/lib/media-library";
-import { getPlainTextFromHtml } from "@/lib/post-content";
+import { getPlainTextFromHtml, sanitizeRichHtml } from "@/lib/post-content";
 import { createUniqueShopProductSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
 import { getPublicModuleSettings } from "@/lib/settings";
@@ -22,6 +22,27 @@ const productSchema = z.object({
     .refine((value) => getPlainTextFromHtml(value).length > 0, {
       message: "Content is required",
     }),
+  seoTitle: z
+    .string()
+    .trim()
+    .max(191, "SEO title is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoDescription: z
+    .string()
+    .trim()
+    .max(320, "SEO description is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoImage: z
+    .string()
+    .trim()
+    .max(2048, "SEO image URL is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
   priceCents: z.number().int().positive("Price must be greater than zero"),
   kind: z.enum(["SERVICE", "DIGITAL"]),
   active: z.boolean().optional().default(true),
@@ -143,6 +164,9 @@ export async function PATCH(
       title,
       summary,
       content,
+      seoTitle,
+      seoDescription,
+      seoImage,
       priceCents,
       kind,
       active,
@@ -153,6 +177,15 @@ export async function PATCH(
       highlights,
       images,
     } = validation.data;
+    const sanitizedContent = sanitizeRichHtml(content);
+
+    if (getPlainTextFromHtml(sanitizedContent).length === 0) {
+      return NextResponse.json(
+        { error: "Invalid input", details: { content: ["Content is required"] } },
+        { status: 400 },
+      );
+    }
+
     const previousImages = readStringList(existingProduct.images);
     const slug = await createUniqueShopProductSlug(title, {
       excludeId: productId,
@@ -167,7 +200,10 @@ export async function PATCH(
         title,
         slug,
         summary,
-        content,
+        content: sanitizedContent,
+        seoTitle,
+        seoDescription,
+        seoImage,
         priceCents,
         kind,
         active,

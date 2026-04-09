@@ -378,6 +378,9 @@ export default function AdminWorkspace({
       contentHtml: post.content ?? "",
       contentText: getPlainTextFromHtml(post.content ?? ""),
       featuredImageFile: null,
+      seoTitle: post.seoTitle ?? "",
+      seoDescription: post.seoDescription ?? "",
+      seoImage: post.seoImage ?? "",
       published: post.published,
     });
     setPostExistingImage(post.featuredImage);
@@ -413,6 +416,9 @@ export default function AdminWorkspace({
       summary: product.summary,
       contentHtml: product.content ?? "",
       contentText: getPlainTextFromHtml(product.content ?? ""),
+      seoTitle: product.seoTitle ?? "",
+      seoDescription: product.seoDescription ?? "",
+      seoImage: product.seoImage ?? "",
       price: String(product.priceCents / 100),
       kind: product.kind,
       active: product.active,
@@ -656,6 +662,9 @@ export default function AdminWorkspace({
           title: postForm.title,
           content: postForm.contentHtml,
           featuredImage,
+          seoTitle: postForm.seoTitle,
+          seoDescription: postForm.seoDescription,
+          seoImage: postForm.seoImage,
           published: postForm.published,
         }),
       });
@@ -937,6 +946,9 @@ export default function AdminWorkspace({
           title: productForm.title,
           summary: productForm.summary,
           content: productForm.contentHtml,
+          seoTitle: productForm.seoTitle,
+          seoDescription: productForm.seoDescription,
+          seoImage: productForm.seoImage,
           priceCents,
           kind: productForm.kind,
           active: productForm.active,
@@ -1634,6 +1646,24 @@ export default function AdminWorkspace({
               title,
             }))
           }
+          onSeoTitleChange={(seoTitle) =>
+            setPostForm((current) => ({
+              ...current,
+              seoTitle,
+            }))
+          }
+          onSeoDescriptionChange={(seoDescription) =>
+            setPostForm((current) => ({
+              ...current,
+              seoDescription,
+            }))
+          }
+          onSeoImageChange={(seoImage) =>
+            setPostForm((current) => ({
+              ...current,
+              seoImage,
+            }))
+          }
           onPublishedToggle={() =>
             setPostForm((current) => ({
               ...current,
@@ -1757,6 +1787,24 @@ export default function AdminWorkspace({
                       title,
                     }))
                   }
+                  onSeoTitleChange={(seoTitle) =>
+                    setPostForm((current) => ({
+                      ...current,
+                      seoTitle,
+                    }))
+                  }
+                  onSeoDescriptionChange={(seoDescription) =>
+                    setPostForm((current) => ({
+                      ...current,
+                      seoDescription,
+                    }))
+                  }
+                  onSeoImageChange={(seoImage) =>
+                    setPostForm((current) => ({
+                      ...current,
+                      seoImage,
+                    }))
+                  }
                   onPublishedToggle={() =>
                     setPostForm((current) => ({
                       ...current,
@@ -1840,6 +1888,24 @@ export default function AdminWorkspace({
                     setProductForm((current) => ({
                       ...current,
                       summary,
+                    }))
+                  }
+                  onSeoTitleChange={(seoTitle) =>
+                    setProductForm((current) => ({
+                      ...current,
+                      seoTitle,
+                    }))
+                  }
+                  onSeoDescriptionChange={(seoDescription) =>
+                    setProductForm((current) => ({
+                      ...current,
+                      seoDescription,
+                    }))
+                  }
+                  onSeoImageChange={(seoImage) =>
+                    setProductForm((current) => ({
+                      ...current,
+                      seoImage,
                     }))
                   }
                   onPriceChange={(price) =>

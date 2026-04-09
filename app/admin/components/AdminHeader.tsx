@@ -1,6 +1,6 @@
 "use client";
 
-import { TopFilter } from "./ui";
+import { TopFilter, adminPrimaryButtonClass } from "./ui";
 import type {
   AdminSection,
   MessageFilter,
@@ -181,7 +181,7 @@ export default function AdminHeader({
             <button
               type="button"
               onClick={onComposerButtonClick}
-              className="admin-button-primary"
+              className={adminPrimaryButtonClass}
             >
               {composerLabel}
             </button>

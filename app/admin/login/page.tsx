@@ -6,7 +6,11 @@ import {
   getAuthenticatedAdmin,
   hasConfiguredAdminPassword,
 } from "@/lib/auth";
-import { adminKickerClass, adminPillClass } from "../components/ui";
+import {
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPillClass,
+} from "../components/ui";
 
 import AdminAuthForm from "./AdminAuthForm";
 
@@ -57,14 +61,14 @@ export default async function AdminLoginPage() {
             </div>
 
             <aside className="space-y-4">
-              <div className="admin-panel-muted p-6">
+              <div className={`${adminPanelMutedClass} p-6`}>
                 <p className={adminKickerClass}>Status</p>
                 <p className="mt-3 text-[1.7rem] leading-[1.05] font-semibold tracking-[-0.03em] text-white">
                   {adminHasPassword ? "Ready to sign in" : "Owner setup required"}
                 </p>
               </div>
 
-              <div className="admin-panel-muted p-6">
+              <div className={`${adminPanelMutedClass} p-6`}>
                 <p className={adminKickerClass}>What you can do</p>
                 <div className="mt-4 flex flex-wrap gap-2">
                   <span className={adminPillClass("neutral")}>Posts</span>

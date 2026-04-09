@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { normalizeShopProductRecord, writeStringList } from "@/lib/db-json";
-import { getPlainTextFromHtml } from "@/lib/post-content";
+import { getPlainTextFromHtml, sanitizeRichHtml } from "@/lib/post-content";
 import { createUniqueShopProductSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
 import { getPublicModuleSettings } from "@/lib/settings";
@@ -17,6 +17,27 @@ const productSchema = z.object({
     .refine((value) => getPlainTextFromHtml(value).length > 0, {
       message: "Content is required",
     }),
+  seoTitle: z
+    .string()
+    .trim()
+    .max(191, "SEO title is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoDescription: z
+    .string()
+    .trim()
+    .max(320, "SEO description is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoImage: z
+    .string()
+    .trim()
+    .max(2048, "SEO image URL is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
   priceCents: z.number().int().positive("Price must be greater than zero"),
   kind: z.enum(["SERVICE", "DIGITAL"]),
   active: z.boolean().optional().default(true),
@@ -86,6 +107,9 @@ export async function POST(request: NextRequest) {
       title,
       summary,
       content,
+      seoTitle,
+      seoDescription,
+      seoImage,
       priceCents,
       kind,
       active,
@@ -96,6 +120,15 @@ export async function POST(request: NextRequest) {
       highlights,
       images,
     } = validation.data;
+    const sanitizedContent = sanitizeRichHtml(content);
+
+    if (getPlainTextFromHtml(sanitizedContent).length === 0) {
+      return NextResponse.json(
+        { error: "Invalid input", details: { content: ["Content is required"] } },
+        { status: 400 },
+      );
+    }
+
     const slug = await createUniqueShopProductSlug(title, { prisma });
 
     const product = await prisma.shopProduct.create({
@@ -103,7 +136,10 @@ export async function POST(request: NextRequest) {
         title,
         slug,
         summary,
-        content,
+        content: sanitizedContent,
+        seoTitle,
+        seoDescription,
+        seoImage,
         priceCents,
         currency: "EUR",
         kind,

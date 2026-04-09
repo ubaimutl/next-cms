@@ -2,7 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { type FormEvent, useMemo, useState, useTransition } from "react";
-import { adminKickerClass } from "../components/ui";
+import {
+  adminInputClass,
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPrimaryButtonClass,
+} from "../components/ui";
 
 type AdminAuthFormProps = {
   adminHasPassword: boolean;
@@ -68,7 +73,7 @@ export default function AdminAuthForm({
   }
 
   return (
-    <div className="admin-panel-muted p-6 md:p-8">
+    <div className={`${adminPanelMutedClass} p-6 md:p-8`}>
       <div className="border-b border-base-content/8 pb-6">
         <p className={adminKickerClass}>
           {adminHasPassword ? "Authentication" : "Setup"}
@@ -94,7 +99,7 @@ export default function AdminAuthForm({
                 }))
               }
               placeholder="Your name"
-              className="admin-field mt-3"
+              className={`${adminInputClass} mt-3`}
             />
           </label>
         )}
@@ -113,7 +118,7 @@ export default function AdminAuthForm({
               }))
             }
             placeholder="you@example.com"
-            className="admin-field mt-3"
+            className={`${adminInputClass} mt-3`}
             required
           />
         </label>
@@ -134,7 +139,7 @@ export default function AdminAuthForm({
             placeholder={
               adminHasPassword ? "Your password" : "Create a strong password"
             }
-            className="admin-field mt-3"
+            className={`${adminInputClass} mt-3`}
             minLength={adminHasPassword ? 8 : 12}
             maxLength={200}
             required
@@ -157,7 +162,7 @@ export default function AdminAuthForm({
           <button
             type="submit"
             disabled={isPending}
-            className="admin-button-primary px-6"
+            className={`${adminPrimaryButtonClass} px-6`}
           >
             {isPending ? "Working..." : modeLabel}
           </button>

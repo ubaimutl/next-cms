@@ -5,8 +5,15 @@ import { notFound } from "next/navigation";
 
 import Footer from "@/app/components/layout/Footer";
 import { normalizeShopProductRecord } from "@/lib/db-json";
-import { shouldBypassImageOptimization } from "@/lib/image";
-import { getExcerptFromHtml, getReadingTimeMinutes } from "@/lib/post-content";
+import {
+  shouldBypassImageOptimization,
+  toAbsoluteImageUrl,
+} from "@/lib/image";
+import {
+  getExcerptFromHtml,
+  getReadingTimeMinutes,
+  sanitizeRichHtml,
+} from "@/lib/post-content";
 import { getPayPalClientId } from "@/lib/paypal";
 import prisma from "@/lib/prisma";
 import { getPublicModuleSettings } from "@/lib/settings";
@@ -30,6 +37,9 @@ type ShopProductDetail = {
   slug: string;
   summary: string;
   content: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoImage: string | null;
   priceCents: number;
   currency: string;
   kind: "SERVICE" | "DIGITAL";
@@ -78,27 +88,34 @@ export async function generateMetadata({
     };
   }
 
-  const description = product.summary || getExcerptFromHtml(product.content, 160);
+  const fallbackDescription =
+    product.summary || getExcerptFromHtml(product.content, 160);
+  const metadataTitle = product.seoTitle || product.title;
+  const metadataDescription = product.seoDescription || fallbackDescription;
   const canonicalPath = `/shop/${product.slug}`;
+  const shareImage = toAbsoluteImageUrl(
+    product.seoImage || product.images[0],
+    siteConfig.url,
+  );
 
   return {
-    title: product.title,
-    description,
+    title: metadataTitle,
+    description: metadataDescription,
     alternates: { canonical: canonicalPath },
     openGraph: {
       type: "website",
-      title: product.title,
-      description,
+      title: metadataTitle,
+      description: metadataDescription,
       url: canonicalPath,
-      images: product.images[0]
-        ? [{ url: product.images[0], alt: product.title }]
+      images: shareImage
+        ? [{ url: shareImage, alt: metadataTitle }]
         : undefined,
     },
     twitter: {
       card: "summary_large_image",
-      title: product.title,
-      description,
-      images: product.images[0] ? [product.images[0]] : undefined,
+      title: metadataTitle,
+      description: metadataDescription,
+      images: shareImage ? [shareImage] : undefined,
     },
   };
 }
@@ -118,13 +135,27 @@ export default async function ShopProductPage({ params }: ProductPageProps) {
   }
 
   const readingTime = getReadingTimeMinutes(product.content);
+  const sanitizedContent = sanitizeRichHtml(product.content);
   const productUrl = `${siteConfig.url}/shop/${product.slug}`;
+  const metadataDescription =
+    product.seoDescription ||
+    product.summary ||
+    getExcerptFromHtml(product.content, 160);
+  const productImages = product.images
+    .map((image) => toAbsoluteImageUrl(image, siteConfig.url))
+    .filter((image): image is string => Boolean(image));
+  const shareImage = toAbsoluteImageUrl(
+    product.seoImage || product.images[0],
+    siteConfig.url,
+  );
   const productJsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    description: product.summary,
-    image: product.images,
+    description: metadataDescription,
+    image: shareImage
+      ? [shareImage, ...productImages.filter((image) => image !== shareImage)]
+      : productImages,
     url: productUrl,
     brand: { "@type": "Brand", name: siteConfig.shortName },
     offers: {
@@ -222,7 +253,7 @@ export default async function ShopProductPage({ params }: ProductPageProps) {
             {product.content ? (
               <div
                 className="post-content mt-8 max-w-3xl text-[1.02rem] leading-[1.82]"
-                dangerouslySetInnerHTML={{ __html: product.content }}
+                dangerouslySetInnerHTML={{ __html: sanitizedContent }}
               />
             ) : null}
 

@@ -7,6 +7,7 @@ import { formatPrice } from "@/lib/shop-helpers";
 import {
   OrderStatusPill,
   adminKickerClass,
+  adminPanelMutedClass,
   adminPillClass,
   formatDateTime,
 } from "./ui";
@@ -117,25 +118,25 @@ export default function OrdersSection({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Buyer</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedOrder.buyerName || "Not provided"}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Buyer email</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.buyerEmail || "Not provided"}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>PayPal order</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.paypalOrderId}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Capture</p>
                 <p className="mt-2 break-all text-[0.98rem] text-white/86">
                   {selectedOrder.paypalCaptureId || "Pending"}
@@ -160,7 +161,7 @@ export default function OrdersSection({
             </div>
           </div>
         ) : (
-          <div className="admin-panel-muted px-5 py-6 text-sm text-white/46">
+          <div className={`${adminPanelMutedClass} px-5 py-6 text-sm text-white/46`}>
             Select an order.
           </div>
         )}

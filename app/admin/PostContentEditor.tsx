@@ -20,7 +20,10 @@ import {
   renderItems,
 } from "novel";
 import type { EditorInstance, JSONContent } from "novel";
-import { adminKickerClass } from "./components/ui";
+import {
+  adminKickerClass,
+  adminSecondaryButtonClass,
+} from "./components/ui";
 
 type PostContentEditorProps = {
   editorKey: number;
@@ -291,7 +294,7 @@ export default function PostContentEditor({
             <button
               type="button"
               onClick={() => setIsFocusMode((current) => !current)}
-              className="admin-button-secondary min-h-10 px-4"
+              className={`${adminSecondaryButtonClass} min-h-10 px-4`}
             >
               {isFocusMode ? "Exit focus" : "Focus mode"}
             </button>

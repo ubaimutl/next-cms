@@ -32,6 +32,9 @@ model Post {
   slug          String  @unique
   content       String? @db.Text
   featuredImage String?
+  seoTitle      String?
+  seoDescription String? @db.Text
+  seoImage      String?
   published     Boolean @default(false)
   authorId      Int
   author        User    @relation(fields: [authorId], references: [id])
@@ -81,6 +84,9 @@ model ShopProduct {
   slug         String          @unique
   summary      String          @db.Text
   content      String?         @db.Text
+  seoTitle     String?
+  seoDescription String?       @db.Text
+  seoImage     String?
   priceCents   Int
   currency     String          @default("EUR")
   kind         ShopProductKind @default(SERVICE)

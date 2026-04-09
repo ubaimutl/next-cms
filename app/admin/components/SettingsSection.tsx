@@ -1,6 +1,15 @@
 "use client";
 
-import { RolePill, adminKickerClass, adminPillClass } from "./ui";
+import {
+  RolePill,
+  adminDangerButtonClass,
+  adminInputClass,
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPillClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
+} from "./ui";
 import type {
   AdminAnalyticsOverview,
   AdminAppSettings,
@@ -61,7 +70,7 @@ function SettingsToggle({
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="admin-panel-muted flex w-full items-start justify-between gap-5 p-5 text-left transition hover:border-base-content/14 disabled:cursor-not-allowed disabled:opacity-55"
+      className={`${adminPanelMutedClass} flex w-full items-start justify-between gap-5 p-5 text-left transition hover:border-base-content/14 disabled:cursor-not-allowed disabled:opacity-55`}
     >
       <div className="min-w-0">
         <p className={adminKickerClass}>{label}</p>
@@ -156,7 +165,7 @@ export default function SettingsSection({
             type="button"
             onClick={() => onToggleAnalytics(!analytics.enabled)}
             disabled={!canManageSettings || isUpdatingAnalytics}
-            className="admin-button-primary self-start px-5"
+            className={`${adminPrimaryButtonClass} self-start px-5`}
           >
             {isUpdatingAnalytics
               ? "Saving"
@@ -181,7 +190,7 @@ export default function SettingsSection({
 
           <div className="mt-5 space-y-4">
             {adminUsers.map((user) => (
-              <div key={user.id} className="admin-panel-muted p-5">
+              <div key={user.id} className={`${adminPanelMutedClass} p-5`}>
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
@@ -215,8 +224,8 @@ export default function SettingsSection({
                         }
                         className={
                           user.role === role
-                            ? "admin-button-primary min-h-10 px-4"
-                            : "admin-button-secondary min-h-10 px-4"
+                            ? `${adminPrimaryButtonClass} min-h-10 px-4`
+                            : `${adminSecondaryButtonClass} min-h-10 px-4`
                         }
                       >
                         {role}
@@ -227,7 +236,7 @@ export default function SettingsSection({
                       type="button"
                       onClick={() => onToggleUserActive(user, !user.active)}
                       disabled={!canManageUsers || isUpdatingUserId === user.id}
-                      className="admin-button-secondary min-h-10 px-4"
+                      className={`${adminSecondaryButtonClass} min-h-10 px-4`}
                     >
                       {user.active ? "Disable" : "Enable"}
                     </button>
@@ -235,9 +244,9 @@ export default function SettingsSection({
                     {currentAdmin.id !== user.id ? (
                       <button
                         type="button"
-                        onClick={() => onDeleteUser(user)}
-                        disabled={!canManageUsers || isDeletingUserId === user.id}
-                        className="admin-button-danger min-h-10 px-4"
+                      onClick={() => onDeleteUser(user)}
+                      disabled={!canManageUsers || isDeletingUserId === user.id}
+                      className={`${adminDangerButtonClass} min-h-10 px-4`}
                       >
                         Delete
                       </button>
@@ -262,7 +271,7 @@ export default function SettingsSection({
                 type="text"
                 value={userForm.name}
                 onChange={(event) => onUserFormChange("name", event.target.value)}
-                className="admin-field mt-3"
+                className={`${adminInputClass} mt-3`}
                 placeholder="Team member name"
                 disabled={!canManageUsers || isSubmittingUser}
               />
@@ -274,7 +283,7 @@ export default function SettingsSection({
                 type="email"
                 value={userForm.email}
                 onChange={(event) => onUserFormChange("email", event.target.value)}
-                className="admin-field mt-3"
+                className={`${adminInputClass} mt-3`}
                 placeholder="editor@example.com"
                 disabled={!canManageUsers || isSubmittingUser}
               />
@@ -288,7 +297,7 @@ export default function SettingsSection({
                 onChange={(event) =>
                   onUserFormChange("password", event.target.value)
                 }
-                className="admin-field mt-3"
+                className={`${adminInputClass} mt-3`}
                 placeholder="At least 12 characters"
                 disabled={!canManageUsers || isSubmittingUser}
               />
@@ -305,8 +314,8 @@ export default function SettingsSection({
                     disabled={!canManageUsers || isSubmittingUser}
                     className={
                       userForm.role === role
-                        ? "admin-button-primary min-h-10 px-4"
-                        : "admin-button-secondary min-h-10 px-4"
+                        ? `${adminPrimaryButtonClass} min-h-10 px-4`
+                        : `${adminSecondaryButtonClass} min-h-10 px-4`
                     }
                   >
                     {role}
@@ -332,7 +341,7 @@ export default function SettingsSection({
               type="button"
               onClick={onCreateUser}
               disabled={!canManageUsers || isSubmittingUser}
-              className="admin-button-primary w-full"
+              className={`${adminPrimaryButtonClass} w-full`}
             >
               {isSubmittingUser ? "Creating" : "Create admin user"}
             </button>

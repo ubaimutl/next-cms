@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { cleanupManagedMediaUrl } from "@/lib/media-library";
-import { getPlainTextFromHtml } from "@/lib/post-content";
+import { getPlainTextFromHtml, sanitizeRichHtml } from "@/lib/post-content";
 import { createUniquePostSlug } from "@/lib/post-slug";
 import prisma from "@/lib/prisma";
 import { getPublicModuleSettings } from "@/lib/settings";
@@ -20,6 +20,27 @@ const updatePostSchema = z.object({
     .string()
     .trim()
     .max(191, "Featured image path is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoTitle: z
+    .string()
+    .trim()
+    .max(191, "SEO title is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoDescription: z
+    .string()
+    .trim()
+    .max(320, "SEO description is too long")
+    .optional()
+    .nullable()
+    .transform((value) => (value && value.trim() ? value.trim() : null)),
+  seoImage: z
+    .string()
+    .trim()
+    .max(2048, "SEO image URL is too long")
     .optional()
     .nullable()
     .transform((value) => (value && value.trim() ? value.trim() : null)),
@@ -95,7 +116,24 @@ export async function PATCH(
       return NextResponse.json({ error: "Post not found" }, { status: 404 });
     }
 
-    const { title, content, featuredImage, published } = validation.data;
+    const {
+      title,
+      content,
+      featuredImage,
+      seoTitle,
+      seoDescription,
+      seoImage,
+      published,
+    } = validation.data;
+    const sanitizedContent = sanitizeRichHtml(content);
+
+    if (getPlainTextFromHtml(sanitizedContent).length === 0) {
+      return NextResponse.json(
+        { error: "Invalid input", details: { content: ["Content is required"] } },
+        { status: 400 },
+      );
+    }
+
     const slug = await createUniquePostSlug(title, {
       excludeId: postId,
       prisma,
@@ -106,8 +144,11 @@ export async function PATCH(
       data: {
         title,
         slug,
-        content,
+        content: sanitizedContent,
         featuredImage,
+        seoTitle,
+        seoDescription,
+        seoImage,
         published,
       },
     });

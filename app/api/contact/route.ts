@@ -4,6 +4,7 @@ import { contactSubmissionSchema } from "@/lib/contact";
 import { writeStringList } from "@/lib/db-json";
 import { sendContactEmail } from "@/lib/mail";
 import prisma from "@/lib/prisma";
+import { consumePublicRateLimit } from "@/lib/public-rate-limit";
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,6 +25,20 @@ export async function POST(request: NextRequest) {
 
     if (honeypot) {
       return NextResponse.json({ status: "ignored" }, { status: 202 });
+    }
+
+    const rateLimit = await consumePublicRateLimit("contact", request);
+
+    if (rateLimit) {
+      return NextResponse.json(
+        { error: "Too many contact submissions. Try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
     }
 
     const savedMessage = await prisma.contactMessage.create({

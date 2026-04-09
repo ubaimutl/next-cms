@@ -2,8 +2,12 @@
 
 import {
   MessageStatusPill,
+  adminDangerButtonClass,
   adminKickerClass,
+  adminPanelMutedClass,
   adminPillClass,
+  adminPrimaryButtonClass,
+  adminSecondaryButtonClass,
   formatDateTime,
 } from "./ui";
 import type { AdminMessage, AdminMessageStatus } from "./types";
@@ -128,13 +132,13 @@ export default function MessagesSection({
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Company</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.company || "Not provided"}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Website</p>
                 {selectedMessage.website ? (
                   <a
@@ -149,13 +153,13 @@ export default function MessagesSection({
                   <p className="mt-2 text-[0.98rem] text-white/86">Not provided</p>
                 )}
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Budget</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.budget || "Not specified"}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Timeline</p>
                 <p className="mt-2 text-[0.98rem] text-white/86">
                   {selectedMessage.timeline || "Not specified"}
@@ -200,7 +204,7 @@ export default function MessagesSection({
             <div className="flex flex-wrap gap-3 border-t border-white/6 pt-5">
               <a
                 href={`mailto:${selectedMessage.email}`}
-                className="admin-button-secondary"
+                className={adminSecondaryButtonClass}
               >
                 Reply
               </a>
@@ -210,7 +214,7 @@ export default function MessagesSection({
                   type="button"
                   onClick={() => onUpdateMessageStatus(selectedMessage.id, "READ")}
                   disabled={isUpdatingMessage}
-                  className="admin-button-secondary"
+                  className={adminSecondaryButtonClass}
                 >
                   Mark read
                 </button>
@@ -223,7 +227,7 @@ export default function MessagesSection({
                     onUpdateMessageStatus(selectedMessage.id, "ARCHIVED")
                   }
                   disabled={isUpdatingMessage}
-                  className="admin-button-primary"
+                  className={adminPrimaryButtonClass}
                 >
                   Archive
                 </button>
@@ -232,7 +236,7 @@ export default function MessagesSection({
                   type="button"
                   onClick={() => onUpdateMessageStatus(selectedMessage.id, "READ")}
                   disabled={isUpdatingMessage}
-                  className="admin-button-primary"
+                  className={adminPrimaryButtonClass}
                 >
                   Restore
                 </button>
@@ -242,14 +246,14 @@ export default function MessagesSection({
                 type="button"
                 onClick={() => onDeleteMessage(selectedMessage)}
                 disabled={isDeletingMessageId === selectedMessage.id}
-                className="admin-button-danger"
+                className={adminDangerButtonClass}
               >
                 {isDeletingMessageId === selectedMessage.id ? "Deleting" : "Delete"}
               </button>
             </div>
           </div>
         ) : (
-          <div className="admin-panel-muted px-5 py-6 text-sm text-white/46">
+          <div className={`${adminPanelMutedClass} px-5 py-6 text-sm text-white/46`}>
             Select a message.
           </div>
         )}

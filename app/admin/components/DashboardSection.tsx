@@ -2,7 +2,12 @@
 
 import { formatPrice } from "@/lib/shop-helpers";
 
-import { adminKickerClass, adminPillClass, formatDateTime } from "./ui";
+import {
+  adminKickerClass,
+  adminPanelMutedClass,
+  adminPillClass,
+  formatDateTime,
+} from "./ui";
 import type {
   AdminAnalyticsOverview,
   AdminMessage,
@@ -88,7 +93,7 @@ function MetricCard({
   detail: string;
 }) {
   return (
-    <div className="admin-panel-muted p-5">
+    <div className={`${adminPanelMutedClass} p-5`}>
       <p className={adminKickerClass}>{label}</p>
       <p className="mt-4 text-[2rem] leading-none font-semibold tracking-[-0.04em]">
         {value}
@@ -198,19 +203,19 @@ export default function DashboardSection({
             </div>
 
             <div className="space-y-3">
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Top pages</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {analytics.topPages.length}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Products</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {products.length}
                 </p>
               </div>
-              <div className="admin-panel-muted p-4">
+              <div className={`${adminPanelMutedClass} p-4`}>
                 <p className={adminKickerClass}>Projects</p>
                 <p className="mt-3 text-[1.8rem] leading-none font-semibold tracking-[-0.04em]">
                   {projects.length}
@@ -267,7 +272,7 @@ export default function DashboardSection({
             <button
               type="button"
               onClick={onNewPost}
-              className="admin-panel-muted flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]"
+              className={`${adminPanelMutedClass} flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]`}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-[0.7rem] bg-[#28cf43] text-black">
                 <Icon path="M12 5v14M5 12h14" />
@@ -283,7 +288,7 @@ export default function DashboardSection({
             <button
               type="button"
               onClick={onOpenMessages}
-              className="admin-panel-muted flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]"
+              className={`${adminPanelMutedClass} flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]`}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-[0.7rem] bg-[#ff1a75] text-white">
                 <Icon path="M4 7h16v10H4zM4 7l8 6 8-6" />
@@ -299,7 +304,7 @@ export default function DashboardSection({
             <button
               type="button"
               onClick={onOpenOrders}
-              className="admin-panel-muted flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]"
+              className={`${adminPanelMutedClass} flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]`}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-[0.7rem] bg-[#53c5ff] text-black">
                 <Icon path="M6 7h15l-1.5 8h-11zM6 7 4 4M9 20a1 1 0 1 0 0 .01M18 20a1 1 0 1 0 0 .01" />
@@ -315,7 +320,7 @@ export default function DashboardSection({
             <button
               type="button"
               onClick={onOpenShop}
-              className="admin-panel-muted flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]"
+              className={`${adminPanelMutedClass} flex items-start gap-4 p-5 text-left transition hover:bg-white/[0.06]`}
             >
               <div className="flex h-10 w-10 items-center justify-center rounded-[0.7rem] bg-white text-black">
                 <Icon path="M5 8h14M7 8V6.5A2.5 2.5 0 0 1 9.5 4h5A2.5 2.5 0 0 1 17 6.5V8m-10 0v10h10V8" />
@@ -371,7 +376,7 @@ export default function DashboardSection({
             </div>
 
             <div className="mt-4 grid gap-3">
-              <div className="admin-panel-muted flex items-center justify-between p-4">
+              <div className={`${adminPanelMutedClass} flex items-center justify-between p-4`}>
                 <div>
                   <p className={adminKickerClass}>Projects</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">
@@ -380,7 +385,7 @@ export default function DashboardSection({
                 </div>
                 <Icon path="M4 20 20 4M8 4h12v12" className="h-5 w-5 text-white/35" />
               </div>
-              <div className="admin-panel-muted flex items-center justify-between p-4">
+              <div className={`${adminPanelMutedClass} flex items-center justify-between p-4`}>
                 <div>
                   <p className={adminKickerClass}>Products</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">
@@ -389,7 +394,7 @@ export default function DashboardSection({
                 </div>
                 <Icon path="M5 8h14M7 8V6.5A2.5 2.5 0 0 1 9.5 4h5A2.5 2.5 0 0 1 17 6.5V8m-10 0v10h10V8" className="h-5 w-5 text-white/35" />
               </div>
-              <div className="admin-panel-muted flex items-center justify-between p-4">
+              <div className={`${adminPanelMutedClass} flex items-center justify-between p-4`}>
                 <div>
                   <p className={adminKickerClass}>Drafts</p>
                   <p className="mt-2 text-[1.45rem] leading-none font-semibold tracking-[-0.03em]">

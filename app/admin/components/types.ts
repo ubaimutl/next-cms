@@ -4,6 +4,9 @@ export type AdminPost = {
   slug: string;
   content: string | null;
   featuredImage: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoImage: string | null;
   published: boolean;
   authorId: number;
 };
@@ -31,6 +34,9 @@ export type AdminProduct = {
   slug: string;
   summary: string;
   content: string | null;
+  seoTitle: string | null;
+  seoDescription: string | null;
+  seoImage: string | null;
   priceCents: number;
   currency: string;
   kind: AdminProductKind;
@@ -181,6 +187,9 @@ export type PostFormState = {
   contentHtml: string;
   contentText: string;
   featuredImageFile: File | null;
+  seoTitle: string;
+  seoDescription: string;
+  seoImage: string;
   published: boolean;
 };
 
@@ -198,6 +207,9 @@ export type ProductFormState = {
   summary: string;
   contentHtml: string;
   contentText: string;
+  seoTitle: string;
+  seoDescription: string;
+  seoImage: string;
   price: string;
   kind: AdminProductKind;
   active: boolean;
@@ -224,6 +236,9 @@ export function createEmptyPostForm(): PostFormState {
     contentHtml: "",
     contentText: "",
     featuredImageFile: null,
+    seoTitle: "",
+    seoDescription: "",
+    seoImage: "",
     published: false,
   };
 }
@@ -245,6 +260,9 @@ export function createEmptyProductForm(): ProductFormState {
     summary: "",
     contentHtml: "",
     contentText: "",
+    seoTitle: "",
+    seoDescription: "",
+    seoImage: "",
     price: "",
     kind: "SERVICE",
     active: true,

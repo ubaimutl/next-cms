@@ -10,6 +10,7 @@ import {
   recordAnalyticsPageView,
   setAnalyticsEnabled,
 } from "@/lib/prisma";
+import { consumePublicRateLimit } from "@/lib/public-rate-limit";
 import { siteConfig } from "@/lib/site";
 
 const TRACKING_COOKIE_NAME = "ubai_analytics_visitor";
@@ -63,6 +64,20 @@ export async function POST(request: NextRequest) {
 
     if (!normalizedPath) {
       return NextResponse.json({ tracked: false }, { status: 200 });
+    }
+
+    const rateLimit = await consumePublicRateLimit("analytics", request);
+
+    if (rateLimit) {
+      return NextResponse.json(
+        { error: "Too many analytics requests. Try again later." },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(rateLimit.retryAfterSeconds),
+          },
+        },
+      );
     }
 
     const existingVisitorToken = request.cookies.get(TRACKING_COOKIE_NAME)?.value;
