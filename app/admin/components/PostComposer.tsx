@@ -28,6 +28,7 @@ type PostComposerProps = {
   editorKey: number;
   postInputKey: number;
   featuredImageUrl: string | null;
+  isUploadingFeaturedImage: boolean;
   isSubmittingPost: boolean;
   onSubmit: FormEventHandler<HTMLFormElement>;
   onCancel: () => void;
@@ -70,6 +71,7 @@ export default function PostComposer({
   editorKey,
   postInputKey,
   featuredImageUrl,
+  isUploadingFeaturedImage,
   isSubmittingPost,
   onSubmit,
   onCancel,
@@ -104,7 +106,7 @@ export default function PostComposer({
           <button
             type="button"
             onClick={() => setIsSettingsOpen((open) => !open)}
-            className={`inline-flex min-h-9 items-center justify-center rounded-md border px-3 text-[0.82rem] font-medium transition ${isSettingsOpen
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-[0.6rem] border transition ${isSettingsOpen
               ? "border-white/16 bg-white/[0.08] text-white"
               : "border-white/10 bg-white/[0.04] text-white/72 hover:bg-white/[0.06] hover:text-white"
               }`}
@@ -119,16 +121,18 @@ export default function PostComposer({
           <button
             type="button"
             onClick={onPublishedToggle}
-            className="inline-flex min-h-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.04] px-3 text-[0.82rem] font-medium text-white/72 transition hover:bg-white/[0.06] hover:text-white"
+            className="inline-flex min-h-8 items-center justify-center rounded-[0.6rem] border border-white/10 bg-white/[0.04] px-3 text-[0.78rem] font-medium text-white/72 transition hover:bg-white/[0.06] hover:text-white"
           >
             {postForm.published ? "Published" : "Draft"}
           </button>
           <button
             type="submit"
-            disabled={isSubmittingPost}
-            className="inline-flex min-h-9 items-center justify-center rounded-md bg-white px-3.5 text-[0.82rem] font-semibold text-[#151719] transition hover:opacity-90 disabled:opacity-45"
+            disabled={isSubmittingPost || isUploadingFeaturedImage}
+            className="inline-flex min-h-8 items-center justify-center rounded-[0.6rem] bg-white px-3 text-[0.78rem] font-semibold text-[#151719] transition hover:opacity-90 disabled:opacity-45"
           >
-            {isSubmittingPost
+            {isUploadingFeaturedImage
+              ? "Uploading image"
+              : isSubmittingPost
               ? "Saving"
               : isEditingPost
                 ? "Update post"
@@ -157,7 +161,7 @@ export default function PostComposer({
             <label className="inline-flex cursor-pointer items-center gap-2 text-white/34 transition hover:text-white/62">
               <Icon path="M12 5v14M5 12h14" className="h-3.5 w-3.5" />
               <span>
-                {featuredImageUrl || postForm.featuredImageFile
+                {featuredImageUrl || isUploadingFeaturedImage
                   ? "Replace feature image"
                   : "Add feature image"}
               </span>
@@ -166,22 +170,24 @@ export default function PostComposer({
                 type="file"
                 accept="image/avif,image/jpeg,image/png,image/webp"
                 onChange={onFeaturedImageChange}
+                disabled={isUploadingFeaturedImage || isSubmittingPost}
                 className="hidden"
               />
             </label>
 
-            {(featuredImageUrl || postForm.featuredImageFile) ? (
+            {(featuredImageUrl || isUploadingFeaturedImage) ? (
               <button
                 type="button"
                 onClick={onRemoveFeaturedImage}
-                className="text-white/28 transition hover:text-white/62"
+                disabled={isUploadingFeaturedImage || isSubmittingPost}
+                className="text-white/28 transition hover:text-white/62 disabled:opacity-40"
               >
                 Remove
               </button>
             ) : null}
           </div>
 
-          {(featuredImageUrl || postForm.featuredImageFile) && (
+          {(featuredImageUrl || isUploadingFeaturedImage) && (
             <div className="mb-8 overflow-hidden rounded-[0.45rem] border border-white/6 bg-black/20">
               <div className="relative aspect-[16/7] w-full">
                 {featuredImageUrl ? (
@@ -195,13 +201,17 @@ export default function PostComposer({
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-sm text-white/44">New image selected</span>
+                    <span className="text-sm text-white/44">
+                      Uploading feature image...
+                    </span>
                   </div>
                 )}
               </div>
 
               <div className="border-t border-white/6 px-4 py-3 text-sm text-white/44">
-                {postForm.featuredImageFile?.name ?? featuredImageUrl}
+                {isUploadingFeaturedImage
+                  ? "Uploading feature image..."
+                  : featuredImageUrl}
               </div>
             </div>
           )}

@@ -118,7 +118,7 @@ export default function ProductComposer({
           <button
             type="button"
             onClick={() => setIsSettingsOpen((open) => !open)}
-            className={`inline-flex h-10 w-10 items-center justify-center rounded-md border transition ${
+            className={`inline-flex h-8 w-8 items-center justify-center rounded-[0.6rem] border transition ${
               isSettingsOpen
                 ? "border-white/16 bg-white/[0.08] text-white"
                 : "border-white/10 bg-white/[0.04] text-white/72 hover:bg-white/[0.06] hover:text-white"
@@ -269,7 +269,7 @@ export default function ProductComposer({
                       key={value}
                       type="button"
                       onClick={() => onAvailabilityChange(value)}
-                      className={`min-h-10 rounded-full border px-4 text-sm font-medium transition ${
+                      className={`min-h-8 rounded-full border px-3 text-[0.78rem] font-medium transition ${
                         active
                           ? "border-white/18 bg-white/[0.08] text-white"
                           : "border-white/8 bg-white/[0.03] text-white/52 hover:border-white/12 hover:text-white/76"

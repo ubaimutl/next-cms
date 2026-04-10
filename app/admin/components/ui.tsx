@@ -12,13 +12,13 @@ export const adminPanelMutedClass =
   "rounded-[0.5rem] border border-[var(--admin-border)] bg-[var(--admin-surface-2)] text-[var(--admin-text)] shadow-none";
 
 export const adminPrimaryButtonClass =
-  "inline-flex min-h-[2.6rem] items-center justify-center rounded-[0.45rem] border border-[var(--color-base-content)] bg-[var(--color-base-content)] px-4 text-[0.86rem] font-semibold text-[var(--color-base-100)] transition hover:-translate-y-px disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex min-h-8 items-center justify-center rounded-[0.6rem] border border-[var(--color-base-content)] bg-[var(--color-base-content)] px-3 text-[0.78rem] font-semibold text-[var(--color-base-100)] transition hover:opacity-92 disabled:cursor-not-allowed disabled:opacity-40";
 
 export const adminSecondaryButtonClass =
-  "inline-flex min-h-[2.6rem] items-center justify-center rounded-[0.45rem] border border-[var(--admin-border)] bg-[var(--admin-surface-3)] px-4 text-[0.86rem] font-medium text-[var(--admin-text)] transition hover:bg-[var(--admin-surface)] disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex min-h-8 items-center justify-center rounded-[0.6rem] border border-[var(--admin-border)] bg-[var(--admin-surface-3)] px-3 text-[0.78rem] font-medium text-[var(--admin-text)] transition hover:bg-[var(--admin-surface)] disabled:cursor-not-allowed disabled:opacity-40";
 
 export const adminDangerButtonClass =
-  "inline-flex min-h-[2.6rem] items-center justify-center rounded-[0.45rem] border border-[rgba(255,106,106,0.22)] bg-[rgba(255,106,106,0.06)] px-4 text-[0.86rem] font-medium text-[#ff9b9b] transition hover:border-[rgba(255,106,106,0.34)] hover:bg-[rgba(255,106,106,0.1)] disabled:cursor-not-allowed disabled:opacity-40";
+  "inline-flex min-h-8 items-center justify-center rounded-[0.6rem] border border-[rgba(255,106,106,0.22)] bg-[rgba(255,106,106,0.06)] px-3 text-[0.78rem] font-medium text-[#ff9b9b] transition hover:border-[rgba(255,106,106,0.34)] hover:bg-[rgba(255,106,106,0.1)] disabled:cursor-not-allowed disabled:opacity-40";
 
 export const adminInputClass =
   "w-full rounded-[0.7rem] border border-[var(--admin-border)] bg-[var(--admin-surface-3)] text-[var(--admin-text)] shadow-none transition placeholder:text-[var(--admin-faint)] focus:border-sky-400/30 focus:bg-[var(--admin-surface)] focus:outline-none min-h-12 px-[0.95rem]";

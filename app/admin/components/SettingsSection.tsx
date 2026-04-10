@@ -224,8 +224,8 @@ export default function SettingsSection({
                         }
                         className={
                           user.role === role
-                            ? `${adminPrimaryButtonClass} min-h-10 px-4`
-                            : `${adminSecondaryButtonClass} min-h-10 px-4`
+                            ? adminPrimaryButtonClass
+                            : adminSecondaryButtonClass
                         }
                       >
                         {role}
@@ -236,7 +236,7 @@ export default function SettingsSection({
                       type="button"
                       onClick={() => onToggleUserActive(user, !user.active)}
                       disabled={!canManageUsers || isUpdatingUserId === user.id}
-                      className={`${adminSecondaryButtonClass} min-h-10 px-4`}
+                      className={adminSecondaryButtonClass}
                     >
                       {user.active ? "Disable" : "Enable"}
                     </button>
@@ -244,9 +244,9 @@ export default function SettingsSection({
                     {currentAdmin.id !== user.id ? (
                       <button
                         type="button"
-                      onClick={() => onDeleteUser(user)}
-                      disabled={!canManageUsers || isDeletingUserId === user.id}
-                      className={`${adminDangerButtonClass} min-h-10 px-4`}
+                        onClick={() => onDeleteUser(user)}
+                        disabled={!canManageUsers || isDeletingUserId === user.id}
+                        className={adminDangerButtonClass}
                       >
                         Delete
                       </button>
@@ -314,8 +314,8 @@ export default function SettingsSection({
                     disabled={!canManageUsers || isSubmittingUser}
                     className={
                       userForm.role === role
-                        ? `${adminPrimaryButtonClass} min-h-10 px-4`
-                        : `${adminSecondaryButtonClass} min-h-10 px-4`
+                        ? adminPrimaryButtonClass
+                        : adminSecondaryButtonClass
                     }
                   >
                     {role}

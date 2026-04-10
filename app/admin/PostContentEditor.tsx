@@ -350,7 +350,7 @@ export default function PostContentEditor({
             <button
               type="button"
               onClick={() => setIsFocusMode((current) => !current)}
-              className={`${adminSecondaryButtonClass} min-h-10 px-4`}
+              className={adminSecondaryButtonClass}
             >
               {isFocusMode ? "Exit focus" : "Focus mode"}
             </button>

@@ -30,13 +30,16 @@ export async function POST(request: NextRequest) {
       validation.extension,
     );
 
-    await registerMediaAsset({
+    const asset = await registerMediaAsset({
       storedImage,
       kind: "posts",
       uploadedById: admin.id,
     });
 
-    return NextResponse.json({ url: storedImage.url }, { status: 201 });
+    return NextResponse.json(
+      { id: asset.id, url: storedImage.url },
+      { status: 201 },
+    );
   } catch (error) {
     console.error("Error uploading post image:", error);
     return NextResponse.json(

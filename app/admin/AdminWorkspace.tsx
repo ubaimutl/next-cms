@@ -6,6 +6,7 @@ import {
   type FormEvent,
   useEffect,
   useMemo,
+  useRef,
   useState,
   useTransition,
 } from "react";
@@ -141,6 +142,8 @@ export default function AdminWorkspace({
     initialOrders[0]?.id ?? null,
   );
   const [postExistingImage, setPostExistingImage] = useState<string | null>(null);
+  const [postDraftAssetId, setPostDraftAssetId] = useState<number | null>(null);
+  const [isUploadingPostImage, setIsUploadingPostImage] = useState(false);
   const [projectExistingImages, setProjectExistingImages] = useState<string[]>(
     [],
   );
@@ -154,6 +157,7 @@ export default function AdminWorkspace({
     createEmptyProductForm,
   );
   const [userForm, setUserForm] = useState(createEmptyAdminUserForm);
+  const postUploadRequestId = useRef(0);
   const canManageWorkspaceSettings = canManageSettings(admin);
   const canManageWorkspaceUsers = canManageAdminUsers(admin);
 
@@ -284,8 +288,11 @@ export default function AdminWorkspace({
   }, [selectedOrder, selectedOrderId]);
 
   function resetPostComposer() {
+    postUploadRequestId.current += 1;
     setEditingPostId(null);
     setPostExistingImage(null);
+    setPostDraftAssetId(null);
+    setIsUploadingPostImage(false);
     setPostForm(createEmptyPostForm());
     setEditorKey((current) => current + 1);
     setPostInputKey((current) => current + 1);
@@ -308,6 +315,7 @@ export default function AdminWorkspace({
 
   function closeComposer() {
     if (activeSection === "posts") {
+      discardUnsavedPostImage(postDraftAssetId);
       resetPostComposer();
     }
 
@@ -328,6 +336,7 @@ export default function AdminWorkspace({
       return;
     }
 
+    discardUnsavedPostImage(postDraftAssetId);
     setActiveSection(section);
     setShowComposer(false);
     setFeedback(null);
@@ -351,6 +360,7 @@ export default function AdminWorkspace({
   function startPostCreate() {
     setActiveSection("posts");
     setFeedback(null);
+    discardUnsavedPostImage(postDraftAssetId);
     resetPostComposer();
     setShowComposer(true);
   }
@@ -372,6 +382,7 @@ export default function AdminWorkspace({
   function startPostEdit(post: AdminPost) {
     setActiveSection("posts");
     setFeedback(null);
+    discardUnsavedPostImage(postDraftAssetId);
     setEditingPostId(post.id);
     setPostForm({
       title: post.title,
@@ -387,6 +398,41 @@ export default function AdminWorkspace({
     setEditorKey((current) => current + 1);
     setPostInputKey((current) => current + 1);
     setShowComposer(true);
+  }
+
+  async function deleteMediaAsset(mediaId: number) {
+    const response = await fetch(`/api/media/${mediaId}`, {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      return;
+    }
+
+    const payload = (await response.json()) as { error?: string };
+
+    throw new Error(payload.error ?? "Failed to delete media asset.");
+  }
+
+  function discardUnsavedPostImage(mediaId: number | null) {
+    if (mediaId === null) {
+      return;
+    }
+
+    void (async () => {
+      try {
+        await deleteMediaAsset(mediaId);
+        await refreshMediaAssets();
+      } catch (error) {
+        setFeedback({
+          tone: "error",
+          text:
+            error instanceof Error
+              ? error.message
+              : "Failed to delete the uploaded image.",
+        });
+      }
+    })();
   }
 
   function startProjectEdit(project: AdminProject) {
@@ -523,10 +569,14 @@ export default function AdminWorkspace({
     });
 
     const payload = (await response.json()) as
-      | { url: string }
+      | { id: number; url: string }
       | { error?: string };
 
-    if (!response.ok || !("url" in payload)) {
+    if (
+      !response.ok ||
+      !("url" in payload) ||
+      typeof payload.id !== "number"
+    ) {
       throw new Error(
         "error" in payload && payload.error
           ? payload.error
@@ -534,7 +584,7 @@ export default function AdminWorkspace({
       );
     }
 
-    return payload.url;
+    return payload;
   }
 
   async function uploadProductImage(file: File) {
@@ -602,13 +652,54 @@ export default function AdminWorkspace({
     }));
   }
 
-  function handlePostFileChange(event: ChangeEvent<HTMLInputElement>) {
+  async function handlePostFileChange(event: ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0] ?? null;
+    setPostInputKey((current) => current + 1);
 
-    setPostForm((current) => ({
-      ...current,
-      featuredImageFile: file,
-    }));
+    if (!file) {
+      return;
+    }
+
+    const requestId = postUploadRequestId.current + 1;
+    postUploadRequestId.current = requestId;
+    const previousDraftAssetId = postDraftAssetId;
+
+    setIsUploadingPostImage(true);
+    setFeedback(null);
+
+    try {
+      const uploadedImage = await uploadPostImage(file);
+
+      if (postUploadRequestId.current !== requestId) {
+        await deleteMediaAsset(uploadedImage.id);
+        return;
+      }
+
+      setPostExistingImage(uploadedImage.url);
+      setPostDraftAssetId(uploadedImage.id);
+      setPostForm((current) => ({
+        ...current,
+        featuredImageFile: null,
+      }));
+
+      if (previousDraftAssetId !== null) {
+        discardUnsavedPostImage(previousDraftAssetId);
+      }
+
+      void refreshMediaAssets();
+    } catch (error) {
+      setFeedback({
+        tone: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Failed to upload image.",
+      });
+    } finally {
+      if (postUploadRequestId.current === requestId) {
+        setIsUploadingPostImage(false);
+      }
+    }
   }
 
   function handleProductFileChange(
@@ -646,9 +737,7 @@ export default function AdminWorkspace({
     setFeedback(null);
 
     try {
-      const featuredImage = postForm.featuredImageFile
-        ? await uploadPostImage(postForm.featuredImageFile)
-        : postExistingImage;
+      const featuredImage = postExistingImage;
       const endpoint =
         editingPostId === null ? "/api/posts" : `/api/posts/${editingPostId}`;
       const method = editingPostId === null ? "POST" : "PATCH";
@@ -687,6 +776,7 @@ export default function AdminWorkspace({
       const savedPost = payload as AdminPost;
 
       startTransition(() => {
+        setPostDraftAssetId(null);
         setPosts((current) =>
           editingPostId === null
             ? [savedPost, ...current]
@@ -1670,8 +1760,11 @@ export default function AdminWorkspace({
             }))
           }
           onFeaturedImageChange={handlePostFileChange}
+          isUploadingFeaturedImage={isUploadingPostImage}
           onRemoveFeaturedImage={() => {
+            discardUnsavedPostImage(postDraftAssetId);
             setPostExistingImage(null);
+            setPostDraftAssetId(null);
             setPostForm((current) => ({
               ...current,
               featuredImageFile: null,
@@ -1813,8 +1906,11 @@ export default function AdminWorkspace({
                   }))
                 }
                 onFeaturedImageChange={handlePostFileChange}
+                isUploadingFeaturedImage={isUploadingPostImage}
                 onRemoveFeaturedImage={() => {
+                  discardUnsavedPostImage(postDraftAssetId);
                   setPostExistingImage(null);
+                  setPostDraftAssetId(null);
                   setPostForm((current) => ({
                     ...current,
                     featuredImageFile: null,
