@@ -50,7 +50,7 @@ npm run db:seed-dummy
 
 ## Deployment
 
-This starter is designed to deploy cleanly on Vercel with Prisma Postgres.
+This starter is designed to deploy cleanly on Vercel with Neon Postgres.
 
 Before the first production deployment:
 
@@ -61,8 +61,8 @@ npx prisma migrate deploy
 ## Notes
 
 - this starter uses Prisma ORM with PostgreSQL
-- use a pooled `DATABASE_URL` for the app runtime
-- use `DIRECT_URL` for Prisma migrations and CLI commands
+- on Neon, use the `-pooler` hostname for `DATABASE_URL`
+- keep the direct Neon hostname in `DIRECT_URL` for Prisma migrations and CLI commands
 - if you later enable Prisma Accelerate, set `DATABASE_URL` to the `prisma://` URL and keep the direct Postgres URL in `DIRECT_URL`
 - uploaded files are served through `/uploads/...`
 - PayPal is optional and only needed when the shop module is enabled
