@@ -90,7 +90,7 @@ export default function AdminHeader({
                   ? analyticsEnabled
                     ? "Manage modules, analytics, and admin access."
                     : "Tracking is disabled. Modules and access are still editable."
-                  : "Settings are visible in read-only mode."
+                  : "Update your account security settings."
                 : activeSection === "projects"
                   ? `${projectCount} projects currently stored in the workspace.`
                   : activeSection === "shop"

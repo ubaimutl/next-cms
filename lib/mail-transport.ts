@@ -4,7 +4,17 @@ type GlobalMailState = typeof globalThis & {
   contactTransporter?: ReturnType<typeof nodemailer.createTransport>;
 };
 
-export function getConfiguredFromAddress() {
+export function getConfiguredFromAddress(kind: "contact" | "auth" = "contact") {
+  if (kind === "auth") {
+    return (
+      process.env.AUTH_FROM_EMAIL ||
+      process.env.CONTACT_FROM_EMAIL ||
+      process.env.SMTP_FROM_EMAIL ||
+      process.env.SMTP_USER ||
+      null
+    );
+  }
+
   return (
     process.env.CONTACT_FROM_EMAIL ||
     process.env.SMTP_FROM_EMAIL ||
@@ -19,7 +29,8 @@ export function getMailDebugSummary() {
       mode: "url",
       host: "configured-via-url",
       port: "configured-via-url",
-      from: getConfiguredFromAddress(),
+      from: getConfiguredFromAddress("contact"),
+      authFrom: getConfiguredFromAddress("auth"),
       to: process.env.CONTACT_TO_EMAIL || null,
     };
   }
@@ -28,20 +39,21 @@ export function getMailDebugSummary() {
     mode: "host",
     host: process.env.SMTP_HOST || null,
     port: process.env.SMTP_PORT || null,
-    secure:
-      process.env.SMTP_SECURE === "true" ||
-      Number(process.env.SMTP_PORT) === 465,
-    from: getConfiguredFromAddress(),
+      secure:
+        process.env.SMTP_SECURE === "true" ||
+        Number(process.env.SMTP_PORT) === 465,
+    from: getConfiguredFromAddress("contact"),
+    authFrom: getConfiguredFromAddress("auth"),
     to: process.env.CONTACT_TO_EMAIL || null,
   };
 }
 
-export function isMailConfigured() {
+export function isMailConfigured(kind: "contact" | "auth" = "contact") {
   return Boolean(
     process.env.SMTP_URL ||
     (process.env.SMTP_HOST &&
       process.env.SMTP_PORT &&
-      getConfiguredFromAddress()),
+      getConfiguredFromAddress(kind)),
   );
 }
 
@@ -72,10 +84,10 @@ export function getTransporter() {
   return transporter;
 }
 
-export async function verifyMailTransport() {
-  if (!isMailConfigured() || !getConfiguredFromAddress()) {
+export async function verifyMailTransport(kind: "contact" | "auth" = "contact") {
+  if (!isMailConfigured(kind) || !getConfiguredFromAddress(kind)) {
     throw new Error(
-      "SMTP is not configured. Set SMTP_URL or SMTP_HOST/SMTP_PORT/SMTP_USER and CONTACT_FROM_EMAIL.",
+      "SMTP is not configured. Set SMTP_URL or SMTP_HOST/SMTP_PORT/SMTP_USER and the appropriate sender email env.",
     );
   }
 

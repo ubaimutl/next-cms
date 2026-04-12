@@ -18,10 +18,10 @@ function escapeHtml(value: string) {
 }
 
 export async function sendContactEmail(submission: ContactSubmission) {
-  const from = getConfiguredFromAddress();
+  const from = getConfiguredFromAddress("contact");
   const to = process.env.CONTACT_TO_EMAIL || siteConfig.email;
 
-  if (!isMailConfigured() || !from) {
+  if (!isMailConfigured("contact") || !from) {
     throw new Error(
       "SMTP is not configured. Set SMTP_URL or SMTP_HOST/SMTP_PORT/SMTP_USER and CONTACT_FROM_EMAIL.",
     );
@@ -70,6 +70,59 @@ export async function sendContactEmail(submission: ContactSubmission) {
     from,
     replyTo: `${submission.name} <${submission.email}>`,
     subject: `New inquiry from ${submission.name}`,
+    text,
+    html,
+  });
+}
+
+export async function sendPasswordChangeEmail({
+  to,
+  name,
+  confirmUrl,
+}: {
+  to: string;
+  name?: string | null;
+  confirmUrl: string;
+}) {
+  const from = getConfiguredFromAddress("auth");
+
+  if (!isMailConfigured("auth") || !from) {
+    throw new Error(
+      "SMTP is not configured for auth emails. Set AUTH_FROM_EMAIL or CONTACT_FROM_EMAIL alongside SMTP settings.",
+    );
+  }
+
+  const transporter = getTransporter();
+  const recipientName = name?.trim() || to;
+  const escapedUrl = escapeHtml(confirmUrl);
+
+  const text = [
+    `Hi ${recipientName},`,
+    "",
+    "A password change was requested for your admin account.",
+    "To confirm the change, open this link:",
+    confirmUrl,
+    "",
+    "If you did not request this change, you can ignore this email.",
+  ].join("\n");
+
+  const html = `
+    <div style="font-family: Arial, sans-serif; color: #111; line-height: 1.6;">
+      <h2 style="margin-bottom: 20px;">Confirm password change</h2>
+      <p>Hi ${escapeHtml(recipientName)},</p>
+      <p>A password change was requested for your admin account.</p>
+      <p style="margin: 24px 0;">
+        <a href="${escapedUrl}" style="display: inline-block; padding: 10px 16px; border-radius: 8px; background: #111; color: #fff; text-decoration: none;">Confirm password change</a>
+      </p>
+      <p style="word-break: break-all;">${escapedUrl}</p>
+      <p>If you did not request this change, you can ignore this email.</p>
+    </div>
+  `;
+
+  return transporter.sendMail({
+    to,
+    from,
+    subject: "Confirm your password change",
     text,
     html,
   });

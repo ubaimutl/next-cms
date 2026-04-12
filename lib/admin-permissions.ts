@@ -1,6 +1,11 @@
 export type AdminRole = "OWNER" | "ADMIN" | "EDITOR";
 
 export const ADMIN_ACCESS_ROLES: AdminRole[] = ["OWNER", "ADMIN", "EDITOR"];
+export const SETTINGS_PAGE_ACCESS_ROLES: AdminRole[] = [
+  "OWNER",
+  "ADMIN",
+  "EDITOR",
+];
 export const SETTINGS_ACCESS_ROLES: AdminRole[] = ["OWNER", "ADMIN"];
 export const USER_MANAGEMENT_ROLES: AdminRole[] = ["OWNER", "ADMIN"];
 export const OPERATIONS_ACCESS_ROLES: AdminRole[] = ["OWNER", "ADMIN"];
@@ -20,6 +25,10 @@ function hasAllowedRole(role: AdminRole, allowedRoles: AdminRole[]) {
 
 export function canAccessAdmin(user: RoleAwareRecord) {
   return user.active && hasAllowedRole(user.role, ADMIN_ACCESS_ROLES);
+}
+
+export function canAccessSettings(user: RoleAwareRecord) {
+  return user.active && hasAllowedRole(user.role, SETTINGS_PAGE_ACCESS_ROLES);
 }
 
 export function canManageSettings(user: RoleAwareRecord) {

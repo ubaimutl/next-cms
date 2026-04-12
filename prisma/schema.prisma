@@ -23,6 +23,7 @@ model User {
   updatedAt    DateTime  @updatedAt
   posts        Post[]
   mediaAssets  MediaAsset[]
+  passwordChangeTokens PasswordChangeToken[]
   sessions     Session[]
 }
 
@@ -53,6 +54,21 @@ model Session {
   @@index([userId])
   @@index([expiresAt])
   @@index([lastSeenAt])
+}
+
+model PasswordChangeToken {
+  id                  Int      @id @default(autoincrement())
+  tokenHash           String   @unique
+  pendingPasswordHash String
+  expiresAt           DateTime
+  usedAt              DateTime?
+  createdAt           DateTime @default(now())
+  userId              Int
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([usedAt])
 }
 
 model AuthRateLimit {

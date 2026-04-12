@@ -12,6 +12,7 @@ import {
 } from "react";
 
 import {
+  canAccessSettings,
   canAccessAdminOperations,
   canManageAdminUsers,
   canManageSettings,
@@ -127,6 +128,8 @@ export default function AdminWorkspace({
   const [isUpdatingAnalytics, setIsUpdatingAnalytics] = useState(false);
   const [isSavingSettings, setIsSavingSettings] = useState(false);
   const [isSubmittingUser, setIsSubmittingUser] = useState(false);
+  const [isSubmittingPasswordChange, setIsSubmittingPasswordChange] =
+    useState(false);
   const [isUpdatingUserId, setIsUpdatingUserId] = useState<number | null>(null);
   const [isDeletingUserId, setIsDeletingUserId] = useState<number | null>(null);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -163,8 +166,16 @@ export default function AdminWorkspace({
     createEmptyProductForm,
   );
   const [userForm, setUserForm] = useState(createEmptyAdminUserForm);
+  const [passwordChangeForm, setPasswordChangeForm] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+  const [passwordChangeFeedback, setPasswordChangeFeedback] =
+    useState<Feedback>(null);
   const postUploadRequestId = useRef(0);
   const canAccessWorkspaceOperations = canAccessAdminOperations(admin);
+  const canAccessWorkspaceSettings = canAccessSettings(admin);
   const canManageWorkspaceSettings = canManageSettings(admin);
   const canManageWorkspaceUsers = canManageAdminUsers(admin);
 
@@ -339,7 +350,7 @@ export default function AdminWorkspace({
   }
 
   function switchSection(section: AdminSection) {
-    if (section === "settings" && !canManageWorkspaceSettings) {
+    if (section === "settings" && !canAccessWorkspaceSettings) {
       return;
     }
 
@@ -1292,6 +1303,85 @@ export default function AdminWorkspace({
     }
   }
 
+  async function handlePasswordChangeRequest() {
+    const currentPassword = passwordChangeForm.currentPassword.trim();
+    const newPassword = passwordChangeForm.newPassword.trim();
+    const confirmPassword = passwordChangeForm.confirmPassword.trim();
+
+    if (!currentPassword) {
+      setPasswordChangeFeedback({
+        tone: "error",
+        text: "Enter your current password.",
+      });
+      return;
+    }
+
+    if (newPassword.length < 12) {
+      setPasswordChangeFeedback({
+        tone: "error",
+        text: "Use a new password with at least 12 characters.",
+      });
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      setPasswordChangeFeedback({
+        tone: "error",
+        text: "New password confirmation does not match.",
+      });
+      return;
+    }
+
+    setIsSubmittingPasswordChange(true);
+    setPasswordChangeFeedback(null);
+
+    try {
+      const response = await fetch("/api/auth/password-change/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword,
+          newPassword,
+        }),
+      });
+
+      const payload = (await response.json()) as {
+        message?: string;
+        error?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(
+          payload.error ?? "Failed to request password change.",
+        );
+      }
+
+      setPasswordChangeForm({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+      setPasswordChangeFeedback({
+        tone: "success",
+        text:
+          payload.message ??
+          "Confirmation email sent. Open the link in your inbox to finish the password change.",
+      });
+    } catch (error) {
+      setPasswordChangeFeedback({
+        tone: "error",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Failed to request password change.",
+      });
+    } finally {
+      setIsSubmittingPasswordChange(false);
+    }
+  }
+
   async function handleUpdateAdminUser(
     userId: number,
     patch: Partial<Pick<AdminUser, "role" | "active">>,
@@ -2166,15 +2256,18 @@ export default function AdminWorkspace({
                 settings={settings}
                 analytics={analytics}
                 adminUsers={adminUsers}
-                currentAdmin={{ id: admin.id, role: admin.role }}
+                currentAdmin={{ id: admin.id, email: admin.email, role: admin.role }}
                 canManageSettings={canManageWorkspaceSettings}
                 canManageUsers={canManageWorkspaceUsers}
                 isSavingSettings={isSavingSettings}
                 isUpdatingAnalytics={isUpdatingAnalytics}
                 isSubmittingUser={isSubmittingUser}
+                isSubmittingPasswordChange={isSubmittingPasswordChange}
                 isUpdatingUserId={isUpdatingUserId}
                 isDeletingUserId={isDeletingUserId}
                 userForm={userForm}
+                passwordChangeForm={passwordChangeForm}
+                passwordChangeFeedback={passwordChangeFeedback}
                 onToggleModule={(module, nextValue) => {
                   void handleSettingsUpdate({ [module]: nextValue });
                 }}
@@ -2187,6 +2280,15 @@ export default function AdminWorkspace({
                     [field]: value,
                   }))
                 }
+                onPasswordChangeFormChange={(field, value) =>
+                  setPasswordChangeForm((current) => ({
+                    ...current,
+                    [field]: value,
+                  }))
+                }
+                onRequestPasswordChange={() => {
+                  void handlePasswordChangeRequest();
+                }}
                 onCreateUser={() => {
                   void handleCreateAdminUser();
                 }}
