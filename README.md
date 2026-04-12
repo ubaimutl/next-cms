@@ -4,6 +4,13 @@ A reusable Next.js CMS starter extracted from the portfolio/admin system and cle
 
 ![next-cms preview](docs/preview.gif)
 
+## Demo
+
+- site: `https://next-cms-demo-six.vercel.app`
+- admin: `https://next-cms-demo-six.vercel.app/admin/login`
+- email: `demo@next-cms.demo`
+- password: `next-cms.demoXu678!`
+
 ## Included modules
 
 - posts / blog
