@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { canManageAdminUsers } from "@/lib/admin-permissions";
+import {
+  canAssignAdminRole,
+  canManageAdminUsers,
+  canManageTargetAdminUser,
+  isProtectedAdminUser,
+} from "@/lib/admin-permissions";
 import {
   getAuthenticatedAdmin,
   hashPassword,
@@ -149,6 +154,35 @@ export async function PATCH(
 
     if (safety.error || !safety.existingUser) return safety.error;
 
+    if (isProtectedAdminUser(safety.existingUser)) {
+      return NextResponse.json(
+        { error: "Owner accounts cannot be changed from the admin workspace." },
+        { status: 403 },
+      );
+    }
+
+    if (!canManageTargetAdminUser(access.admin, safety.existingUser)) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
+
+    if (validation.data.role && !canAssignAdminRole(access.admin, validation.data.role)) {
+      return NextResponse.json(
+        { error: "This role cannot be assigned from the admin workspace." },
+        { status: 403 },
+      );
+    }
+
+    if (
+      access.admin.id === userId &&
+      validation.data.role &&
+      validation.data.role !== safety.existingUser.role
+    ) {
+      return NextResponse.json(
+        { error: "You cannot change your own role." },
+        { status: 400 },
+      );
+    }
+
     const nextEmail = validation.data.email
       ? normalizeEmail(validation.data.email)
       : undefined;
@@ -217,6 +251,17 @@ export async function DELETE(
     const safety = await ensureOwnerSafety(userId, "EDITOR", false);
 
     if (safety.error || !safety.existingUser) return safety.error;
+
+    if (isProtectedAdminUser(safety.existingUser)) {
+      return NextResponse.json(
+        { error: "Owner accounts cannot be deleted from the admin workspace." },
+        { status: 403 },
+      );
+    }
+
+    if (!canManageTargetAdminUser(access.admin, safety.existingUser)) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
+    }
 
     await prisma.user.delete({
       where: {

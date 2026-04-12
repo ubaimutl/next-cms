@@ -1,6 +1,12 @@
 "use client";
 
 import {
+  canManageTargetAdminUser,
+  getAssignableAdminRoles,
+  isProtectedAdminUser,
+} from "@/lib/admin-permissions";
+
+import {
   RolePill,
   adminDangerButtonClass,
   adminInputClass,
@@ -107,6 +113,13 @@ export default function SettingsSection({
   onToggleUserActive,
   onDeleteUser,
 }: SettingsSectionProps) {
+  const currentActor = {
+    id: currentAdmin.id,
+    role: currentAdmin.role,
+    active: true,
+  } as const;
+  const assignableRoles = getAssignableAdminRoles(currentActor);
+
   return (
     <div className="space-y-6">
       <section className="admin-panel px-6 py-6 md:px-8">
@@ -191,6 +204,11 @@ export default function SettingsSection({
           <div className="mt-5 space-y-4">
             {adminUsers.map((user) => (
               <div key={user.id} className={`${adminPanelMutedClass} p-5`}>
+                {(() => {
+                  const canManageTarget = canManageTargetAdminUser(currentActor, user);
+                  const isProtected = isProtectedAdminUser(user);
+
+                  return (
                 <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
@@ -204,6 +222,9 @@ export default function SettingsSection({
                       {currentAdmin.id === user.id ? (
                         <span className={adminPillClass("neutral")}>Current session</span>
                       ) : null}
+                      {isProtected ? (
+                        <span className={adminPillClass("neutral")}>Protected</span>
+                      ) : null}
                     </div>
 
                     <p className="mt-3 break-all text-sm text-base-content/56">
@@ -212,13 +233,14 @@ export default function SettingsSection({
                   </div>
 
                   <div className="flex flex-wrap gap-2">
-                    {(["OWNER", "ADMIN", "EDITOR"] as const).map((role) => (
+                    {assignableRoles.map((role) => (
                       <button
                         key={role}
                         type="button"
                         onClick={() => onUpdateUserRole(user, role)}
                         disabled={
                           !canManageUsers ||
+                          !canManageTarget ||
                           isUpdatingUserId === user.id ||
                           user.role === role
                         }
@@ -235,13 +257,17 @@ export default function SettingsSection({
                     <button
                       type="button"
                       onClick={() => onToggleUserActive(user, !user.active)}
-                      disabled={!canManageUsers || isUpdatingUserId === user.id}
+                      disabled={
+                        !canManageUsers ||
+                        !canManageTarget ||
+                        isUpdatingUserId === user.id
+                      }
                       className={adminSecondaryButtonClass}
                     >
                       {user.active ? "Disable" : "Enable"}
                     </button>
 
-                    {currentAdmin.id !== user.id ? (
+                    {currentAdmin.id !== user.id && canManageTarget ? (
                       <button
                         type="button"
                         onClick={() => onDeleteUser(user)}
@@ -253,6 +279,8 @@ export default function SettingsSection({
                     ) : null}
                   </div>
                 </div>
+                  );
+                })()}
               </div>
             ))}
           </div>
@@ -306,7 +334,7 @@ export default function SettingsSection({
             <div>
               <p className={adminKickerClass}>Role</p>
               <div className="mt-3 flex flex-wrap gap-2">
-                {(["OWNER", "ADMIN", "EDITOR"] as const).map((role) => (
+                {assignableRoles.map((role) => (
                   <button
                     key={role}
                     type="button"
@@ -345,6 +373,11 @@ export default function SettingsSection({
             >
               {isSubmittingUser ? "Creating" : "Create admin user"}
             </button>
+
+            <p className="text-xs leading-relaxed text-base-content/48">
+              Owner accounts are protected and can only be created during the
+              initial setup flow.
+            </p>
           </div>
         </div>
       </section>

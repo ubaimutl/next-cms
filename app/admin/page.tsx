@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 
 import { requireAuthenticatedAdmin } from "@/lib/auth";
 import {
+  canAccessAdminOperations,
+  canManageAdminUsers,
+} from "@/lib/admin-permissions";
+import {
   normalizeContactMessageRecord,
   normalizeProjectRecord,
   normalizeShopProductRecord,
@@ -39,6 +43,8 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const admin = await requireAuthenticatedAdmin();
+  const canAccessOperations = canAccessAdminOperations(admin);
+  const canManageUsers = canManageAdminUsers(admin);
   const [posts, projects, products, orders, messages, mediaAssets, analytics, settings, users] =
     await Promise.all([
     prisma.post.findMany({
@@ -56,36 +62,54 @@ export default async function AdminPage() {
         id: "desc",
       },
     }),
-    prisma.shopOrder.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    }),
-    prisma.contactMessage.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    }),
+    canAccessOperations
+      ? prisma.shopOrder.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+        })
+      : Promise.resolve([]),
+    canAccessOperations
+      ? prisma.contactMessage.findMany({
+          orderBy: {
+            createdAt: "desc",
+          },
+        })
+      : Promise.resolve([]),
     listAdminMediaAssets(),
-    getAnalyticsOverview(),
+    canAccessOperations
+      ? getAnalyticsOverview()
+      : Promise.resolve({
+          enabled: false,
+          totalPageViews: 0,
+          totalVisits: 0,
+          postPageViews: 0,
+          pageViewsLast7Days: 0,
+          visitsLast7Days: 0,
+          topPages: [],
+          topPosts: [],
+          postViewCounts: {},
+        }),
     getAppSettings(),
-    prisma.user.findMany({
-      where: {
-        role: {
-          in: ["OWNER", "ADMIN", "EDITOR"],
-        },
-      },
-      orderBy: [{ role: "asc" }, { createdAt: "asc" }],
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        role: true,
-        active: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    }),
+    canManageUsers
+      ? prisma.user.findMany({
+          where: {
+            role: {
+              in: ["OWNER", "ADMIN", "EDITOR"],
+            },
+          },
+          orderBy: [{ role: "asc" }, { createdAt: "asc" }],
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            active: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        })
+      : Promise.resolve([]),
   ]);
 
   return (

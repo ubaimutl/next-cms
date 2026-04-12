@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { canAccessAdminOperations } from "@/lib/admin-permissions";
 import { getAuthenticatedAdmin } from "@/lib/auth";
 import { normalizeContactMessageRecord } from "@/lib/db-json";
 import prisma from "@/lib/prisma";
@@ -18,6 +19,10 @@ export async function PATCH(
 
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    if (!canAccessAdminOperations(admin)) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     }
 
     const { id } = await params;
@@ -85,6 +90,10 @@ export async function DELETE(
 
     if (!admin) {
       return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+    }
+
+    if (!canAccessAdminOperations(admin)) {
+      return NextResponse.json({ error: "Forbidden." }, { status: 403 });
     }
 
     const { id } = await params;

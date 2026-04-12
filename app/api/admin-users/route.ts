@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { canManageAdminUsers } from "@/lib/admin-permissions";
+import {
+  canAssignAdminRole,
+  canManageAdminUsers,
+} from "@/lib/admin-permissions";
 import {
   getAuthenticatedAdmin,
   hashPassword,
@@ -98,6 +101,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { name, email, password, role, active } = validation.data;
+
+    if (!canAssignAdminRole(admin, role)) {
+      return NextResponse.json(
+        { error: "This role cannot be assigned from the admin workspace." },
+        { status: 403 },
+      );
+    }
+
     const normalizedEmail = normalizeEmail(email);
     const passwordHash = await hashPassword(password);
 

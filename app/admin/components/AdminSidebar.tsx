@@ -41,6 +41,7 @@ type AdminSidebarProps = {
   readMessageCount: number;
   archivedMessageCount: number;
   canManageSettings: boolean;
+  canAccessOperations: boolean;
   onLogout: () => void;
   onToggleTheme: () => void;
   onSwitchSection: (section: AdminSection) => void;
@@ -181,6 +182,7 @@ export default function AdminSidebar({
   readMessageCount,
   archivedMessageCount,
   canManageSettings,
+  canAccessOperations,
   onLogout,
   onToggleTheme,
   onSwitchSection,
@@ -230,12 +232,14 @@ export default function AdminSidebar({
         </div>
 
         <div className="mt-9 space-y-1">
-          <NavItem
-            label="Dashboard"
-            icon={<Icon path="M4 12.5 12 5l8 7.5M6.5 10.5V20h11v-9.5" />}
-            active={activeSection === "dashboard"}
-            onClick={() => onSwitchSection("dashboard")}
-          />
+          {canAccessOperations ? (
+            <NavItem
+              label="Dashboard"
+              icon={<Icon path="M4 12.5 12 5l8 7.5M6.5 10.5V20h11v-9.5" />}
+              active={activeSection === "dashboard"}
+              onClick={() => onSwitchSection("dashboard")}
+            />
+          ) : null}
 
           <Link
             href="/"
@@ -314,94 +318,96 @@ export default function AdminSidebar({
             ) : null}
           </div>
 
-          <div className="space-y-1">
-            <GroupHeader
-              label="Inbox"
-              open={openGroups.sales}
-              onClick={() => toggleGroup("sales")}
-            />
-            {openGroups.sales ? (
-              <div className="space-y-1">
-                <NavItem
-                  label="Messages"
-                  icon={<Icon path="M4 7h16v10H4zM4 7l8 6 8-6" />}
-                  active={activeSection === "messages"}
-                  meta={messageCount}
-                  onClick={() => onSwitchSection("messages")}
-                />
-                {activeSection === "messages" ? (
-                  <div className="mt-0.5 space-y-0">
-                    <SubItem
-                      label="All"
-                      meta={messageCount}
-                      active={messageFilter === "all"}
-                      onClick={() => onSetMessageFilter("all")}
-                    />
-                    <SubItem
-                      label="New"
-                      meta={newMessageCount}
-                      active={messageFilter === "new"}
-                      onClick={() => onSetMessageFilter("new")}
-                    />
-                    <SubItem
-                      label="Read"
-                      meta={readMessageCount}
-                      active={messageFilter === "read"}
-                      onClick={() => onSetMessageFilter("read")}
-                    />
-                    <SubItem
-                      label="Archived"
-                      meta={archivedMessageCount}
-                      active={messageFilter === "archived"}
-                      onClick={() => onSetMessageFilter("archived")}
-                    />
-                  </div>
-                ) : null}
+          {canAccessOperations ? (
+            <div className="space-y-1">
+              <GroupHeader
+                label="Inbox"
+                open={openGroups.sales}
+                onClick={() => toggleGroup("sales")}
+              />
+              {openGroups.sales ? (
+                <div className="space-y-1">
+                  <NavItem
+                    label="Messages"
+                    icon={<Icon path="M4 7h16v10H4zM4 7l8 6 8-6" />}
+                    active={activeSection === "messages"}
+                    meta={messageCount}
+                    onClick={() => onSwitchSection("messages")}
+                  />
+                  {activeSection === "messages" ? (
+                    <div className="mt-0.5 space-y-0">
+                      <SubItem
+                        label="All"
+                        meta={messageCount}
+                        active={messageFilter === "all"}
+                        onClick={() => onSetMessageFilter("all")}
+                      />
+                      <SubItem
+                        label="New"
+                        meta={newMessageCount}
+                        active={messageFilter === "new"}
+                        onClick={() => onSetMessageFilter("new")}
+                      />
+                      <SubItem
+                        label="Read"
+                        meta={readMessageCount}
+                        active={messageFilter === "read"}
+                        onClick={() => onSetMessageFilter("read")}
+                      />
+                      <SubItem
+                        label="Archived"
+                        meta={archivedMessageCount}
+                        active={messageFilter === "archived"}
+                        onClick={() => onSetMessageFilter("archived")}
+                      />
+                    </div>
+                  ) : null}
 
-                <NavItem
-                  label="Orders"
-                  icon={<Icon path="M6 7h15l-1.5 8h-11zM6 7 4 4M9 20a1 1 0 1 0 0 .01M18 20a1 1 0 1 0 0 .01" />}
-                  active={activeSection === "orders"}
-                  meta={orderCount}
-                  onClick={() => onSwitchSection("orders")}
-                />
-                {activeSection === "orders" ? (
-                  <div className="mt-0.5 space-y-0">
-                    <SubItem
-                      label="All"
-                      meta={orderCount}
-                      active={orderFilter === "all"}
-                      onClick={() => onSetOrderFilter("all")}
-                    />
-                    <SubItem
-                      label="Pending"
-                      meta={pendingOrderCount}
-                      active={orderFilter === "pending"}
-                      onClick={() => onSetOrderFilter("pending")}
-                    />
-                    <SubItem
-                      label="Completed"
-                      meta={completedOrderCount}
-                      active={orderFilter === "completed"}
-                      onClick={() => onSetOrderFilter("completed")}
-                    />
-                    <SubItem
-                      label="Failed"
-                      meta={failedOrderCount}
-                      active={orderFilter === "failed"}
-                      onClick={() => onSetOrderFilter("failed")}
-                    />
-                    <SubItem
-                      label="Canceled"
-                      meta={canceledOrderCount}
-                      active={orderFilter === "canceled"}
-                      onClick={() => onSetOrderFilter("canceled")}
-                    />
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
-          </div>
+                  <NavItem
+                    label="Orders"
+                    icon={<Icon path="M6 7h15l-1.5 8h-11zM6 7 4 4M9 20a1 1 0 1 0 0 .01M18 20a1 1 0 1 0 0 .01" />}
+                    active={activeSection === "orders"}
+                    meta={orderCount}
+                    onClick={() => onSwitchSection("orders")}
+                  />
+                  {activeSection === "orders" ? (
+                    <div className="mt-0.5 space-y-0">
+                      <SubItem
+                        label="All"
+                        meta={orderCount}
+                        active={orderFilter === "all"}
+                        onClick={() => onSetOrderFilter("all")}
+                      />
+                      <SubItem
+                        label="Pending"
+                        meta={pendingOrderCount}
+                        active={orderFilter === "pending"}
+                        onClick={() => onSetOrderFilter("pending")}
+                      />
+                      <SubItem
+                        label="Completed"
+                        meta={completedOrderCount}
+                        active={orderFilter === "completed"}
+                        onClick={() => onSetOrderFilter("completed")}
+                      />
+                      <SubItem
+                        label="Failed"
+                        meta={failedOrderCount}
+                        active={orderFilter === "failed"}
+                        onClick={() => onSetOrderFilter("failed")}
+                      />
+                      <SubItem
+                        label="Canceled"
+                        meta={canceledOrderCount}
+                        active={orderFilter === "canceled"}
+                        onClick={() => onSetOrderFilter("canceled")}
+                      />
+                    </div>
+                  ) : null}
+                </div>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="space-y-1">
             <GroupHeader

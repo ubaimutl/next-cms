@@ -11,7 +11,11 @@ import {
   useTransition,
 } from "react";
 
-import { canManageAdminUsers, canManageSettings } from "@/lib/admin-permissions";
+import {
+  canAccessAdminOperations,
+  canManageAdminUsers,
+  canManageSettings,
+} from "@/lib/admin-permissions";
 import { getPlainTextFromHtml } from "@/lib/post-content";
 
 import DashboardSection from "./components/DashboardSection";
@@ -102,7 +106,9 @@ export default function AdminWorkspace({
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>(initialUsers);
   const [theme, setTheme] = useState<ThemeMode>(() => getInitialTheme());
   const [feedback, setFeedback] = useState<Feedback>(null);
-  const [activeSection, setActiveSection] = useState<AdminSection>("dashboard");
+  const [activeSection, setActiveSection] = useState<AdminSection>(
+    canAccessAdminOperations(admin) ? "dashboard" : "posts",
+  );
   const [isSubmittingPost, setIsSubmittingPost] = useState(false);
   const [isSubmittingProject, setIsSubmittingProject] = useState(false);
   const [isSubmittingProduct, setIsSubmittingProduct] = useState(false);
@@ -158,6 +164,7 @@ export default function AdminWorkspace({
   );
   const [userForm, setUserForm] = useState(createEmptyAdminUserForm);
   const postUploadRequestId = useRef(0);
+  const canAccessWorkspaceOperations = canAccessAdminOperations(admin);
   const canManageWorkspaceSettings = canManageSettings(admin);
   const canManageWorkspaceUsers = canManageAdminUsers(admin);
 
@@ -333,6 +340,13 @@ export default function AdminWorkspace({
 
   function switchSection(section: AdminSection) {
     if (section === "settings" && !canManageWorkspaceSettings) {
+      return;
+    }
+
+    if (
+      (section === "dashboard" || section === "messages" || section === "orders") &&
+      !canAccessWorkspaceOperations
+    ) {
       return;
     }
 
@@ -1814,6 +1828,7 @@ export default function AdminWorkspace({
           readMessageCount={readMessageCount}
           archivedMessageCount={archivedMessageCount}
           canManageSettings={canManageWorkspaceSettings}
+          canAccessOperations={canAccessWorkspaceOperations}
           onLogout={() => {
             void handleLogout();
           }}
