@@ -1,75 +1,129 @@
 # next-cms
 
-A reusable Next.js CMS starter extracted from the portfolio/admin system and cleaned up for future client and studio projects.
+A modular Next.js CMS starter with a polished admin workspace, PostgreSQL via Prisma, media management, blogging, portfolio content, and lightweight commerce.
 
 ![next-cms preview](docs/preview.gif)
 
 ## Demo
 
-- site: `https://next-cms-demo-six.vercel.app`
-- admin: `https://next-cms-demo-six.vercel.app/admin/login`
-- email: `demo@next-cms.demo`
-- password: `next-cms.demoXu678!`
+- Site: `https://next-cms-demo-six.vercel.app`
+- Admin: `https://next-cms-demo-six.vercel.app/admin/login`
+- Email: `demo@next-cms.demo`
+- Password: `next-cms.demoXu678!`
 
-## Included modules
+## Overview
 
-- posts / blog
-- projects / work
-- shop / digital products and services
-- contact inbox
-- analytics
-- role-based admin users
+`next-cms` is a production-oriented starter for studios, freelancers, and product teams that want a self-hosted CMS on a modern Next.js stack without adopting a larger framework.
 
-## Admin model
+It ships with a custom admin interface, role-based access, content modules for publishing and portfolio work, optional commerce primitives, email-based contact handling, and deploy-friendly infrastructure choices for Vercel.
 
-The starter supports multiple admin users with roles:
+## Core Features
 
-- `OWNER`
-- `ADMIN`
-- `EDITOR`
+- Posts and blog publishing with a focused editor experience
+- Projects and work archive for case studies or portfolio content
+- Shop module for digital products and service offers
+- Media library backed by Vercel Blob
+- Contact inbox and message management
+- Analytics overview inside the admin workspace
+- Multi-user admin with `OWNER`, `ADMIN`, and `EDITOR` roles
+- Per-post and per-product SEO fields
+- Email-confirmed password changes for admin accounts
+- Module toggles for blog, projects, shop, and analytics
+
+## Stack
+
+- Next.js App Router
+- React
+- Tailwind CSS
+- Prisma ORM
+- PostgreSQL
+- Vercel Blob for uploads
+- Nodemailer for transactional email
+- Novel editor for rich post editing
+
+## Admin Roles
+
+The admin supports three roles:
+
+- `OWNER`: protected bootstrap role with full control
+- `ADMIN`: full operational access, including user management
+- `EDITOR`: content-focused access without user or operational controls
 
 The first account created through `/admin/login` becomes the initial `OWNER`.
 
-## Module toggles
+## Getting Started
 
-From admin settings you can enable or disable:
-
-- blog
-- projects
-- shop
-- analytics tracking
-
-Disabled modules are hidden from public navigation and their public routes return `404`.
-
-## Development
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Create your local environment file:
+
+```bash
+cp .env.example .env
+```
+
+Apply database migrations:
+
+```bash
 npx prisma migrate dev --name init
+```
+
+Start the development server:
+
+```bash
 npm run dev
 ```
 
-To load demo content:
+## Demo Content
+
+Load sample data:
 
 ```bash
 npm run db:seed-dummy
 ```
 
+## Environment
+
+At minimum, configure:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `NEXT_PUBLIC_SITE_URL`
+
+Optional integrations:
+
+- `SMTP_*`, `CONTACT_*`, and `AUTH_FROM_EMAIL` for email delivery
+- `BLOB_READ_WRITE_TOKEN` for media uploads
+- `PAYPAL_CLIENT_ID`, `PAYPAL_CLIENT_SECRET`, and `PAYPAL_ENV` for the shop checkout flow
+
+Use the pooled database URL for `DATABASE_URL` in runtime environments and the direct database URL for `DIRECT_URL` in Prisma CLI operations.
+
 ## Deployment
 
-This starter is designed to deploy cleanly on Vercel with Neon Postgres.
+This project is designed to deploy cleanly on Vercel with PostgreSQL and Blob storage.
 
-Before the first production deployment:
+Before the first production deployment, apply migrations:
 
 ```bash
 npx prisma migrate deploy
 ```
 
+Recommended production setup:
+
+- Vercel for hosting
+- Neon Postgres for the database
+- Vercel Blob for media storage
+
 ## Notes
 
-- this starter uses Prisma ORM with PostgreSQL
-- on Neon, use the `-pooler` hostname for `DATABASE_URL`
-- keep the direct Neon hostname in `DIRECT_URL` for Prisma migrations and CLI commands
-- if you later enable Prisma Accelerate, set `DATABASE_URL` to the `prisma://` URL and keep the direct Postgres URL in `DIRECT_URL`
-- uploaded files are served through `/uploads/...`
-- PayPal is optional and only needed when the shop module is enabled
+- Disabled modules are hidden from public navigation and their public routes return `404`
+- Uploaded assets are tracked in the admin media library
+- Password changes require email confirmation before the new password is applied
+- If you use Neon, prefer the `-pooler` hostname for `DATABASE_URL`
+
+## License
+
+MIT

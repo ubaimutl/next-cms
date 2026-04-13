@@ -133,12 +133,12 @@ export default function PostComposer({
             {isUploadingFeaturedImage
               ? "Uploading image"
               : isSubmittingPost
-              ? "Saving"
-              : isEditingPost
-                ? "Update post"
-                : postForm.published
-                  ? "Publish"
-                  : "Save draft"}
+                ? "Saving"
+                : isEditingPost
+                  ? "Update post"
+                  : postForm.published
+                    ? "Publish"
+                    : "Save draft"}
           </button>
         </div>
       </div>
@@ -221,7 +221,7 @@ export default function PostComposer({
               type="text"
               value={postForm.title}
               onChange={(event) => onTitleChange(event.target.value)}
-              className="w-full border-0 bg-transparent px-0 py-0 text-[clamp(3rem,7vw,4.7rem)]! leading-[0.9] font-semibold tracking-[-0.058em] text-white outline-none placeholder:text-white/10"
+              className="w-full border-0 bg-transparent px-0 py-0 text-[clamp(3rem,7vw,4.7rem)]! leading-[0.9] font-semibold tracking-[-0.058em] text-[var(--admin-text)] outline-none placeholder:text-[color:color-mix(in_srgb,var(--admin-text)_14%,transparent)]"
               placeholder="Post title"
               required
             />
